@@ -14,7 +14,7 @@
 ### Frontend:
 - [**Vue.js**](https://vuejs.org/)
 - [**Tailwind CSS**](https://tailwindcss.com/)
-- [PrimeVue](https://primevue.org/)
+- [**PrimeVue**](https://primevue.org/)
 
 ### Backend:
 - [**Firebase**](https://firebase.google.com/)
