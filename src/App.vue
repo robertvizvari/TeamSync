@@ -6,4 +6,7 @@
 * {
   scroll-behavior: smooth;
 }
+html {
+  background-color: hsl(var(--primary));
+}
 </style>
