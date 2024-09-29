@@ -1,8 +1,8 @@
 <template>
   <div class="bg-background">
-    <Sidebar />
+    <Sidebar :sidebarActive="sidebarActive" />
 
-    <Navbar />
+    <Navbar @toggle-sidebar="toggleSidebar" />
 
     <div class="p-4 sm:ml-64">
       <div class="mt-14 rounded-lg border-2 border-dashed border-gray-200 p-4 dark:border-gray-700">
@@ -107,6 +107,21 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      sidebarActive: false,
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      this.sidebarActive = !this.sidebarActive
+    },
+  },
+}
+</script>
 
 <script setup>
 import Sidebar from './components/Sidebar.vue'

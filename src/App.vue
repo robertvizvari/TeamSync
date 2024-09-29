@@ -1,6 +1,11 @@
 <template>
+  <PageLoader />
   <RouterView />
 </template>
+
+<script setup>
+import PageLoader from './components/PageLoader.vue'
+</script>
 
 <style>
 * {

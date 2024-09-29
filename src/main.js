@@ -9,7 +9,9 @@ import 'aos/dist/aos.css'
 
 const app = createApp(App)
 
-AOS.init()
+window.addEventListener('load', function () {
+  AOS.init()
+})
 
 app.use(router)
 
