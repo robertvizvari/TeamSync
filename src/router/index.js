@@ -14,7 +14,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/dashboard',
+      path: '/dashboard/:urlId?',
       name: 'dashboard',
       component: Dashboard,
       meta: {

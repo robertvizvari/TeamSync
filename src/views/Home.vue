@@ -10,7 +10,7 @@
           <h1 class="text-foreground mb-4 max-w-2xl text-4xl font-extrabold leading-none tracking-tight md:text-5xl xl:text-6xl" data-aos="fade-up" data-aos-duration="1000" data-aos-once="true">Collaborate Smarter, Not Harder.</h1>
           <p class="text-muted-foreground mb-6 max-w-2xl md:text-lg lg:mb-8 lg:text-xl" data-aos="fade-up" data-aos-delay="50" data-aos-duration="1000" data-aos-once="true">Manage your team, track tasks, and stay productive with TeamSync.</p>
           <div data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000" data-aos-once="true">
-            <Button @click="$router.push('/dashboard')" class="text-white" size="lg">
+            <Button @click="$router.push('/dashboard/tasks')" class="text-white" size="lg">
               Get Started
               <Icon class="ml-2 mr-[-0.5rem] size-4" icon="radix-icons:arrow-right" />
             </Button>

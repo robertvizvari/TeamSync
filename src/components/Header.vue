@@ -6,7 +6,7 @@
         <span class="text-foreground self-center whitespace-nowrap text-lg font-semibold sm:text-2xl">TeamSync</span>
       </a>
       <div class="flex space-x-3 md:order-2 md:space-x-0 rtl:space-x-reverse">
-        <Button @click="$router.push('/dashboard')" class="text-white sm:mr-3">
+        <Button @click="$router.push('/dashboard/tasks')" class="text-white sm:mr-3">
           Get Started
           <Icon class="ml-2 mr-[-0.5rem] size-4" icon="radix-icons:arrow-right" />
         </Button>
