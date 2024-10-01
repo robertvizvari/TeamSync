@@ -22,6 +22,20 @@ const router = createRouter({
       },
     },
     {
+      path: '/login',
+      component: () => import('@/views/Login.vue'),
+      meta: {
+        title: 'TeamSync - Log in',
+      },
+    },
+    {
+      path: '/register',
+      component: () => import('@/views/Register.vue'),
+      meta: {
+        title: 'TeamSync - Register',
+      },
+    },
+    {
       path: '/:pathMatch(.*)*',
       component: () => import('@/views/404.vue'),
       meta: {

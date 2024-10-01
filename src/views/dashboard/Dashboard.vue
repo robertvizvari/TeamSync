@@ -1,12 +1,11 @@
 <template>
-  <div class="bg-background">
+  <div class="overflow-x-hidden bg-background">
     <Sidebar :sidebarActive="sidebarActive" :urlId="urlId" />
 
     <Navbar @toggle-sidebar="toggleSidebar" />
 
-    <Transition name="slide-fade">
-      <Tasks v-if="urlId == 'tasks'" />
-    </Transition>
+    <Tasks v-show="urlId == 'tasks'" />
+    <Projects v-show="urlId == 'projects'" />
   </div>
 </template>
 
@@ -40,20 +39,5 @@ import Sidebar from './components/Sidebar.vue'
 import Navbar from './components/Navbar.vue'
 
 import Tasks from './components/Tasks.vue'
+import Projects from './components/Projects.vue'
 </script>
-
-<style>
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.35s ease-out;
-}
-
-.slide-fade-enter-from {
-  transform: translateY(100%);
-  opacity: 0;
-}
-.slide-fade-leave-to {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-</style>
