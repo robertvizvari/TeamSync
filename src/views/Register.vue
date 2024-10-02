@@ -71,7 +71,7 @@ export default {
         return false
       }
       toast.success('Inputs are valid!')
-      this.$router.push('/login')
+      this.$router.push('/dashboard/mytasks')
       return true
     },
   },
