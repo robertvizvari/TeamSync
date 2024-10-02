@@ -66,20 +66,23 @@ import Logo from '../../../assets/svg/Logo.vue'
 </script>
 
 <style scoped>
-.slide-fade-enter-active,
-.slide-fade-leave-active {
+.slide-fade-enter-active {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-fade-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide-fade-enter-from,
 .slide-fade-leave-to {
-  transform: translateY(-120px) translateX(70px) scale(0);
+  transform: translateY(-120px) translateX(70px) rotate(20deg) scale(0);
   opacity: 0;
 }
 
 .slide-fade-enter-to,
 .slide-fade-leave-from {
-  transform: translateY(0) translateX(0) scale(1);
+  transform: translateY(0) translateX(0) rotate(0deg) scale(1);
   opacity: 1;
 }
 </style>

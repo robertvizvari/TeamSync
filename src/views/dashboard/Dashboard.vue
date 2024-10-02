@@ -4,8 +4,8 @@
 
     <Navbar @toggle-sidebar="toggleSidebar" />
 
-    <Tasks v-show="urlId == 'tasks'" />
-    <Projects v-show="urlId == 'projects'" />
+    <MyTasks v-show="urlId == 'mytasks'" />
+    <MyProjects v-show="urlId == 'myprojects'" />
   </div>
 </template>
 
@@ -38,6 +38,6 @@ export default {
 import Sidebar from './components/Sidebar.vue'
 import Navbar from './components/Navbar.vue'
 
-import Tasks from './components/Tasks.vue'
-import Projects from './components/Projects.vue'
+import MyTasks from './components/My_Tasks.vue'
+import MyProjects from './components/My_Projects.vue'
 </script>
