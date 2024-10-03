@@ -1,5 +1,5 @@
 <template>
-  <section class="flex min-h-screen w-full items-center bg-background">
+  <section class="flex min-h-dvh w-full items-center bg-background">
     <div class="container mx-auto flex flex-col px-6 py-12 lg:flex-row lg:items-center lg:gap-12">
       <div class="mx-auto w-full">
         <router-link to="/" class="mb-6 flex items-center justify-center text-2xl font-semibold text-foreground">

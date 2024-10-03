@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed z-[999] w-full border-gray-200 backdrop-blur-xl backdrop-brightness-[.99] dark:backdrop-brightness-75">
+  <nav :class="showBlur ? 'backdrop-blur-xl backdrop-brightness-[.99] dark:backdrop-brightness-75' : ''" class="fixed z-[999] w-full border-gray-200 transition-all duration-100">
     <div class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
       <a href="#home" class="flex items-center space-x-3 rtl:space-x-reverse">
         <Logo class="m-[-3px] size-10 sm:m-0 sm:size-12" />
@@ -35,7 +35,23 @@ export default {
   data() {
     return {
       showMenu: false,
+      showBlur: false,
     }
+  },
+  methods: {
+    handleScroll() {
+      if (window.scrollY == 0) {
+        this.showBlur = false
+      } else {
+        this.showBlur = true
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll)
   },
 }
 </script>
