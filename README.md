@@ -2,7 +2,7 @@
 
 **TeamSync** is a web application designed for task management and collaboration, helping teams efficiently organize their work and track hours worked. The app allows users to create teams, assign tasks to team members, and track the time spent on each task, promoting better time management and productivity.
 
-### Features
+### Features 
 
 - **Team Creation**: Users can create teams and invite other members for collaboration.
 - **Task Management**: Team members can create tasks, assign them to individuals or groups, and track their status.
