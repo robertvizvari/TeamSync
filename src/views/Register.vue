@@ -16,15 +16,15 @@
               <div>
                 <label for="password" class="mb-2 block text-sm font-medium text-foreground">Password</label>
                 <div class="relative">
-                  <Input v-model="password" class="text-foreground" :type="!showPassword ? 'password' : 'text'" placeholder="••••••••" />
-                  <Icon @click="showPassword = !showPassword" class="absolute right-5 top-1/2 size-5 -translate-y-1/2 transform cursor-pointer text-foreground" :icon="!showPassword ? 'radix-icons:eye-open' : 'radix-icons:eye-closed'" />
+                  <Input v-model="password" @input="sanitizeInput($event, 'password')" class="text-foreground" :type="!showPassword ? 'password' : 'text'" placeholder="••••••••" />
+                  <Icon @click="showPassword = !showPassword" :class="password.length < 1 ? 'scale-0' : ''" class="absolute right-5 top-1/2 size-5 -translate-y-1/2 transform cursor-pointer text-foreground transition-all duration-200" :icon="!showPassword ? 'radix-icons:eye-open' : 'radix-icons:eye-closed'" />
                 </div>
               </div>
               <div>
                 <label for="password" class="mb-2 block text-sm font-medium text-foreground">Confirm password</label>
                 <div class="relative">
-                  <Input v-model="confirm_password" class="text-foreground" :type="!showPassword2 ? 'password' : 'text'" placeholder="••••••••" />
-                  <Icon @click="showPassword2 = !showPassword2" class="absolute right-5 top-1/2 size-5 -translate-y-1/2 transform cursor-pointer text-foreground" :icon="!showPassword2 ? 'radix-icons:eye-open' : 'radix-icons:eye-closed'" />
+                  <Input v-model="confirm_password" @input="sanitizeInput($event, 'confirm_password')" class="text-foreground" :type="!showPassword2 ? 'password' : 'text'" placeholder="••••••••" />
+                  <Icon @click="showPassword2 = !showPassword2" :class="confirm_password.length < 1 ? 'scale-0' : ''" class="absolute right-5 top-1/2 size-5 -translate-y-1/2 transform cursor-pointer text-foreground transition-all duration-200" :icon="!showPassword2 ? 'radix-icons:eye-open' : 'radix-icons:eye-closed'" />
                 </div>
               </div>
               <Button @click="validate()" class="w-full text-white">Register</Button>
@@ -56,6 +56,14 @@ export default {
     }
   },
   methods: {
+    sanitizeInput(event, id) {
+      const sanitizedValue = event.target.value.replace(/\s+/g, '')
+      if (id == 'password') {
+        this.password = sanitizedValue
+      } else if (id == 'confirm_password') {
+        this.confirm_password = sanitizedValue
+      }
+    },
     validate() {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if (!this.email || !emailPattern.test(this.email)) {

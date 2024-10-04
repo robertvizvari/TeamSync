@@ -27,6 +27,10 @@ export default {
   },
   mounted() {
     this.handleUrlChange()
+
+    if (this.$route.params.urlId == '') {
+      this.$router.push('/dashboard/mytasks')
+    }
   },
   watch: {
     '$route.params.urlId': 'handleUrlChange',

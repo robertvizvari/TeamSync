@@ -16,8 +16,8 @@
               <div>
                 <label for="password" class="mb-2 block text-sm font-medium text-foreground">Password</label>
                 <div class="relative">
-                  <Input v-model="password" class="text-foreground" :type="!showPassword ? 'password' : 'text'" placeholder="••••••••" />
-                  <Icon @click="showPassword = !showPassword" class="absolute right-5 top-1/2 size-5 -translate-y-1/2 transform cursor-pointer text-foreground" :icon="!showPassword ? 'radix-icons:eye-open' : 'radix-icons:eye-closed'" />
+                  <Input v-model="password" @input="sanitizeInput($event)" class="text-foreground" :type="!showPassword ? 'password' : 'text'" placeholder="••••••••" />
+                  <Icon @click="showPassword = !showPassword" :class="password.length < 1 ? 'scale-0' : ''" class="absolute right-5 top-1/2 size-5 -translate-y-1/2 transform cursor-pointer text-foreground transition-all duration-200" :icon="!showPassword ? 'radix-icons:eye-open' : 'radix-icons:eye-closed'" />
                 </div>
               </div>
               <div class="flex items-center justify-between">
@@ -50,6 +50,10 @@ export default {
     }
   },
   methods: {
+    sanitizeInput(event) {
+      const sanitizedValue = event.target.value.replace(/\s+/g, '')
+      this.password = sanitizedValue
+    },
     validate() {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if (!this.email || !emailPattern.test(this.email)) {

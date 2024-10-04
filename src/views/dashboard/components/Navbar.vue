@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+  <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-muted dark:border-gray-700">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
@@ -23,7 +23,7 @@
               </button>
             </div>
             <Transition name="slide-fade">
-              <div v-if="userSettings" class="absolute right-2 top-10 z-50 my-4 list-none divide-y divide-gray-100 rounded bg-white text-base shadow dark:divide-gray-600 dark:bg-gray-700" id="dropdown-user">
+              <div v-if="userSettings" class="absolute right-2 top-10 z-50 my-4 list-none divide-y divide-gray-100 rounded border border-gray-200 bg-white text-base shadow dark:divide-gray-600 dark:border-gray-700 dark:bg-muted" id="dropdown-user">
                 <div class="px-4 py-3" role="none">
                   <p class="text-sm text-gray-900 dark:text-white" role="none">Neil Sims</p>
                   <p class="truncate text-sm font-medium text-gray-900 dark:text-gray-300" role="none">neil.sims@flowbite.com</p>
