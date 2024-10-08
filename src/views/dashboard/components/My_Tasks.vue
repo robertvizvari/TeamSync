@@ -1,17 +1,21 @@
 <template>
   <div class="min-h-dvh p-2 sm:ml-64">
     <div class="mt-20 flex w-full flex-col p-3">
-      <Tabs default-value="account" class="w-full">
+      <Tabs default-value="latest" class="w-full">
         <TabsList class="grid w-full grid-cols-2">
-          <TabsTrigger value="account">Latest</TabsTrigger>
-          <TabsTrigger value="password">Pinned</TabsTrigger>
+          <TabsTrigger value="latest">Latest</TabsTrigger>
+          <TabsTrigger value="pinned">Pinned</TabsTrigger>
         </TabsList>
-        <TabsContent value="account" class="w-full">
+        <TabsContent value="latest" class="w-full">
           <div class="flex w-full flex-col gap-3">
             <Task v-for="task in tasks" :data="task" />
           </div>
         </TabsContent>
-        <TabsContent value="password">asdad</TabsContent>
+        <TabsContent value="pinned">
+          <div class="flex w-full flex-col gap-3">
+            <Task v-for="task in tasks" :data="task" />
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   </div>
