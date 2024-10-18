@@ -33,7 +33,7 @@ export default {
       ],
       adminLinks: [
         { name: 'Tasks', id: 'tasks', icon: 'radix-icons:check-circled' },
-        { name: 'Projects', id: 'projects', icon: 'radix-icons:check-circled' },
+        { name: 'Projects', id: 'projects', icon: 'radix-icons:card-stack' },
       ],
     }
   },
