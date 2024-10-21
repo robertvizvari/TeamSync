@@ -36,6 +36,6 @@ export default {
 </script>
 
 <script setup>
-import Task from '@/components/Task.vue'
+import Task from '@/views/dashboard/components/Task.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 </script>

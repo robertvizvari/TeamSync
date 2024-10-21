@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-dvh p-4 sm:ml-64">
     <div :class="cards.length > 3 ? 'overflow-x-scroll' : ''" class="custom-scrollbar mt-20 flex h-full flex-row gap-5">
-      <Card v-for="card in cards" class="mb-5 h-full w-[350px] shrink-0 border-border">
+      <Card v-for="card in cards" class="border-border mb-5 h-full w-[350px] shrink-0">
         <CardHeader>
           <CardTitle class="flex items-center gap-4">
             <Avatar>
@@ -30,8 +30,7 @@
           </div>
         </CardContent>
         <CardFooter class="flex justify-between px-6 pb-6">
-          <Button variant="outline">Cancel</Button>
-          <Button>Deploy</Button>
+          <Button class="border-primary text-primary hover:text-primary w-full" size="sm" variant="outline">Open</Button>
         </CardFooter>
       </Card>
     </div>
