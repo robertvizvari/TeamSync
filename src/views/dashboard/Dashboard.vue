@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-x-hidden bg-background">
-    <Sidebar :sidebarActive="sidebarActive" :urlId="urlId" />
+    <Sidebar :sidebarActive="sidebarActive" :urlId="urlId" @toggle-sidebar="toggleSidebar" />
 
     <Navbar @toggle-sidebar="toggleSidebar" />
 
