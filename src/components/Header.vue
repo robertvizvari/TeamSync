@@ -1,5 +1,5 @@
 <template>
-  <nav :class="showBlur ? 'backdrop-blur-xl backdrop-brightness-[.99] dark:backdrop-brightness-75' : ''" class="fixed z-[999] w-full border-gray-200 transition-all duration-100">
+  <nav :class="showBlur ? 'nav_blur' : ''" class="fixed z-[99] w-full border-gray-200 transition-all duration-300">
     <div class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
       <a href="#home" class="flex items-center space-x-3 rtl:space-x-reverse">
         <Logo class="m-[-3px] size-10 sm:m-0 sm:size-12" />
@@ -65,3 +65,15 @@ import Logo from '@/assets/svg/Logo.vue'
 
 const mode = useColorMode()
 </script>
+
+<style>
+.nav_blur {
+  backdrop-filter: blur(10px) brightness(0.99);
+  transition: all 1000ms;
+}
+
+.dark .nav_blur {
+  backdrop-filter: blur(10px) brightness(0.75);
+  transition: all 1000ms;
+}
+</style>
