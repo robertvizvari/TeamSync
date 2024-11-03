@@ -59,7 +59,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'login' })
   } else if (to.meta.requiresGuest && isAuthenticated) {
-    next({ name: 'dashboard' })
+    next('/dashboard/myTasks')
   } else {
     next()
   }
