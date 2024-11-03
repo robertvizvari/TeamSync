@@ -77,6 +77,7 @@ export default {
     async login() {
       if (!this.validateInputs()) return
 
+      this.loading = true
       const auth = getAuth()
       try {
         await signInWithEmailAndPassword(auth, this.email, this.password)

@@ -39,7 +39,11 @@
                   <Icon @click="showPassword2 = !showPassword2" :class="confirm_password.length < 1 ? 'scale-0' : ''" class="absolute right-5 top-1/2 size-5 -translate-y-1/2 transform cursor-pointer text-foreground transition-all duration-200" :icon="!showPassword2 ? 'radix-icons:eye-open' : 'radix-icons:eye-closed'" />
                 </div>
               </div>
-              <Button @click="register" class="w-full text-white">Register</Button>
+              <Button v-if="!loading" @click="register" class="w-full text-white">Register</Button>
+              <Button v-if="loading" disabled class="w-full text-white">
+                <Icon class="mr-2 animate-spin" icon="radix-icons:symbol" />
+                Register
+              </Button>
               <p class="text-center text-sm font-light text-muted-foreground">
                 Already have an account?
                 <router-link to="/login" class="text-primary-600 dark:text-primary-500 font-medium hover:underline">Log in</router-link>
@@ -74,6 +78,7 @@ export default {
       confirm_password: '',
       showPassword: false,
       showPassword2: false,
+      loading: false,
     }
   },
   methods: {
@@ -104,6 +109,7 @@ export default {
     async register() {
       if (!this.validate()) return
 
+      this.loading = true
       try {
         const auth = getAuth()
         const userCredential = await createUserWithEmailAndPassword(auth, this.email, this.password)
@@ -123,9 +129,11 @@ export default {
         store.commit('setUser', userDoc)
 
         await sendEmailVerification(userCredential.user)
+        this.loading = false
         toast.success('Registration successful! Please check your email for verification.')
         this.$router.push('/login')
       } catch (error) {
+        this.loading = false
         toast.error(`Error: ${error.message}`)
       }
     },
