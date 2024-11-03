@@ -13,6 +13,7 @@
     "aos": "^2.3.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "firebase": "^11.0.1",
     "lottie-web": "^5.12.2",
     "lucide-vue-next": "^0.446.0",
     "primeicons": "^7.0.0",
@@ -22,7 +23,8 @@
     "tailwindcss-animate": "^1.0.7",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3",
-    "vue-sonner": "^1.2.1"
+    "vue-sonner": "^1.2.1",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@iconify-json/radix-icons": "^1.2.0",

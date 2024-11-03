@@ -21,9 +21,13 @@
                 </div>
               </div>
               <div class="flex items-center justify-between">
-                <a href="#" class="text-sm font-medium text-primary hover:underline">Forgot password?</a>
+                <a @click.prevent="resetPassword" href="#" class="text-sm font-medium text-primary hover:underline">Forgot password?</a>
               </div>
-              <Button @click="validate()" class="w-full text-white">Log in</Button>
+              <Button v-if="!loading" @click="login" class="w-full text-white">Log in</Button>
+              <Button v-if="loading" disabled class="w-full text-white">
+                <Icon class="mr-2 animate-spin" icon="radix-icons:symbol" />
+                Log in
+              </Button>
               <p class="text-center text-sm font-light text-muted-foreground">
                 Don't have an account?
                 <router-link to="/register" class="text-primary-600 dark:text-primary-500 font-medium hover:underline">Register</router-link>
@@ -41,12 +45,16 @@
 </template>
 
 <script>
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
+import { toast } from 'vue-sonner'
+
 export default {
   data() {
     return {
       email: '',
       password: '',
       showPassword: false,
+      loading: false,
     }
   },
   methods: {
@@ -54,7 +62,7 @@ export default {
       const sanitizedValue = event.target.value.replace(/\s+/g, '')
       this.password = sanitizedValue
     },
-    validate() {
+    validateInputs() {
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if (!this.email || !emailPattern.test(this.email)) {
         toast.warning('Please enter a valid email')
@@ -64,9 +72,71 @@ export default {
         toast.warning('Password must be at least 6 characters long')
         return false
       }
-      toast.success('Inputs are valid!')
-      this.$router.push('/dashboard/mytasks')
       return true
+    },
+    async login() {
+      if (!this.validateInputs()) return
+
+      const auth = getAuth()
+      try {
+        await signInWithEmailAndPassword(auth, this.email, this.password)
+        toast.success('Login successful!')
+        this.$router.push('/dashboard/mytasks')
+
+        this.loading = false
+      } catch (error) {
+        switch (error.code) {
+          case 'auth/wrong-password':
+            toast.error('Incorrect password. Please try again.')
+            break
+          case 'auth/user-not-found':
+            toast.error('No account found with this email. Please register first.')
+            break
+          case 'auth/too-many-requests':
+            toast.warning('Too many unsuccessful attempts. Please try again later.')
+            break
+          case 'auth/network-request-failed':
+            toast.error('Network error. Check your internet connection.')
+            break
+          default:
+            toast.error('An error occurred. Please try again.')
+        }
+
+        this.loading = false
+      }
+    },
+    async resetPassword() {
+      this.loading = true
+
+      if (!this.email) {
+        toast.warning('Please enter your email to reset password')
+        this.loading = false
+        return
+      }
+
+      const auth = getAuth()
+      try {
+        await sendPasswordResetEmail(auth, this.email)
+        toast.success('Password reset email sent! Check your inbox.')
+
+        this.loading = false
+      } catch (error) {
+        switch (error.code) {
+          case 'auth/user-not-found':
+            toast.error('No account found with this email.')
+            break
+          case 'auth/invalid-email':
+            toast.warning('Invalid email format. Please enter a correct email.')
+            break
+          case 'auth/network-request-failed':
+            toast.error('Network error. Check your internet connection.')
+            break
+          default:
+            toast.error('An error occurred. Please try again.')
+        }
+
+        this.loading = false
+      }
     },
   },
 }
@@ -78,7 +148,6 @@ import LottieAnimation from '@/components/LottieAnimation.vue'
 import { Icon } from '@iconify/vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { toast } from 'vue-sonner'
 </script>
 
 <style scoped>

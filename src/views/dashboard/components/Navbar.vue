@@ -19,14 +19,19 @@
             <div>
               <button @click="userSettings = !userSettings" type="button" class="flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                 <span class="sr-only">Open user menu</span>
-                <img class="h-8 w-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo" />
+                <Avatar :class="!user.profilePicture ? 'border border-gray-600' : ''" class="h-8 w-8 rounded-full">
+                  <!-- <AvatarImage src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="User photo" /> -->
+                  <AvatarFallback v-if="user && user.name && user.surname" class="text-md font-bold uppercase">
+                    {{ user.name.slice(0, 1) + user.surname.slice(0, 1) }}
+                  </AvatarFallback>
+                </Avatar>
               </button>
             </div>
             <Transition name="slide-fade">
               <div v-if="userSettings" class="absolute right-2 top-10 z-50 my-4 list-none divide-y divide-gray-100 rounded border border-gray-200 bg-white text-base shadow dark:divide-gray-600 dark:border-gray-700 dark:bg-muted" id="dropdown-user">
                 <div class="px-4 py-3" role="none">
-                  <p class="text-sm text-gray-900 dark:text-white" role="none">Neil Sims</p>
-                  <p class="truncate text-sm font-medium text-gray-900 dark:text-gray-300" role="none">neil.sims@flowbite.com</p>
+                  <p class="text-sm text-gray-900 dark:text-white" role="none">{{ user.name + ' ' + user.surname }}</p>
+                  <p class="truncate text-sm font-medium text-gray-900 dark:text-gray-300" role="none">{{ user.email }}</p>
                 </div>
                 <ul class="py-1" role="none">
                   <li v-for="link in userSettingsLinks">
@@ -46,9 +51,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
+      user: [],
       userSettings: false,
       userSettingsLinks: [{ name: 'Account' }, { name: 'Settings' }, { name: 'Log out' }],
     }
@@ -58,11 +66,15 @@ export default {
       this.$emit('toggle-sidebar')
     },
   },
+  mounted() {
+    this.user = JSON.parse(localStorage.getItem('user'))
+  },
 }
 </script>
 
 <script setup>
 import Logo from '../../../assets/svg/Logo.vue'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 </script>
 
 <style scoped>

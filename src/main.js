@@ -3,9 +3,12 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+
+import { db } from './firebase'
 
 const app = createApp(App)
 
@@ -14,5 +17,8 @@ window.addEventListener('load', function () {
 })
 
 app.use(router)
+app.provide('db', db)
 
-app.mount('#app')
+store.dispatch('fetchUser').then(() => {
+  app.mount('#app')
+})

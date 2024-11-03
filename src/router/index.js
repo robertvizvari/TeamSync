@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Dashboard from '../views/dashboard/Dashboard.vue'
+import store from '@/store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,6 +12,7 @@ const router = createRouter({
       component: Home,
       meta: {
         title: 'TeamSync - Home',
+        requiresAuth: false,
       },
     },
     {
@@ -19,20 +21,25 @@ const router = createRouter({
       component: Dashboard,
       meta: {
         title: 'TeamSync - Dashboard',
+        requiresAuth: true,
       },
     },
     {
       path: '/login',
+      name: 'login',
       component: () => import('@/views/Login.vue'),
       meta: {
         title: 'TeamSync - Log in',
+        requiresGuest: true,
       },
     },
     {
       path: '/register',
+      name: 'register',
       component: () => import('@/views/Register.vue'),
       meta: {
         title: 'TeamSync - Register',
+        requiresGuest: true,
       },
     },
     {
@@ -45,8 +52,17 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters.isAuthenticated
   document.title = to.meta?.title ?? 'TeamSync'
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next({ name: 'login' })
+  } else if (to.meta.requiresGuest && isAuthenticated) {
+    next({ name: 'dashboard' })
+  } else {
+    next()
+  }
 })
 
 export default router

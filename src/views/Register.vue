@@ -10,6 +10,18 @@
           <div class="w-full space-y-4 p-6 sm:p-8 md:space-y-6">
             <div class="space-y-4 md:space-y-6">
               <div>
+                <label for="name" class="mb-2 block text-sm font-medium text-foreground">Name</label>
+                <Input v-model="name" class="text-foreground" type="text" name="name" placeholder="John" />
+              </div>
+              <div>
+                <label for="surname" class="mb-2 block text-sm font-medium text-foreground">Surname</label>
+                <Input v-model="surname" class="text-foreground" type="text" name="surname" placeholder="Doe" />
+              </div>
+              <div>
+                <label for="surname" class="mb-2 block text-sm font-medium text-foreground">Birth date</label>
+                <input class="w-full rounded-md border border-border bg-background p-2 text-foreground" type="date" v-model="birth_date" />
+              </div>
+              <div>
                 <label for="email" class="mb-2 block text-sm font-medium text-foreground">Email</label>
                 <Input v-model="email" class="text-foreground" type="email" name="email" placeholder="Email" />
               </div>
@@ -27,7 +39,7 @@
                   <Icon @click="showPassword2 = !showPassword2" :class="confirm_password.length < 1 ? 'scale-0' : ''" class="absolute right-5 top-1/2 size-5 -translate-y-1/2 transform cursor-pointer text-foreground transition-all duration-200" :icon="!showPassword2 ? 'radix-icons:eye-open' : 'radix-icons:eye-closed'" />
                 </div>
               </div>
-              <Button @click="validate()" class="w-full text-white">Register</Button>
+              <Button @click="register" class="w-full text-white">Register</Button>
               <p class="text-center text-sm font-light text-muted-foreground">
                 Already have an account?
                 <router-link to="/login" class="text-primary-600 dark:text-primary-500 font-medium hover:underline">Log in</router-link>
@@ -45,9 +57,18 @@
 </template>
 
 <script>
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth'
+import store from '@/store'
+import { doc, setDoc } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { toast } from 'vue-sonner'
+
 export default {
   data() {
     return {
+      name: '',
+      surname: '',
+      birth_date: '',
       email: '',
       password: '',
       confirm_password: '',
@@ -58,9 +79,9 @@ export default {
   methods: {
     sanitizeInput(event, id) {
       const sanitizedValue = event.target.value.replace(/\s+/g, '')
-      if (id == 'password') {
+      if (id === 'password') {
         this.password = sanitizedValue
-      } else if (id == 'confirm_password') {
+      } else if (id === 'confirm_password') {
         this.confirm_password = sanitizedValue
       }
     },
@@ -78,9 +99,35 @@ export default {
         toast.warning('Passwords do not match')
         return false
       }
-      toast.success('Inputs are valid!')
-      this.$router.push('/dashboard/mytasks')
       return true
+    },
+    async register() {
+      if (!this.validate()) return
+
+      try {
+        const auth = getAuth()
+        const userCredential = await createUserWithEmailAndPassword(auth, this.email, this.password)
+
+        const displayName = `${this.name} ${this.surname}`
+        await updateProfile(userCredential.user, { displayName })
+
+        const userDoc = {
+          uid: userCredential.user.uid,
+          name: this.name,
+          surname: this.surname,
+          email: this.email,
+          birth_date: this.birth_date,
+        }
+        await setDoc(doc(db, 'users', userCredential.user.uid), userDoc)
+
+        store.commit('setUser', userDoc)
+
+        await sendEmailVerification(userCredential.user)
+        toast.success('Registration successful! Please check your email for verification.')
+        this.$router.push('/login')
+      } catch (error) {
+        toast.error(`Error: ${error.message}`)
+      }
     },
   },
 }
@@ -92,7 +139,6 @@ import LottieAnimation from '@/components/LottieAnimation.vue'
 import { Icon } from '@iconify/vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { toast } from 'vue-sonner'
 </script>
 
 <style scoped>
@@ -100,5 +146,9 @@ import { toast } from 'vue-sonner'
   .lottie {
     max-width: 35rem;
   }
+}
+
+.dark input[type='date'] {
+  color-scheme: dark;
 }
 </style>
