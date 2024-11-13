@@ -25,6 +25,15 @@ const router = createRouter({
       },
     },
     {
+      path: '/account',
+      name: 'account',
+      component: () => import('@/views/Account.vue'),
+      meta: {
+        title: 'TeamSync - Account',
+        requiresAuth: true,
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('@/views/Login.vue'),
@@ -59,7 +68,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'login' })
   } else if (to.meta.requiresGuest && isAuthenticated) {
-    next('/dashboard/myTasks')
+    next('/dashboard/mytasks')
   } else {
     next()
   }

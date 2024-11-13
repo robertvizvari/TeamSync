@@ -17,6 +17,7 @@ window.addEventListener('load', function () {
 })
 
 app.use(router)
+app.use(store)
 app.provide('db', db)
 
 store.dispatch('fetchUser').then(() => {

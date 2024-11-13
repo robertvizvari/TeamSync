@@ -47,6 +47,8 @@
 <script>
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
 import { toast } from 'vue-sonner'
+import { useStore } from 'vuex'
+import { doc } from 'firebase/firestore'
 
 export default {
   data() {
@@ -79,13 +81,21 @@ export default {
 
       this.loading = true
       const auth = getAuth()
+
       try {
         await signInWithEmailAndPassword(auth, this.email, this.password)
-        toast.success('Login successful!')
-        this.$router.push('/dashboard/mytasks')
+
+        await this.$store.dispatch('fetchUser')
+
+        this.$nextTick(() => {
+          toast.success('Login successful!')
+
+          this.redirect()
+        })
 
         this.loading = false
       } catch (error) {
+        this.loading = false
         switch (error.code) {
           case 'auth/wrong-password':
             toast.error('Incorrect password. Please try again.')
@@ -102,10 +112,9 @@ export default {
           default:
             toast.error('An error occurred. Please try again.')
         }
-
-        this.loading = false
       }
     },
+
     async resetPassword() {
       this.loading = true
 
@@ -138,6 +147,9 @@ export default {
 
         this.loading = false
       }
+    },
+    redirect() {
+      this.$router.push('/dashboard/mytasks')
     },
   },
 }

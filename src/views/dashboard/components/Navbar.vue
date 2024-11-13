@@ -15,12 +15,14 @@
           </router-link>
         </div>
         <div class="flex items-center">
+          <DarkModeButton :color="'light'" />
+
           <div class="ms-3 flex items-center">
             <div>
               <button @click="userSettings = !userSettings" type="button" class="flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                 <span class="sr-only">Open user menu</span>
                 <Avatar :class="!user.profilePicture ? 'border border-gray-600' : ''" class="h-8 w-8 rounded-full">
-                  <!-- <AvatarImage src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="User photo" /> -->
+                  <AvatarImage :src="user.profilePicture" alt="User photo" />
                   <AvatarFallback v-if="user && user.name && user.surname" class="text-md font-bold uppercase">
                     {{ user.name.slice(0, 1) + user.surname.slice(0, 1) }}
                   </AvatarFallback>
@@ -33,11 +35,11 @@
                   <p class="text-sm text-gray-900 dark:text-white" role="none">{{ user.name + ' ' + user.surname }}</p>
                   <p class="truncate text-sm font-medium text-gray-900 dark:text-gray-300" role="none">{{ user.email }}</p>
                 </div>
-                <ul class="py-1" role="none">
-                  <li v-for="link in userSettingsLinks">
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
-                      {{ link.name }}
-                    </a>
+                <ul class="pt-1" role="none">
+                  <li>
+                    <router-link to="/account" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Account</router-link>
+                    <router-link to="#" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</router-link>
+                    <span @click="showDialog = true" class="block cursor-pointer bg-red-300 bg-opacity-20 px-4 py-2 text-sm text-red-300 transition-all duration-150 hover:bg-opacity-30" role="menuitem">Log out</span>
                   </li>
                 </ul>
                 <!-- <div @click="userSettings = false" class="absolute right-0 top-0 h-screen w-screen bg-transparent"></div> -->
@@ -47,34 +49,70 @@
         </div>
       </div>
     </div>
+
+    <Transition name="fade">
+      <div v-if="showDialog" @click="showDialog = false" class="fixed left-1/2 top-1/2 z-[9999] flex h-screen w-screen -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black bg-opacity-60">
+        <div class="grid w-full max-w-lg gap-4 border border-border bg-background p-6 shadow-lg duration-200 sm:rounded-lg" style="pointer-events: auto">
+          <div class="flex flex-col gap-y-2 text-center sm:text-left">
+            <h2 class="text-lg font-semibold text-foreground">Are you absolutely sure?</h2>
+            <p class="text-sm text-muted-foreground">This action cannot be undone. This will permanently delete your account and remove your data from our servers.</p>
+          </div>
+          <div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2">
+            <Button @click="showDialog = false" class="mt-2 font-normal text-white sm:mt-0" size="sm" variant="outline">Cancel</Button>
+            <Button @click="logout" class="bg-red-500 font-normal text-white hover:bg-red-400" size="sm">Log out</Button>
+          </div>
+        </div>
+      </div>
+    </Transition>
   </nav>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { getAuth, signOut } from 'firebase/auth'
+import { toast } from 'vue-sonner'
+import { useRouter } from 'vue-router'
 
 export default {
   data() {
     return {
-      user: [],
+      user: JSON.parse(localStorage.getItem('user')) || [],
       userSettings: false,
-      userSettingsLinks: [{ name: 'Account' }, { name: 'Settings' }, { name: 'Log out' }],
+      showDialog: false,
     }
   },
   methods: {
     toggleSidebar() {
       this.$emit('toggle-sidebar')
     },
+
+    async logout() {
+      try {
+        const auth = getAuth()
+
+        await signOut(auth)
+
+        localStorage.removeItem('user')
+
+        toast.success('You have been logged out successfully.')
+
+        this.$router.push('/')
+      } catch (error) {
+        toast.error(`Logout failed: ${error.message}`)
+        console.error(error)
+      }
+    },
   },
   mounted() {
-    this.user = JSON.parse(localStorage.getItem('user'))
+    this.user = JSON.parse(localStorage.getItem('user')) || []
   },
 }
 </script>
 
 <script setup>
-import Logo from '../../../assets/svg/Logo.vue'
+import Logo from '@/assets/svg/Logo.vue'
+import DarkModeButton from '@/components/Dark_Mode.vue'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 </script>
 
 <style scoped>
@@ -96,5 +134,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 .slide-fade-leave-from {
   transform: translateY(0) translateX(0) rotate(0deg) scale(1);
   opacity: 1;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

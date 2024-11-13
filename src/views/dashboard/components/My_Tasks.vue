@@ -6,6 +6,20 @@
           <TabsTrigger value="latest">Latest</TabsTrigger>
           <TabsTrigger value="pinned">Pinned</TabsTrigger>
         </TabsList>
+        <div class="my-3">
+          <Select>
+            <SelectTrigger class="text-foreground sm:max-w-[200px]">
+              <SelectValue class="text-foreground" placeholder="Select a project" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Projects</SelectLabel>
+                <SelectItem value="all">Show all</SelectItem>
+                <SelectItem v-for="project in tasks" :value="project.project">{{ project.project }}</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
         <TabsContent value="latest" class="w-full">
           <div class="flex w-full flex-col gap-3">
             <Task v-for="task in tasks" :data="task" />
@@ -38,4 +52,5 @@ export default {
 <script setup>
 import Task from '@/views/dashboard/components/Task.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 </script>
