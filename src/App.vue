@@ -38,21 +38,16 @@ html {
   background-color: hsl(var(--primary));
 }
 
-/* * {
+* {
   scrollbar-width: auto;
-  scrollbar-color: hsl(var(--primary));
-}
-
-*::-webkit-scrollbar {
-  width: 14px;
+  scrollbar-color: hsl(var(--primary)) hsl(var(--border));
 }
 
 *::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
+  background: hsl(var(--border));
 }
 
 *::-webkit-scrollbar-thumb {
   background-color: hsl(var(--primary));
-  border-radius: 10px;
-} */
+}
 </style>

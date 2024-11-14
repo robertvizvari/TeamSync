@@ -1,5 +1,7 @@
 <template>
-  <div class="flex h-screen w-full items-center justify-center bg-background">
+  <div class="flex h-dvh w-full items-center justify-center bg-background">
+    <Navbar />
+
     <div class="mx-auto w-full max-w-lg rounded-lg bg-background p-6 shadow-lg">
       <div class="mb-4 flex items-center justify-center">
         <template v-if="!isEditing">
@@ -9,6 +11,7 @@
           </div>
         </template>
         <template v-else>
+          <img v-if="profilePicture" :src="profilePicture || ''" alt="Profile Picture" class="mr-5 size-12 rounded-full" />
           <input type="file" accept="image/*" @change="handleImageUpload" class="hover:file:bg-primary-dark block w-full text-sm text-foreground file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-white" />
         </template>
       </div>
@@ -23,9 +26,13 @@
         <Input v-model="surname" :disabled="!isEditing" class="mt-1 bg-background text-foreground" />
       </div>
 
-      <Button @click="toggleEdit" :class="!isEditing ? 'border-primary text-primary hover:text-primary' : ''" class="mt-1 w-full" :variant="!isEditing ? 'outline' : ''" :disabled="isEditing && originalName?.trim() === name.trim() && originalSurname?.trim() === surname.trim() && originalProfilePicture?.trim() === profilePicture.trim()">
-        {{ isEditing ? 'Save' : 'Edit' }}
-      </Button>
+      <div class="flex flex-row items-center gap-2">
+        <Button @click="discard" v-if="isEditing" class="mt-1 w-[40%] border-red-500 text-red-500 hover:bg-red-500 hover:text-white" variant="outline">Discard</Button>
+
+        <Button @click="toggleEdit" :class="!isEditing ? 'border-primary text-primary hover:text-primary' : 'text-white'" class="mt-1 w-full" :variant="!isEditing ? 'outline' : ''" :disabled="isEditing && originalName?.trim() === name.trim() && originalSurname?.trim() === surname.trim() && originalProfilePicture?.trim() === profilePicture.trim()">
+          {{ isEditing ? 'Save' : 'Edit' }}
+        </Button>
+      </div>
     </div>
   </div>
 </template>
@@ -68,6 +75,12 @@ export default {
     },
   },
   methods: {
+    discard() {
+      this.name = this.originalName
+      this.surname = this.originalSurname
+      this.profilePicture = this.originalProfilePicture
+      this.isEditing = false
+    },
     toggleEdit() {
       if (this.isEditing) {
         this.saveChanges()
@@ -130,6 +143,7 @@ export default {
 </script>
 
 <script setup>
+import Navbar from './dashboard/components/Navbar.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 </script>

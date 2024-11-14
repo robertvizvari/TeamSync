@@ -1,5 +1,5 @@
 <template>
-  <Dialog class="custom-scrollbar">
+  <Dialog>
     <div class="flex flex-row items-center gap-5 rounded-lg border border-border p-4 text-foreground">
       <div>
         <Checkbox />

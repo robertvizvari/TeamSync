@@ -37,12 +37,12 @@
                 </div>
                 <ul class="pt-1" role="none">
                   <li>
-                    <router-link to="/account" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Account</router-link>
+                    <router-link v-if="$route.path == '/account'" to="/dashboard/mytasks" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</router-link>
+                    <router-link v-if="$route.path !== '/account'" to="/account" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Account</router-link>
                     <router-link to="#" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</router-link>
                     <span @click="showDialog = true" class="block cursor-pointer bg-red-300 bg-opacity-20 px-4 py-2 text-sm text-red-300 transition-all duration-150 hover:bg-opacity-30" role="menuitem">Log out</span>
                   </li>
                 </ul>
-                <!-- <div @click="userSettings = false" class="absolute right-0 top-0 h-screen w-screen bg-transparent"></div> -->
               </div>
             </Transition>
           </div>
@@ -50,15 +50,17 @@
       </div>
     </div>
 
+    <div v-if="userSettings" @click="userSettings = false" class="absolute right-0 top-0 h-screen w-screen bg-transparent"></div>
+
     <Transition name="fade">
       <div v-if="showDialog" @click="showDialog = false" class="fixed left-1/2 top-1/2 z-[9999] flex h-screen w-screen -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black bg-opacity-60">
         <div class="grid w-full max-w-lg gap-4 border border-border bg-background p-6 shadow-lg duration-200 sm:rounded-lg" style="pointer-events: auto">
           <div class="flex flex-col gap-y-2 text-center sm:text-left">
             <h2 class="text-lg font-semibold text-foreground">Are you absolutely sure?</h2>
-            <p class="text-sm text-muted-foreground">This action cannot be undone. This will permanently delete your account and remove your data from our servers.</p>
+            <p class="text-sm text-muted-foreground">Are you sure you want to log out? Any unsaved changes may be lost. Click "Log out" to log out, or "Cancel" to stay logged in.</p>
           </div>
           <div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2">
-            <Button @click="showDialog = false" class="mt-2 font-normal text-white sm:mt-0" size="sm" variant="outline">Cancel</Button>
+            <Button @click="showDialog = false" class="mt-2 font-normal text-foreground sm:mt-0" size="sm" variant="outline">Cancel</Button>
             <Button @click="logout" class="bg-red-500 font-normal text-white hover:bg-red-400" size="sm">Log out</Button>
           </div>
         </div>
