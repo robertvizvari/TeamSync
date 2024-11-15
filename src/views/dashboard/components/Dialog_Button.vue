@@ -12,20 +12,20 @@
         <div class="flex w-full flex-col gap-2">
           <Label for="image" class="text-foreground">Image</Label>
           <div class="flex items-center gap-5">
-            <img v-if="image" :src="image || ''" class="size-12 rounded-full" />
+            <img v-if="image" :src="image || ''" class="h-12 w-12 rounded-full object-cover" />
             <input id="image" type="file" accept="image/*" @change="handleImageUpload" class="hover:file:bg-primary-dark block w-full text-sm text-foreground file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-white" />
           </div>
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="name" class="text-foreground">Name</Label>
-          <Input id="name" class="text-foreground" placeholder="Important Project" />
+          <Input v-model="name" id="name" class="text-foreground" placeholder="Important Project" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="description" class="flex gap-1 text-foreground">
             Description
             <p class="mt-[-1px] text-xs text-muted-foreground">(optional)</p>
           </Label>
-          <Textarea id="description" class="h-40 resize-none text-foreground" placeholder="This project is very important..." maxlength="500" />
+          <Textarea v-model="description" id="description" class="h-40 resize-none text-foreground" placeholder="This project is very important..." maxlength="500" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="invite" class="flex items-center gap-2 text-foreground">
@@ -58,17 +58,23 @@
         </div>
       </div>
       <DialogFooter>
-        <Button type="submit">Save changes</Button>
+        <Button class="w-full text-white" :disabled="image == '' || name == ''" @click="createProject">Create project</Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
 </template>
 
 <script>
+import { db } from '@/firebase'
+import { doc, setDoc, serverTimestamp, getDocs, collection, query, where } from 'firebase/firestore'
+import { toast } from 'vue-sonner'
+
 export default {
   data() {
     return {
       image: '',
+      name: '',
+      description: '',
       inviteEmails: [],
     }
   },
@@ -81,6 +87,58 @@ export default {
           this.image = e.target.result
         }
         reader.readAsDataURL(file)
+      }
+    },
+    async validateMembers(emails) {
+      const validMembers = []
+      for (const email of emails) {
+        try {
+          const userQuery = query(collection(db, 'users'), where('email', '==', email))
+          const userSnapshot = await getDocs(userQuery)
+
+          if (!userSnapshot.empty) {
+            const userData = userSnapshot.docs[0].data()
+            validMembers.push({ uid: userSnapshot.docs[0].id, email: userData.email })
+          } else {
+            toast.error(`User with email ${email} is not registered.`)
+            return null
+          }
+        } catch (error) {
+          console.error(`Error validating email ${email}:`, error)
+          toast.error(`Failed to validate user ${email}.`)
+          return null
+        }
+      }
+      return validMembers
+    },
+    async createProject() {
+      try {
+        if (!this.name || !this.image) {
+          toast.warning('Project name and image are required.')
+          return
+        }
+
+        const validMembers = await this.validateMembers(this.inviteEmails)
+        if (!validMembers) return
+
+        const projectId = Date.now().toString()
+
+        const projectData = {
+          projectName: this.name,
+          projectImage: this.image,
+          description: this.description || '',
+          createdBy: JSON.parse(localStorage.getItem('user')).uid,
+          createdAt: serverTimestamp(),
+          members: validMembers,
+        }
+
+        await setDoc(doc(db, 'projects', projectId), projectData)
+
+        toast.success('Project created successfully!')
+        this.$emit('project-created', projectId)
+      } catch (error) {
+        console.error('Error creating project:', error)
+        toast.error('Failed to create project. Please try again.')
       }
     },
   },
