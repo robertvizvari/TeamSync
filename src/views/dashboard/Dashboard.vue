@@ -4,8 +4,8 @@
 
     <Navbar @toggle-sidebar="toggleSidebar" />
 
-    <MyTasks v-show="urlId == 'mytasks'" />
-    <MyProjects v-show="urlId == 'myprojects'" :projects="projects" />
+    <MyTasks v-if="urlId == 'mytasks'" :projects="projects" />
+    <MyProjects v-if="urlId == 'myprojects'" :projects="projects" />
   </div>
 </template>
 
@@ -31,23 +31,18 @@ export default {
     },
     async fetchProjects() {
       try {
-        const user = JSON.parse(localStorage.getItem('user')) // Get current user from localStorage
+        const user = JSON.parse(localStorage.getItem('user'))
         if (!user || !user.uid) {
           toast.error('User not logged in.')
           return
         }
 
-        console.log('Fetching projects for user UID:', user.uid) // Debug log
-
         const projectsRef = collection(db, 'projects')
-        const querySnapshot = await getDocs(projectsRef) // Fetch all projects
+        const querySnapshot = await getDocs(projectsRef)
 
-        console.log('Total projects fetched:', querySnapshot.size) // Log number of results
+        const userId = user.uid
 
-        // Filter projects where the user's UID is in members
-        const fetchedProjects = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })).filter((project) => project.members.some((member) => member.uid === user.uid))
-
-        console.log('Projects with user UID:', fetchedProjects) // Log matched projects
+        const fetchedProjects = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })).filter((project) => project.members.some((member) => member.uid === userId) || project.createdBy === userId)
 
         this.projects = fetchedProjects
       } catch (error) {

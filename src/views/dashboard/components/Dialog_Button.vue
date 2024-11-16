@@ -18,7 +18,7 @@
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="name" class="text-foreground">Name</Label>
-          <Input v-model="name" id="name" class="text-foreground" placeholder="Important Project" />
+          <Input v-model="name" id="name" class="text-foreground" placeholder="Important Project" maxlength="50" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="description" class="flex gap-1 text-foreground">
@@ -136,6 +136,11 @@ export default {
 
         toast.success('Project created successfully!')
         this.$emit('project-created', projectId)
+
+        this.image = ''
+        this.name = ''
+        this.description = ''
+        this.inviteEmails = ''
       } catch (error) {
         console.error('Error creating project:', error)
         toast.error('Failed to create project. Please try again.')

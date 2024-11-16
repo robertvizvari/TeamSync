@@ -20,7 +20,9 @@
           </CardHeader>
           <CardContent class="flex w-full flex-col gap-2">
             <div>
-              <Accordion v-if="data.members" type="single" collapsible defaultValue="item-1">
+              <div v-if="data.members.length == 0" class="font-semibold">No other members</div>
+
+              <Accordion v-if="data.members.length > 0" type="single" collapsible>
                 <AccordionItem value="item-1">
                   <AccordionTrigger>Members ({{ data.members.length }})</AccordionTrigger>
                   <AccordionContent class="text-[1rem]">
@@ -55,8 +57,8 @@
               </div>
             </div>
           </CardContent>
-          <CardFooter class="mt-auto flex justify-between px-6 pb-6">
-            <Button class="w-full border-primary text-primary hover:text-primary" size="sm" variant="outline">Open</Button>
+          <CardFooter class="mt-auto flex justify-between gap-2 px-6 pb-6">
+            <Button class="w-full border-primary text-primary hover:text-primary" size="sm" variant="outline">Add task</Button>
           </CardFooter>
         </Card>
       </div>
@@ -73,12 +75,10 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import DialogButton from '../components/Dialog_Button.vue'
 
-// Props
 const props = defineProps({
   projects: Array,
 })
 
-// Toggle description visibility on the project object itself
 const toggleDescription = (project) => {
   project.showDescription = !project.showDescription
 }

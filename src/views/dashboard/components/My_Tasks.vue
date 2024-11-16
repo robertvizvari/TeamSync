@@ -13,9 +13,13 @@
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Projects</SelectLabel>
-                <SelectItem value="all">Show all</SelectItem>
-                <SelectItem v-for="project in tasks" :value="project.project">{{ project.project }}</SelectItem>
+                <SelectLabel>
+                  {{ projects.length > 0 ? 'Projects' : 'No projects' }}
+                </SelectLabel>
+                <div v-if="projects.length > 0">
+                  <SelectItem value="all">Show all</SelectItem>
+                  <SelectItem v-for="project in projects" :value="project.id">{{ project.projectName }}</SelectItem>
+                </div>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -37,6 +41,7 @@
 
 <script>
 export default {
+  props: ['projects'],
   data() {
     return {
       tasks: [
