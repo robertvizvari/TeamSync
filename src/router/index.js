@@ -34,6 +34,15 @@ const router = createRouter({
       },
     },
     {
+      path: '/invite/:projectId',
+      name: 'invite',
+      component: () => import('@/views/Invite.vue'),
+      meta: {
+        title: 'TeamSync - Invitation',
+        requiresAuth: true,
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('@/views/Login.vue'),

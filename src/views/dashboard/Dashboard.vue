@@ -42,7 +42,7 @@ export default {
 
         const userId = user.uid
 
-        const fetchedProjects = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })).filter((project) => project.members.some((member) => member.uid === userId) || project.createdBy === userId)
+        const fetchedProjects = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })).filter((project) => project.createdBy === userId || project.members.some((member) => member.uid === userId && member.state === 'accepted'))
 
         this.projects = fetchedProjects
       } catch (error) {

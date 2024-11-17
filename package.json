@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@vueuse/core": "^11.2.0",
     "aos": "^2.3.4",
     "class-variance-authority": "^0.7.0",

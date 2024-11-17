@@ -68,6 +68,7 @@
 import { db } from '@/firebase'
 import { doc, setDoc, serverTimestamp, getDocs, collection, query, where } from 'firebase/firestore'
 import { toast } from 'vue-sonner'
+import emailjs from '@emailjs/browser'
 
 export default {
   data() {
@@ -79,34 +80,110 @@ export default {
     }
   },
   methods: {
-    handleImageUpload(event) {
+    async handleImageUpload(event) {
       const file = event.target.files[0]
+
       if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.image = e.target.result
+        if (file.size > 1048487) {
+          try {
+            const compressedDataUrl = await this.compressImage(file, 800, 800)
+            if (compressedDataUrl.length > 1048487) {
+              toast.error('Compressed image is still too large. Please choose a smaller image.')
+              return
+            } else {
+              this.image = compressedDataUrl
+            }
+          } catch (error) {
+            console.error('Error compressing image:', error)
+            toast.error('Failed to process the image. Please try again.')
+          }
+        } else {
+          const reader = new FileReader()
+          reader.onload = (e) => {
+            this.image = e.target.result
+          }
+          reader.readAsDataURL(file)
         }
-        reader.readAsDataURL(file)
+      } else {
+        toast.error('Invalid file type. Please upload an image.')
       }
     },
-    async validateMembers(emails) {
+    compressImage(file, maxWidth, maxHeight) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+
+        reader.onload = (e) => {
+          const img = new Image()
+          img.onload = () => {
+            const canvas = document.createElement('canvas')
+            const ctx = canvas.getContext('2d')
+
+            let width = img.width
+            let height = img.height
+
+            if (width > maxWidth || height > maxHeight) {
+              if (width > height) {
+                height = Math.floor((height * maxWidth) / width)
+                width = maxWidth
+              } else {
+                width = Math.floor((width * maxHeight) / height)
+                height = maxHeight
+              }
+            }
+
+            canvas.width = width
+            canvas.height = height
+            ctx.drawImage(img, 0, 0, width, height)
+
+            const resizedDataUrl = canvas.toDataURL('image/jpeg', 0.8)
+
+            resolve(resizedDataUrl)
+          }
+
+          img.onerror = () => reject(new Error('Failed to load image.'))
+          img.src = e.target.result
+        }
+
+        reader.onerror = () => reject(new Error('Failed to read file.'))
+        reader.readAsDataURL(file)
+      })
+    },
+    async validateAndSendInvites(emails, projectId, projectName) {
       const validMembers = []
       for (const email of emails) {
         try {
-          const userQuery = query(collection(db, 'users'), where('email', '==', email))
+          const trimmedEmail = email.trim()
+          const userQuery = query(collection(db, 'users'), where('email', '==', trimmedEmail))
           const userSnapshot = await getDocs(userQuery)
 
           if (!userSnapshot.empty) {
             const userData = userSnapshot.docs[0].data()
-            validMembers.push({ uid: userSnapshot.docs[0].id, email: userData.email })
+            const inviteData = {
+              uid: userSnapshot.docs[0].id,
+              email: userData.email,
+              state: 'pending',
+            }
+
+            validMembers.push(inviteData)
+
+            const inviteLink = `https://teamsync-app.vercel.app/invite/${projectId}?email=${encodeURIComponent(trimmedEmail)}`
+
+            await emailjs.send(
+              import.meta.env.VITE_EMAILJS_SERVICE_ID,
+              import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+              {
+                to_email: trimmedEmail,
+                project_name: projectName,
+                invite_link: inviteLink,
+              },
+              import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+            )
           } else {
-            toast.error(`User with email ${email} is not registered.`)
-            return null
+            toast.error(`User with email ${trimmedEmail} is not registered.`)
           }
         } catch (error) {
-          console.error(`Error validating email ${email}:`, error)
-          toast.error(`Failed to validate user ${email}.`)
-          return null
+          console.error(`Error validating or sending email to ${email}:`, error)
+          throw new Error(`Failed to validate or send invite to ${email}.`)
         }
       }
       return validMembers
@@ -118,21 +195,33 @@ export default {
           return
         }
 
-        const validMembers = await this.validateMembers(this.inviteEmails)
-        if (!validMembers) return
-
+        const userId = JSON.parse(localStorage.getItem('user')).uid
         const projectId = Date.now().toString()
 
-        const projectData = {
-          projectName: this.name,
-          projectImage: this.image,
-          description: this.description || '',
-          createdBy: JSON.parse(localStorage.getItem('user')).uid,
-          createdAt: serverTimestamp(),
-          members: validMembers,
+        let validMembers
+        try {
+          validMembers = await this.validateAndSendInvites(this.inviteEmails, projectId, this.name)
+        } catch (error) {
+          toast.error('Failed to send invites. Aborting project creation.')
+          return
         }
 
-        await setDoc(doc(db, 'projects', projectId), projectData)
+        try {
+          const projectData = {
+            projectName: this.name,
+            projectImage: this.image,
+            description: this.description || '',
+            createdBy: userId,
+            createdAt: serverTimestamp(),
+            members: validMembers,
+          }
+
+          await setDoc(doc(db, 'projects', projectId), projectData)
+        } catch (error) {
+          console.error('Error creating project:', error)
+          toast.error('Failed to create project. Please try again.')
+          return
+        }
 
         toast.success('Project created successfully!')
         this.$emit('project-created', projectId)
@@ -140,10 +229,10 @@ export default {
         this.image = ''
         this.name = ''
         this.description = ''
-        this.inviteEmails = ''
+        this.inviteEmails = []
       } catch (error) {
-        console.error('Error creating project:', error)
-        toast.error('Failed to create project. Please try again.')
+        console.error('Unexpected error during project creation:', error)
+        toast.error('An unexpected error occurred. Please try again.')
       }
     },
   },
