@@ -4,8 +4,8 @@
 
     <Navbar @toggle-sidebar="toggleSidebar" />
 
-    <MyTasks v-if="urlId == 'mytasks'" :projects="projects" />
-    <MyProjects v-if="urlId == 'myprojects'" :projects="projects" />
+    <MyTasks v-if="urlId == 'mytasks'" :projects="projects" :loading="loading" />
+    <MyProjects v-if="urlId == 'myprojects'" :projects="projects" :loading="loading" />
   </div>
 </template>
 
@@ -20,6 +20,7 @@ export default {
       sidebarActive: false,
       urlId: null,
       projects: [],
+      loading: true,
     }
   },
   methods: {
@@ -30,6 +31,8 @@ export default {
       this.urlId = this.$route.params.urlId
     },
     async fetchProjects() {
+      this.loading = true
+
       try {
         const user = JSON.parse(localStorage.getItem('user'))
         if (!user || !user.uid) {
@@ -42,12 +45,14 @@ export default {
 
         const userId = user.uid
 
-        const fetchedProjects = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })).filter((project) => project.createdBy === userId || project.members.some((member) => member.uid === userId && member.state === 'accepted'))
+        const fetchedProjects = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })).filter((project) => project.createdBy[0].uid === userId || project.members.some((member) => member.uid === userId && member.state === 'accepted'))
 
+        this.loading = false
         this.projects = fetchedProjects
       } catch (error) {
         console.error('Error fetching projects:', error)
         toast.error('Failed to load projects. Please try again.')
+        this.loading = false
       }
     },
   },

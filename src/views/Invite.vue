@@ -43,31 +43,41 @@ export default {
       const projectDoc = doc(db, 'projects', this.projectId)
       const projectSnapshot = await getDoc(projectDoc)
 
-      if (projectSnapshot.exists()) {
-        const projectData = projectSnapshot.data()
-
-        const updatedMembers = projectData.members.map((member) => {
-          if (member.email === this.email) {
-            return { ...member, state: this.response }
-          }
-          return member
-        })
-
-        const memberFound = projectData.members.some((member) => member.email === this.email)
-
-        if (!memberFound) {
-          toast.error('Invitation not found for this email.')
-          this.error = true
-          return
-        }
-
-        await updateDoc(projectDoc, { members: updatedMembers })
-
-        toast.success(this.response === 'accepted' ? 'You have successfully joined the project!' : 'You have declined the invitation.')
-      } else {
+      if (!projectSnapshot.exists()) {
         toast.error('Project not found.')
         this.error = true
+        return
       }
+
+      const projectData = projectSnapshot.data()
+
+      const memberIndex = projectData.members.findIndex((member) => member.email === this.email)
+
+      if (memberIndex === -1) {
+        toast.error('Invitation not found for this email.')
+        this.error = true
+        return
+      }
+
+      const member = projectData.members[memberIndex]
+
+      if (member.linkUsed) {
+        toast.error('This invitation link has already been used.')
+        this.error = true
+        return
+      }
+
+      let updatedMembers
+
+      if (this.response === 'declined') {
+        updatedMembers = projectData.members.filter((_, index) => index !== memberIndex)
+      } else {
+        updatedMembers = projectData.members.map((member, index) => (index === memberIndex ? { ...member, state: this.response, linkUsed: true } : member))
+      }
+
+      await updateDoc(projectDoc, { members: updatedMembers })
+
+      toast.success(this.response === 'accepted' ? 'You have successfully joined the project!' : 'You have declined the invitation and been removed from the project.')
     } catch (err) {
       console.error('Error processing invitation:', err)
       this.error = true

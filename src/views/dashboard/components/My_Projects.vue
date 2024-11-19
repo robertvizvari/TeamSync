@@ -5,7 +5,17 @@
         <DialogButton />
       </div>
       <div class="flex h-full flex-row gap-5 overflow-x-auto overflow-y-hidden pb-3">
-        <Card v-for="data in projects" :key="data.id" class="mb-5 flex h-full w-[350px] shrink-0 flex-col border-border">
+        <Transition name="fade">
+          <div v-if="loading" class="flex h-full w-full gap-2 overflow-clip">
+            <div v-for="index in 6" class="h-full w-[350px] shrink-0 animate-pulse rounded-lg bg-border"></div>
+          </div>
+        </Transition>
+
+        <div v-if="projects.length == 0 && !loading" class="flex h-full w-full flex-col items-center justify-center">
+          <span class="text-2xl font-semibold text-foreground">No projects</span>
+        </div>
+
+        <Card v-if="projects.length > 0 && !loading" v-for="data in projects" :key="data.id" class="mb-5 flex h-full w-[350px] shrink-0 flex-col border-border">
           <CardHeader>
             <CardTitle class="flex items-center gap-4">
               <Avatar>
@@ -24,11 +34,14 @@
 
               <Accordion v-if="data.members.length > 0" type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>Members ({{ data.members.length }})</AccordionTrigger>
+                  <AccordionTrigger>Members ({{ data.members.length + 1 }})</AccordionTrigger>
                   <AccordionContent class="text-[1rem]">
                     <ul>
-                      <li v-for="(member, index) in data.members" :key="index" :class="index != 0 ? 'mt-1' : ''">
-                        <span>{{ index + 1 + '. ' + member.email }}</span>
+                      <li class="mt-1">
+                        <span>1. {{ data.createdBy[0].email }}</span>
+                      </li>
+                      <li v-for="(member, index) in data.members" :key="index">
+                        <span>{{ index + 2 + '. ' + member.email }}</span>
                       </li>
                     </ul>
                   </AccordionContent>
@@ -77,9 +90,22 @@ import DialogButton from '../components/Dialog_Button.vue'
 
 const props = defineProps({
   projects: Array,
+  loading: Boolean,
 })
 
 const toggleDescription = (project) => {
   project.showDescription = !project.showDescription
 }
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

@@ -166,7 +166,8 @@ export default {
 
             validMembers.push(inviteData)
 
-            const inviteLink = `https://teamsync-app.vercel.app/invite/${projectId}?email=${encodeURIComponent(trimmedEmail)}`
+            // const inviteLink = `https://teamsync-app.vercel.app/invite/${projectId}?email=${encodeURIComponent(trimmedEmail)}`
+            const inviteLink = `http://localhost:5173/invite/${projectId}?email=${encodeURIComponent(trimmedEmail)}`
 
             await emailjs.send(
               import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -196,6 +197,7 @@ export default {
         }
 
         const userId = JSON.parse(localStorage.getItem('user')).uid
+        const userEmail = JSON.parse(localStorage.getItem('user')).email
         const projectId = Date.now().toString()
 
         let validMembers
@@ -211,7 +213,7 @@ export default {
             projectName: this.name,
             projectImage: this.image,
             description: this.description || '',
-            createdBy: userId,
+            createdBy: [{ uid: userId, email: userEmail }],
             createdAt: serverTimestamp(),
             members: validMembers,
           }
