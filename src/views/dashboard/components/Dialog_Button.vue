@@ -13,19 +13,19 @@
           <Label for="image" class="text-foreground">Image</Label>
           <div class="flex items-center gap-5">
             <img v-if="image" :src="image || ''" class="h-12 w-12 rounded-full object-cover" />
-            <input id="image" type="file" accept="image/*" @change="handleImageUpload" class="hover:file:bg-primary-dark block w-full text-sm text-foreground file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-white" />
+            <input :disabled="loading" id="image" type="file" accept="image/*" @change="handleImageUpload" class="hover:file:bg-primary-dark block w-full text-sm text-foreground file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-white" />
           </div>
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="name" class="text-foreground">Name</Label>
-          <Input v-model="name" id="name" class="text-foreground" placeholder="Important Project" maxlength="50" />
+          <Input v-model="name" :disabled="loading" id="name" class="text-foreground" placeholder="Important Project" maxlength="50" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="description" class="flex gap-1 text-foreground">
             Description
             <p class="mt-[-1px] text-xs text-muted-foreground">(optional)</p>
           </Label>
-          <Textarea v-model="description" id="description" class="h-40 resize-none text-foreground" placeholder="This project is very important..." maxlength="500" />
+          <Textarea v-model="description" :disabled="loading" id="description" class="h-40 resize-none text-foreground" placeholder="This project is very important..." maxlength="500" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="invite" class="flex items-center gap-2 text-foreground">
@@ -47,7 +47,7 @@
               </Tooltip>
             </TooltipProvider>
           </Label>
-          <TagsInput class="w-full text-foreground" v-model="inviteEmails">
+          <TagsInput :disabled="loading" class="w-full text-foreground" v-model="inviteEmails">
             <TagsInputItem v-for="item in inviteEmails" :key="item" :value="item">
               <TagsInputItemText />
               <TagsInputItemDelete />
@@ -58,7 +58,11 @@
         </div>
       </div>
       <DialogFooter>
-        <Button class="w-full text-white" :disabled="image == '' || name == ''" @click="createProject">Create project</Button>
+        <Button v-if="!loading" class="w-full text-white" :disabled="image == '' || name == ''" @click="createProject">Create project</Button>
+        <Button v-if="loading" disabled class="w-full text-white">
+          <Icon class="mr-2 animate-spin" icon="radix-icons:symbol" />
+          Create project
+        </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
@@ -77,6 +81,7 @@ export default {
       name: '',
       description: '',
       inviteEmails: [],
+      loading: false,
     }
   },
   methods: {
@@ -190,6 +195,8 @@ export default {
       return validMembers
     },
     async createProject() {
+      this.loading = true
+
       try {
         if (!this.name || !this.image) {
           toast.warning('Project name and image are required.')
@@ -232,9 +239,11 @@ export default {
         this.name = ''
         this.description = ''
         this.inviteEmails = []
+        this.loading = false
       } catch (error) {
         console.error('Unexpected error during project creation:', error)
         toast.error('An unexpected error occurred. Please try again.')
+        this.loading = false
       }
     },
   },

@@ -34,14 +34,17 @@
 
               <Accordion v-if="data.members.length > 0" type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>Members ({{ data.members.length + 1 }})</AccordionTrigger>
+                  <AccordionTrigger>
+                    Members
+                    <!-- ({{ data.members.length + 1 }}) -->
+                  </AccordionTrigger>
                   <AccordionContent class="text-[1rem]">
                     <ul>
                       <li class="mt-1">
                         <span>1. {{ data.createdBy[0].email }}</span>
                       </li>
                       <li v-for="(member, index) in data.members" :key="index">
-                        <span>{{ index + 2 + '. ' + member.email }}</span>
+                        <span v-if="member.state == 'accepted'">{{ index + 2 + '. ' + member.email }}</span>
                       </li>
                     </ul>
                   </AccordionContent>
