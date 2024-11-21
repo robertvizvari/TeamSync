@@ -8,7 +8,7 @@
       <div class="flex space-x-3 md:order-2 md:space-x-0 rtl:space-x-reverse">
         <Button @click="$router.push('/login')" class="text-white sm:mr-3">
           Get Started
-          <Icon class="ml-2 mr-[-0.5rem] size-4" icon="radix-icons:arrow-right" />
+          <ArrowRight class="ml-2 mr-[-0.5rem] size-4" />
         </Button>
 
         <DarkModeButton />
@@ -45,7 +45,7 @@ export default {
 
 <script setup>
 import { useColorMode } from '@vueuse/core'
-import { Icon } from '@iconify/vue'
+import { ArrowRight } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import DarkModeButton from './Dark_Mode.vue'
 import Logo from '@/assets/svg/Logo.vue'

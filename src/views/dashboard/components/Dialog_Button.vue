@@ -33,7 +33,7 @@
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger as-child>
-                  <Icon icon="radix-icons:question-mark-circled" class="size-4 text-muted-foreground" />
+                  <CircleHelp class="size-4 text-muted-foreground" />
                 </TooltipTrigger>
                 <TooltipContent class="border-border">
                   <p class="text-center">
@@ -60,8 +60,8 @@
       <DialogFooter>
         <Button v-if="!loading" class="w-full text-white" :disabled="image == '' || name == ''" @click="createProject">Create project</Button>
         <Button v-if="loading" disabled class="w-full text-white">
-          <Icon class="mr-2 animate-spin" icon="radix-icons:symbol" />
           Create project
+          <RefreshCw class="mr-2 h-4 animate-spin" />
         </Button>
       </DialogFooter>
     </DialogContent>
@@ -255,7 +255,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { Icon } from '@iconify/vue'
+import { CircleHelp, RefreshCw } from 'lucide-vue-next'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'

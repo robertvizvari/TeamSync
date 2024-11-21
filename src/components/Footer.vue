@@ -13,7 +13,7 @@
           <li>
             <Button @click="$router.push('/login')" class="mr-3 text-white">
               Get Started
-              <Icon class="ml-2 mr-[-0.5rem] size-4" icon="radix-icons:arrow-right" />
+              <ArrowRight class="ml-2 mr-[-0.5rem] size-4" />
             </Button>
           </li>
         </ul>
@@ -26,5 +26,5 @@
 <script setup>
 import Logo from '../assets/svg/Logo.vue'
 import { Button } from '@/components/ui/button'
-import { Icon } from '@iconify/vue'
+import { ArrowRight } from 'lucide-vue-next'
 </script>

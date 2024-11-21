@@ -5,8 +5,8 @@
     <div class="mx-auto w-full max-w-lg rounded-lg bg-background p-6 shadow-lg">
       <div class="mb-4 flex items-center justify-center">
         <template v-if="!isEditing">
-          <img v-if="profilePicture" :src="profilePicture || ''" alt="Profile Picture" class="h-24 w-24 rounded-full border-4 border-primary" />
-          <div v-if="!profilePicture" class="flex h-24 w-24 items-center justify-center rounded-full border-4 border-primary text-2xl font-semibold text-foreground">
+          <img v-if="profilePicture" :src="profilePicture || ''" alt="Profile Picture" class="h-24 w-24 rounded-full border-2 border-primary" />
+          <div v-if="!profilePicture" class="flex h-24 w-24 items-center justify-center rounded-full border-2 border-primary text-2xl font-semibold text-foreground">
             {{ name.slice(0, 1) + surname.slice(0, 1) }}
           </div>
         </template>

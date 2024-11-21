@@ -9,7 +9,7 @@
               <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
             </svg>
           </button>
-          <router-link to="/" class="ms-2 flex md:me-24">
+          <router-link to="/dashboard/mytasks" class="ms-2 flex md:me-24">
             <Logo class="mr-2 size-10" />
             <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl">TeamSync</span>
           </router-link>
@@ -30,7 +30,7 @@
               </button>
             </div>
             <Transition name="slide-fade">
-              <div v-if="userSettings" class="absolute right-2 top-10 z-50 my-4 list-none divide-y divide-gray-100 rounded border border-gray-200 bg-white text-base shadow dark:divide-gray-600 dark:border-gray-700 dark:bg-muted" id="dropdown-user">
+              <div v-if="userSettings" class="absolute right-2 top-10 z-50 my-4 max-w-[250px] list-none divide-y divide-gray-100 rounded border border-gray-200 bg-white text-base shadow dark:divide-gray-600 dark:border-gray-700 dark:bg-muted" id="dropdown-user">
                 <div class="px-4 py-3" role="none">
                   <p class="text-sm text-gray-900 dark:text-white" role="none">{{ user.name + ' ' + user.surname }}</p>
                   <p class="truncate text-sm font-medium text-gray-900 dark:text-gray-300" role="none">{{ user.email }}</p>

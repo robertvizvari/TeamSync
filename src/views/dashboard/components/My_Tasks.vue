@@ -7,17 +7,20 @@
           <TabsTrigger value="pinned">Pinned</TabsTrigger>
         </TabsList>
         <div class="my-3">
-          <Select>
-            <SelectTrigger class="text-foreground sm:max-w-[200px]">
+          <Select :disabled="loading" class="relative" default-value="all">
+            <SelectTrigger class="relative text-foreground sm:max-w-[200px]">
               <SelectValue class="text-foreground" placeholder="Select a project" />
+              <div v-if="loading" class="absolute right-1 z-[1]">
+                <RefreshCw class="mr-2 size-4 animate-spin bg-background bg-opacity-100" />
+              </div>
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>
                   {{ projects.length > 0 ? 'Projects' : 'No projects' }}
                 </SelectLabel>
+                <SelectItem value="all">Show all</SelectItem>
                 <div v-if="projects.length > 0">
-                  <SelectItem value="all">Show all</SelectItem>
                   <SelectItem v-for="project in projects" :value="project.id">{{ project.projectName }}</SelectItem>
                 </div>
               </SelectGroup>
@@ -41,7 +44,7 @@
 
 <script>
 export default {
-  props: ['projects'],
+  props: ['projects', 'loading'],
   data() {
     return {
       tasks: [
@@ -58,4 +61,5 @@ export default {
 import Task from '@/views/dashboard/components/Task.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { RefreshCw } from 'lucide-vue-next'
 </script>
