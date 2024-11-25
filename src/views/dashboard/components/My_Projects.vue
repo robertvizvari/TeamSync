@@ -74,7 +74,7 @@
             </div>
           </CardContent>
           <CardFooter class="mt-auto flex justify-between gap-2 px-6 pb-6">
-            <Button class="w-full border-primary text-primary hover:text-primary" size="sm" variant="outline">Add task</Button>
+            <DialogTaskButton :data="data" />
           </CardFooter>
         </Card>
       </div>
@@ -90,6 +90,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import DialogButton from '../components/Dialog_Button.vue'
+import DialogTaskButton from './Dialog_Task_Button.vue'
 
 const props = defineProps({
   projects: Array,

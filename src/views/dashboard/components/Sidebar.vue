@@ -9,7 +9,7 @@
             <span class="ms-3">{{ link.name }}</span>
           </a>
         </li>
-        <div class="my-4 flex h-[1px] w-full select-none items-center rounded-full bg-primary pl-5 uppercase">
+        <!-- <div class="my-4 flex h-[1px] w-full select-none items-center rounded-full bg-primary pl-5 uppercase">
           <span class="bg-muted px-2 text-[0.8rem] tracking-widest text-primary">Admin</span>
         </div>
         <li v-for="link in adminLinks">
@@ -17,7 +17,7 @@
             <Icon :class="urlId == link.id ? 'text-white' : 'text-gray-500 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'" class="h-5 w-5 transition duration-150" :icon="link.icon" />
             <span class="ms-3">{{ link.name }}</span>
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </aside>
