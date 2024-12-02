@@ -6,19 +6,18 @@
     <DialogContent class="sm:max-w-[500px]">
       <DialogHeader>
         <DialogTitle class="text-foreground">Add task</DialogTitle>
-        <!-- <DialogDescription>Work with your team to plan, create, and achieve your goals together.</DialogDescription> -->
       </DialogHeader>
       <div class="grid gap-5 py-4">
         <div class="flex w-full flex-col gap-2">
           <Label for="name" class="text-foreground">Name</Label>
-          <Input v-model="name" :disabled="loading" id="name" class="text-foreground" placeholder="Important Project" maxlength="50" />
+          <Input v-model="name" :disabled="loading" id="name" class="text-foreground" placeholder="Important task" maxlength="50" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="description" class="flex gap-1 text-foreground">
             Description
             <p class="mt-[-1px] text-xs text-muted-foreground">(optional)</p>
           </Label>
-          <Textarea v-model="description" :disabled="loading" id="description" class="h-32 resize-none text-foreground" placeholder="This project is very important..." maxlength="250" />
+          <Textarea v-model="description" :disabled="loading" id="description" class="h-32 resize-none text-foreground" placeholder="This task is very important..." maxlength="250" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="invite" class="text-sm text-foreground">Assign members</Label>
@@ -56,7 +55,7 @@
                       {{ data.createdBy[0].email }}
                     </span>
                   </ComboboxItem>
-                  <ComboboxItem v-for="(member, index) in members" :key="index" class="data-[highlighted]:bg-grass8 relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="member.email">
+                  <ComboboxItem v-for="(member, index) in data.members" :key="index" class="data-[highlighted]:bg-grass8 relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="member.email">
                     <ComboboxItemIndicator class="absolute left-0 inline-flex w-[25px] items-center justify-center">
                       <Icon icon="radix-icons:check" />
                     </ComboboxItemIndicator>
@@ -74,7 +73,7 @@
             <Label class="flex gap-1 text-foreground">Due date</Label>
             <Popover>
               <PopoverTrigger as-child>
-                <Button variant="outline" class="w-[250px] ps-3 text-start font-normal text-foreground">
+                <Button variant="outline" class="ps-3 text-start font-normal text-foreground sm:w-[250px]">
                   <span>{{ dueDate ? dueDate : 'Pick a date' }}</span>
                   <CalendarIcon v-if="!dueDate" class="ms-auto h-4 w-4 opacity-50" />
                   <X v-if="dueDate" @click="dueDate = ''" class="ms-auto h-4 w-4 opacity-50 transition-all duration-300 hover:text-red-500" />
@@ -90,9 +89,10 @@
             <Label class="flex gap-1 text-foreground">State</Label>
             <div class="relative inline-block h-4">
               <Transition name="slide-up">
-                <Button class="absolute bg-amber-500 px-4 text-white hover:bg-amber-600" v-if="state === 'pending'" @click="state = 'accepted'">Pending</Button>
-                <Button class="absolute bg-emerald-600 px-4 text-white hover:bg-emerald-700" v-else-if="state === 'accepted'" @click="state = 'cancelled'">Accepted</Button>
-                <Button class="absolute px-4 text-white" v-else-if="state === 'cancelled'" @click="state = 'pending'" variant="destructive">Cancelled</Button>
+                <Button class="absolute w-full text-white" v-if="state === 'todo'" @click="state = 'inProgress'">To do</Button>
+                <Button class="absolute w-full bg-amber-500 px-4 text-white hover:bg-amber-600" v-else-if="state === 'inProgress'" @click="state = 'finished'">In progress</Button>
+                <Button class="absolute w-full bg-emerald-600 px-4 text-white hover:bg-emerald-700" v-else-if="state === 'finished'" @click="state = 'cancelled'">Finished</Button>
+                <Button class="absolute w-full px-4 text-white" v-else-if="state === 'cancelled'" @click="state = 'todo'" variant="destructive">Cancelled</Button>
               </Transition>
             </div>
           </div>
@@ -100,16 +100,16 @@
             <Label class="flex gap-1 text-foreground">Priority</Label>
             <div class="relative inline-block h-4">
               <Transition name="slide-up">
-                <Button class="absolute bg-amber-500 px-4 text-white hover:bg-amber-600" v-if="priority === 'medium'" @click="priority = 'low'">Meduim</Button>
-                <Button class="absolute bg-emerald-600 px-4 text-white hover:bg-emerald-700" v-else-if="priority === 'low'" @click="priority = 'high'">Low</Button>
-                <Button class="absolute px-4 text-white" v-else-if="priority === 'high'" @click="priority = 'medium'" variant="destructive">High</Button>
+                <Button class="absolute w-full bg-emerald-600 px-4 text-white hover:bg-emerald-700" v-if="priority === 'low'" @click="priority = 'medium'">Low</Button>
+                <Button class="absolute w-full bg-amber-500 px-4 text-white hover:bg-amber-600" v-else-if="priority === 'medium'" @click="priority = 'high'">Meduim</Button>
+                <Button class="absolute w-full px-4 text-white" v-else-if="priority === 'high'" @click="priority = 'low'" variant="destructive">High</Button>
               </Transition>
             </div>
           </div>
         </div>
       </div>
       <DialogFooter>
-        <Button v-if="!loading" class="w-full text-white" :disabled="name == ''">Add task</Button>
+        <Button v-if="!loading" @click="addTask" class="w-full text-white" :disabled="name == '' || assignMembers == []">Add task</Button>
         <Button v-if="loading" disabled class="w-full text-white">
           Add task
           <RefreshCw class="mr-2 h-4 animate-spin" />
@@ -120,36 +120,84 @@
 </template>
 
 <script>
+import { doc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { toast } from 'vue-sonner'
+
 export default {
   props: ['data'],
   data() {
     return {
-      id: '',
       name: '',
       description: '',
-      createdBy: '',
-      members: [],
       assignMembers: [],
-      projectId: '',
-      state: 'pending',
+      state: 'todo',
       priority: 'medium',
       dueDate: '',
-      createdAt: '',
       loading: false,
       searchTerm: '',
     }
   },
-  mounted() {
-    if (this.data.members.length >= 1) {
-      this.members = this.data.members
-    }
-  },
-  watch: {
-    assignMembers: {
-      handler() {
-        this.searchTerm = ''
-      },
-      deep: true,
+  methods: {
+    async addTask() {
+      if (!this.name.trim()) {
+        toast.error('Task name cannot be empty.')
+        return
+      }
+
+      if (!this.data.id) {
+        toast.error('Invalid project ID. Cannot add the task.')
+        return
+      }
+
+      this.loading = true
+
+      const membersList = Array.isArray(this.data.members) ? this.data.members : []
+      const assignedEmails = Array.isArray(this.assignMembers) ? this.assignMembers : []
+
+      const task = {
+        id: Date.now().toString(),
+        name: this.name,
+        description: this.description || '',
+        createdBy: {
+          uid: this.data.createdBy[0].uid,
+          email: this.data.createdBy[0].email,
+        },
+        members: assignedEmails.map((email) => {
+          const member = membersList.find((m) => m.email === email)
+          return member ? { uid: member.uid, email: member.email } : { uid: null, email }
+        }),
+        state: this.state,
+        priority: this.priority,
+        dueDate: this.dueDate || null,
+        createdAt: serverTimestamp(),
+      }
+
+      try {
+        const plainTask = JSON.parse(JSON.stringify(task))
+
+        const projectRef = doc(db, 'projects', this.data.id)
+        await updateDoc(projectRef, {
+          tasks: arrayUnion(plainTask),
+        })
+
+        toast.success('Task added successfully.')
+        this.resetForm()
+      } catch (error) {
+        console.error('Error adding task:', error)
+        toast.error('Failed to add the task. Please try again.')
+      } finally {
+        this.loading = false
+      }
+    },
+
+    resetForm() {
+      this.name = ''
+      this.description = ''
+      this.assignMembers = []
+      this.state = 'todo'
+      this.priority = 'medium'
+      this.dueDate = ''
     },
   },
 }

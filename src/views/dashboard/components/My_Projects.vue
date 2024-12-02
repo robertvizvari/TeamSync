@@ -56,11 +56,46 @@
               <div>
                 <Accordion v-if="data.tasks && data.tasks.length > 0" type="single" collapsible defaultValue="item-1">
                   <AccordionItem value="item-1">
-                    <AccordionTrigger>Tasks - 40h</AccordionTrigger>
+                    <AccordionTrigger>Tasks ({{ data.tasks.length }})</AccordionTrigger>
                     <AccordionContent class="text-[1rem]">
                       <ul>
-                        <li v-for="(task, index) in data.tasks" :key="index" :class="index != 0 ? 'mt-1' : ''">
-                          <span>{{ task }}</span>
+                        <li class="relative flex flex-col rounded-md bg-border p-3" v-for="(task, index) in data.tasks" :key="index" :class="index != 0 ? 'mt-1' : ''">
+                          <span class="flex flex-row items-center gap-3 font-semibold">
+                            {{ task.name }} - 40h
+                            <span v-if="task.state == 'todo'" class="rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
+                            <span v-else-if="task.state == 'inProgress'" class="rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
+                            <span v-else-if="task.state == 'finished'" class="rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
+                            <span v-else-if="task.state == 'cancelled'" class="rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">Cancelled</span>
+                          </span>
+
+                          <span class="text-sm text-muted-foreground">{{ task.members.length }} {{ task.members.length > 1 ? 'members' : 'member' }}</span>
+
+                          <TooltipProvider>
+                            <Tooltip class="border-border">
+                              <TooltipTrigger as-child>
+                                <div v-if="task.priority == 'high'" class="absolute right-3 top-1/2 size-2 -translate-y-1/2 transform cursor-help rounded-full bg-red-500"></div>
+                                <div v-else-if="task.priority == 'medium'" class="absolute right-3 top-1/2 size-2 -translate-y-1/2 transform cursor-help rounded-full bg-amber-500"></div>
+                                <div v-else-if="task.priority == 'low'" class="absolute right-3 top-1/2 size-2 -translate-y-1/2 transform cursor-help rounded-full bg-emerald-500"></div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p v-if="task.priority == 'high'">
+                                  This task is
+                                  <span class="text-red-500">high</span>
+                                  priority.
+                                </p>
+                                <p v-else-if="task.priority == 'medium'">
+                                  This task is
+                                  <span class="text-amber-500">medium</span>
+                                  priority.
+                                </p>
+                                <p v-else-if="task.priority == 'low'">
+                                  This task is
+                                  <span class="text-emerald-500">low</span>
+                                  priority.
+                                </p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         </li>
                       </ul>
                     </AccordionContent>
@@ -88,6 +123,7 @@ import { reactive } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import DialogButton from '../components/Dialog_Button.vue'
 import DialogTaskButton from './Dialog_Task_Button.vue'
