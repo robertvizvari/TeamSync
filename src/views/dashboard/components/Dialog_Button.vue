@@ -1,7 +1,7 @@
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button class="text-muted-foreground" size="sm" variant="outline">Create a project</Button>
+      <Button class="text-muted-foreground" size="sm" variant="outline" :disabled="initialLoading">Create a project</Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[500px]">
       <DialogHeader>
@@ -75,6 +75,7 @@ import { toast } from 'vue-sonner'
 import emailjs from '@emailjs/browser'
 
 export default {
+  props: ['initialLoading'],
   data() {
     return {
       image: '',

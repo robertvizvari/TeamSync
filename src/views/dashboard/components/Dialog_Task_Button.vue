@@ -5,7 +5,8 @@
     </DialogTrigger>
     <DialogContent class="sm:max-w-[500px]">
       <DialogHeader>
-        <DialogTitle class="text-foreground">Add task</DialogTitle>
+        <DialogTitle class="text-foreground">Add a task</DialogTitle>
+        <DialogDescription>Work with your team to assign tasks and stay on track toward your goals.</DialogDescription>
       </DialogHeader>
       <div class="grid gap-5 py-4">
         <div class="flex w-full flex-col gap-2">
@@ -109,7 +110,7 @@
         </div>
       </div>
       <DialogFooter>
-        <Button v-if="!loading" @click="addTask" class="w-full text-white" :disabled="name == '' || assignMembers == []">Add task</Button>
+        <Button v-if="!loading" @click="addTask" class="w-full text-white" :disabled="name == '' || assignMembers == [] || assignMembers.length < 1">Add task</Button>
         <Button v-if="loading" disabled class="w-full text-white">
           Add task
           <RefreshCw class="mr-2 h-4 animate-spin" />
@@ -155,27 +156,35 @@ export default {
       const membersList = Array.isArray(this.data.members) ? this.data.members : []
       const assignedEmails = Array.isArray(this.assignMembers) ? this.assignMembers : []
 
+      const creatorEmail = this.data.createdBy[0].email
+      const creatorUid = JSON.parse(localStorage.getItem('user')).uid
+
       const task = {
         id: Date.now().toString(),
         name: this.name,
         description: this.description || '',
         createdBy: {
           uid: this.data.createdBy[0].uid,
-          email: this.data.createdBy[0].email,
+          email: creatorEmail,
         },
         members: assignedEmails.map((email) => {
+          if (email === creatorEmail) {
+            return { uid: creatorUid, email }
+          }
           const member = membersList.find((m) => m.email === email)
           return member ? { uid: member.uid, email: member.email } : { uid: null, email }
         }),
         state: this.state,
         priority: this.priority,
         dueDate: this.dueDate || null,
-        createdAt: serverTimestamp(),
+        createdAt: setTimeout(() => {
+          Date.now()
+        }, 100),
       }
 
-      try {
-        const plainTask = JSON.parse(JSON.stringify(task))
+      const plainTask = JSON.parse(JSON.stringify(task))
 
+      try {
         const projectRef = doc(db, 'projects', this.data.id)
         await updateDoc(projectRef, {
           tasks: arrayUnion(plainTask),

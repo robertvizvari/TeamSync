@@ -2,7 +2,7 @@
   <div class="h-dvh p-4 pb-36 sm:ml-64">
     <div class="mt-20 h-full">
       <div class="mb-2">
-        <DialogButton />
+        <DialogButton :initialLoading="loading" />
       </div>
       <div class="flex h-full flex-row gap-5 overflow-x-auto overflow-y-hidden pb-3">
         <Transition name="fade">
@@ -28,7 +28,7 @@
             </CardTitle>
             <span @click="toggleDescription(data)" :class="data.showDescription ? '' : 'line-clamp-2'" class="cursor-pointer text-sm font-normal text-muted-foreground transition-all duration-200 hover:text-foreground">{{ data.description }}</span>
           </CardHeader>
-          <CardContent class="flex w-full flex-col gap-2">
+          <CardContent class="hidden_scrollbar flex w-full flex-col gap-2 overflow-y-auto">
             <div>
               <div v-if="data.members.length == 0" class="font-semibold">No other members</div>
 
@@ -59,13 +59,13 @@
                     <AccordionTrigger>Tasks ({{ data.tasks.length }})</AccordionTrigger>
                     <AccordionContent class="text-[1rem]">
                       <ul>
-                        <li class="relative flex flex-col rounded-md bg-border p-3" v-for="(task, index) in data.tasks" :key="index" :class="index != 0 ? 'mt-1' : ''">
+                        <li class="relative flex flex-col rounded-md bg-border p-3" v-for="(task, index) in data.tasks" :key="index" :class="index != 0 ? 'mt-2' : ''">
                           <span class="flex flex-row items-center gap-3 font-semibold">
                             {{ task.name }} - 40h
-                            <span v-if="task.state == 'todo'" class="rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
-                            <span v-else-if="task.state == 'inProgress'" class="rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
-                            <span v-else-if="task.state == 'finished'" class="rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
-                            <span v-else-if="task.state == 'cancelled'" class="rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">Cancelled</span>
+                            <span v-if="task.state == 'todo'" class="select-none rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
+                            <span v-else-if="task.state == 'inProgress'" class="select-none rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
+                            <span v-else-if="task.state == 'finished'" class="select-none rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
+                            <span v-else-if="task.state == 'cancelled'" class="select-none rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">Cancelled</span>
                           </span>
 
                           <span class="text-sm text-muted-foreground">{{ task.members.length }} {{ task.members.length > 1 ? 'members' : 'member' }}</span>
@@ -108,7 +108,7 @@
               </div>
             </div>
           </CardContent>
-          <CardFooter class="mt-auto flex justify-between gap-2 px-6 pb-6">
+          <CardFooter class="mt-auto flex justify-between gap-2 px-6 pb-6 pt-3">
             <DialogTaskButton :data="data" />
           </CardFooter>
         </Card>
@@ -147,5 +147,14 @@ const toggleDescription = (project) => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.hidden_scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hidden_scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>
