@@ -44,15 +44,11 @@
 
 <script>
 export default {
-  props: ['projects', 'loading'],
-  data() {
-    return {
-      tasks: [
-        { name: 'Name', project: 'project', time: '13:20' },
-        { name: 'Name 2', project: 'project 2', time: '14:20' },
-        { name: 'Name 3', project: 'project 3', time: '15:20' },
-      ],
-    }
+  props: ['projects', 'loading', 'tasks'],
+  mounted() {
+    setTimeout(() => {
+      console.log(this.tasks)
+    }, 5000)
   },
 }
 </script>
