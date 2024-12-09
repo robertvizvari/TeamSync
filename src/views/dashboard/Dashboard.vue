@@ -47,8 +47,9 @@ export default {
 
         const fetchedProjects = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })).filter((project) => project.createdBy[0].uid === userId || project.members.some((member) => member.uid === userId && member.state === 'accepted'))
 
-        const userTasks = fetchedProjects.flatMap((project) =>
-          (project.tasks || [])
+        const userTasks = fetchedProjects.flatMap((project) => {
+          const tasks = Array.isArray(project.tasks) ? project.tasks : []
+          return tasks
             .filter((task) => task.members.some((member) => member.uid === userId))
             .map((task) => ({
               ...task,
@@ -56,7 +57,7 @@ export default {
               projectName: project.projectName,
               projectImage: project.projectImage,
             }))
-        )
+        })
 
         this.projects = fetchedProjects
         this.tasks = userTasks

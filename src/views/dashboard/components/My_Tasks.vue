@@ -7,7 +7,7 @@
           <TabsTrigger value="pinned">Pinned</TabsTrigger>
         </TabsList>
         <div class="my-3">
-          <Select :disabled="loading" class="relative" default-value="all">
+          <Select :disabled="loading || tasks.length < 1" class="relative" default-value="all">
             <SelectTrigger class="relative text-foreground sm:max-w-[200px]">
               <SelectValue class="text-foreground" placeholder="Select a project" />
               <div v-if="loading" class="absolute right-1 z-[1]">
@@ -28,12 +28,14 @@
           </Select>
         </div>
         <TabsContent value="latest" class="w-full">
-          <div class="flex w-full flex-col gap-3">
+          <div v-if="tasks.length < 1" class="mt-40 w-full text-center text-2xl font-semibold text-foreground">No tasks</div>
+          <div v-if="tasks.length >= 1" class="flex w-full flex-col gap-3">
             <Task v-for="task in tasks" :data="task" />
           </div>
         </TabsContent>
         <TabsContent value="pinned">
-          <div class="flex w-full flex-col gap-3">
+          <div v-if="tasks.length < 1" class="mt-40 w-full text-center text-2xl font-semibold text-foreground">No tasks</div>
+          <div v-if="tasks.length >= 1" class="flex w-full flex-col gap-3">
             <Task v-for="task in tasks" :data="task" />
           </div>
         </TabsContent>
