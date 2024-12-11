@@ -61,7 +61,7 @@
                       <ul>
                         <li class="relative flex flex-col rounded-md bg-border p-3" v-for="(task, index) in data.tasks" :key="index" :class="index != 0 ? 'mt-2' : ''">
                           <span class="flex flex-row items-center gap-3 font-semibold">
-                            {{ task.name }} - 40h
+                            {{ task.name }} - {{ task.time ? formatTime(task.time) : '0h' }}
                             <span v-if="task.state == 'todo'" class="select-none rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
                             <span v-else-if="task.state == 'inProgress'" class="select-none rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
                             <span v-else-if="task.state == 'finished'" class="select-none rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
@@ -117,6 +117,25 @@
   </div>
 </template>
 
+<script>
+export default {
+  props: ['projects', 'loading'],
+  methods: {
+    formatTime(totalMinutes) {
+      const hours = Math.floor(totalMinutes / 60)
+      const minutes = totalMinutes % 60
+      return `${hours}h ${minutes}m`
+    },
+    toggleDescription(project) {
+      project.showDescription = !project.showDescription
+    },
+  },
+  mounted() {
+    console.log(this.projects)
+  },
+}
+</script>
+
 <script setup>
 import { reactive } from 'vue'
 
@@ -127,15 +146,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import DialogButton from '../components/Dialog_Button.vue'
 import DialogTaskButton from './Dialog_Task_Button.vue'
-
-const props = defineProps({
-  projects: Array,
-  loading: Boolean,
-})
-
-const toggleDescription = (project) => {
-  project.showDescription = !project.showDescription
-}
 </script>
 
 <style scoped>

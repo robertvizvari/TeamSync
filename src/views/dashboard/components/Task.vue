@@ -10,7 +10,7 @@
             {{ data.name }}
           </div>
           <div class="text-sm">Project: {{ data.projectName }}</div>
-          <div class="text-sm text-muted-foreground">Tracked time: {{ formatTime(data.time) }}</div>
+          <div class="text-sm text-muted-foreground">Tracked time: {{ data.timeRecords ? formatTime(data.time) : '0h' }}</div>
         </div>
       </DialogTrigger>
     </div>
@@ -35,18 +35,19 @@
       <div class="grid gap-4 overflow-y-auto pb-4">
         <div class="flex flex-col items-start text-foreground">
           <span class="text-md text-muted-foreground">Tracked time:</span>
-          <span class="text-md font-semibold">{{ formatTime(data.time) }}</span>
+          <span class="text-md font-semibold">{{ data.timeRecords ? formatTime(data.time) : '0h' }}</span>
         </div>
-        <div class="flex flex-col items-start text-foreground">
+        <div @mouseover="showTimeRecords = true" @mouseleave="showTimeRecords = false" class="group flex cursor-pointer flex-col items-start text-foreground">
           <span class="text-md flex w-full text-muted-foreground">
-            <span>All time records:</span>
+            <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">All time records:</span>
             <span class="ml-auto cursor-pointer font-semibold text-primary" @click="showAddTime = true">Add time</span>
           </span>
-          <ul>
-            <li v-for="(record, index) in data.timeRecords" :key="index" class="text-sm">+{{ formatTime(record.timeAdded) }} on {{ record.dateAdded }}</li>
+          <ul v-if="data.timeRecords" class="w-full">
+            <li v-for="(record, index) in data.timeRecords.slice(0, 2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">+{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}</li>
+            <li v-if="showTimeRecords" v-for="(record, index) in data.timeRecords.slice(2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">+{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}</li>
           </ul>
         </div>
-        <div @click="showMembers = !showMembers" class="group line-clamp-1 flex cursor-pointer flex-col items-start text-foreground">
+        <div @mouseover="showMembers = true" @mouseleave="showMembers = false" class="group line-clamp-1 flex cursor-pointer flex-col items-start text-foreground">
           <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">Members ({{ data.members.length }}):</span>
           <span v-for="(member, index) in data.members.slice(0, 2)" class="text-md font-semibold">{{ index + 1 + '. ' + member.email }}</span>
           <span v-if="showMembers" v-for="(member, index) in data.members.slice(2)" class="text-md font-semibold">{{ index + 1 + '. ' + member.email }}</span>
@@ -96,15 +97,16 @@
 </template>
 
 <script>
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore'
+import { doc, updateDoc, getDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
+import { toast } from 'vue-sonner'
 
 export default {
   props: ['data'],
   data() {
     return {
-      showMembers: false,
       showAddTime: false,
+      showTimeRecords: false,
       newTime: {
         hours: 0,
         minutes: 0,
@@ -117,43 +119,75 @@ export default {
       const minutes = totalMinutes % 60
       return `${hours}h ${minutes}m`
     },
+    formatDate(dateString) {
+      const date = new Date(dateString)
+
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const year = date.getFullYear()
+
+      const hours = String(date.getHours()).padStart(2, '0')
+      const minutes = String(date.getMinutes()).padStart(2, '0')
+
+      return `${day}.${month}.${year}, ${hours}:${minutes}`
+    },
     async addTime() {
-      const { hours, minutes } = this.newTime
-
-      if (hours <= 0 && minutes <= 0) {
-        alert('Please add a valid amount of time.')
-        return
-      }
-
-      const now = new Date()
-      const dateAdded = now.toISOString() // Current date and time in ISO format
-      const timeRecord = {
-        hours,
-        minutes,
-        dateAdded,
-      }
-
-      if (!this.data.times) {
-        this.data.times = []
-      }
-
-      this.data.times.push(timeRecord)
-      this.data.time += hours * 60 + minutes // Update total time in minutes
-
       try {
-        const projectDoc = doc(db, 'projects', this.data.projectId)
-        await updateDoc(projectDoc, {
-          [`tasks.${this.data.taskId}.times`]: arrayUnion(timeRecord),
-          [`tasks.${this.data.taskId}.totalTime`]: this.data.time,
+        const { hours, minutes } = this.newTime
+        const timeAdded = hours * 60 + minutes
+
+        if (timeAdded <= 0) {
+          console.warn('Invalid time. No changes made.')
+          return
+        }
+
+        const projectDocRef = doc(db, 'projects', this.data.projectId)
+
+        const projectDocSnap = await getDoc(projectDocRef)
+
+        if (!projectDocSnap.exists()) {
+          throw new Error('Project not found.')
+        }
+
+        const projectData = projectDocSnap.data()
+        const tasks = projectData.tasks || []
+
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === this.data.id) {
+            return {
+              ...task,
+              time: (task.time || 0) + timeAdded,
+              timeRecords: [
+                ...(task.timeRecords || []),
+                {
+                  hours,
+                  minutes,
+                  timeAdded,
+                  dateAdded: new Date().toISOString(),
+                },
+              ],
+            }
+          }
+          return task
         })
 
-        console.log('Time record saved successfully')
-      } catch (error) {
-        console.error('Error saving time record:', error)
-      }
+        await updateDoc(projectDocRef, { tasks: updatedTasks })
 
-      this.newTime = { hours: 0, minutes: 0 }
-      this.showAddTime = false
+        const updatedTask = updatedTasks.find((task) => task.id === this.data.id)
+        if (updatedTask) {
+          this.data.time = updatedTask.time
+          this.data.timeRecords = updatedTask.timeRecords
+        }
+
+        this.newTime.hours = 0
+        this.newTime.minutes = 0
+        this.showAddTime = false
+
+        toast.success('Time successfully added.')
+      } catch (error) {
+        console.error('Error adding time:', error)
+        toast.error('Failed to add time. Please try again.')
+      }
     },
   },
 }
@@ -173,9 +207,9 @@ import { toast } from 'vue-sonner'
 
 <style scoped>
 .hole-shadow {
-  -webkit-box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.82);
-  -moz-box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.82);
-  box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.82);
+  -webkit-box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.7);
+  -moz-box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.7);
+  box-shadow: 0px 0px 0px 9999px rgba(0, 0, 0, 0.7);
 }
 .nested-enter-active,
 .nested-leave-active {
