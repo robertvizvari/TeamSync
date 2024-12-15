@@ -43,14 +43,39 @@
             <span class="ml-auto cursor-pointer font-semibold text-primary" @click="showAddTime = true">Add time</span>
           </span>
           <ul v-if="data.timeRecords" class="w-full">
-            <li v-for="(record, index) in data.timeRecords.slice(0, 2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">+{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}</li>
-            <li v-if="showTimeRecords" v-for="(record, index) in data.timeRecords.slice(2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">+{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}</li>
+            <li v-for="(record, index) in data.timeRecords.slice(0, 2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">
+              +{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}
+              <span>
+                - {{ record.addedBy.name + ' ' + record.addedBy.surname }}
+                <span class="text-[0.6rem] text-muted-foreground">
+                  {{ record.addedBy.email }}
+                </span>
+              </span>
+            </li>
+            <li v-if="showTimeRecords" v-for="(record, index) in data.timeRecords.slice(2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">
+              +{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}
+              <span>
+                - {{ record.addedBy.name + ' ' + record.addedBy.surname }}
+                <span class="text-[0.6rem] text-muted-foreground">
+                  {{ record.addedBy.email }}
+                </span>
+              </span>
+            </li>
           </ul>
         </div>
         <div @mouseover="showMembers = true" @mouseleave="showMembers = false" class="group line-clamp-1 flex cursor-pointer flex-col items-start text-foreground">
           <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">Members ({{ data.members.length }}):</span>
-          <span v-for="(member, index) in data.members.slice(0, 2)" class="text-md font-semibold">{{ index + 1 + '. ' + member.email }}</span>
-          <span v-if="showMembers" v-for="(member, index) in data.members.slice(2)" class="text-md font-semibold">{{ index + 1 + '. ' + member.email }}</span>
+          <span v-for="(member, index) in data.members.slice(0, 2)" @mouseover="hoveredIndex = index + 1" @mouseleave="hoveredIndex = null" class="text-md font-semibold">
+            {{ index + 1 + '. ' + member.name + ' ' + member.surname }}
+            <Transition>
+              <Transition>
+                <span v-if="hoveredIndex === index + 1" class="text-xs text-muted-foreground">
+                  {{ member.email }}
+                </span>
+              </Transition>
+            </Transition>
+          </span>
+          <span v-if="showMembers" v-for="(member, index) in data.members.slice(2)" class="text-md font-semibold">{{ index + 1 + '. ' + member.name + ' ' + member.surname }}</span>
         </div>
       </div>
       <Transition :duration="550" name="nested">
@@ -107,10 +132,12 @@ export default {
     return {
       showAddTime: false,
       showTimeRecords: false,
+      showMembers: false,
       newTime: {
         hours: 0,
         minutes: 0,
       },
+      hoveredIndex: null,
     }
   },
   methods: {
@@ -132,6 +159,11 @@ export default {
       return `${day}.${month}.${year}, ${hours}:${minutes}`
     },
     async addTime() {
+      const creatorEmail = JSON.parse(localStorage.getItem('user')).email
+      const creatorName = JSON.parse(localStorage.getItem('user')).name
+      const creatorSurname = JSON.parse(localStorage.getItem('user')).surname
+      const creatorUid = JSON.parse(localStorage.getItem('user')).uid
+
       try {
         const { hours, minutes } = this.newTime
         const timeAdded = hours * 60 + minutes
@@ -164,6 +196,12 @@ export default {
                   minutes,
                   timeAdded,
                   dateAdded: new Date().toISOString(),
+                  addedBy: {
+                    uid: creatorUid,
+                    email: creatorEmail,
+                    name: creatorName,
+                    surname: creatorSurname,
+                  },
                 },
               ],
             }
@@ -238,5 +276,15 @@ import { toast } from 'vue-sonner'
   transform: translateX(30px);
 
   opacity: 0.001;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.25s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

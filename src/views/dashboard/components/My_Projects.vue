@@ -40,11 +40,26 @@
                   </AccordionTrigger>
                   <AccordionContent class="text-[1rem]">
                     <ul>
-                      <li class="mt-1">
-                        <span>1. {{ data.createdBy[0].email }}</span>
+                      <li class="mt-1 flex flex-row gap-0">
+                        <div>
+                          <span class="mr-1 cursor-pointer" @mouseover="hoveredIndex = 0" @mouseleave="hoveredIndex = null">1. {{ data.createdBy[0].name + ' ' + data.createdBy[0].surname }}</span>
+                          <Transition>
+                            <span v-if="hoveredIndex === 0" class="text-xs text-muted-foreground">
+                              {{ data.createdBy[0].email }}
+                            </span>
+                          </Transition>
+                        </div>
                       </li>
+
                       <li v-for="(member, index) in data.members" :key="index">
-                        <span v-if="member.state == 'accepted'">{{ index + 2 + '. ' + member.email }}</span>
+                        <span v-if="member.state === 'accepted'" class="mr-1 cursor-pointer" @mouseover="hoveredIndex = index + 1" @mouseleave="hoveredIndex = null">
+                          {{ index + 2 + '. ' + member.name + ' ' + member.surname }}
+                        </span>
+                        <Transition>
+                          <span v-if="hoveredIndex === index + 1" class="text-xs text-muted-foreground">
+                            {{ member.email }}
+                          </span>
+                        </Transition>
                       </li>
                     </ul>
                   </AccordionContent>
@@ -120,6 +135,11 @@
 <script>
 export default {
   props: ['projects', 'loading'],
+  data() {
+    return {
+      hoveredIndex: null,
+    }
+  },
   methods: {
     formatTime(totalMinutes) {
       const hours = Math.floor(totalMinutes / 60)
@@ -166,5 +186,15 @@ import DialogTaskButton from './Dialog_Task_Button.vue'
 .hidden_scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.25s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

@@ -3,8 +3,8 @@
     <div class="mt-20 flex w-full flex-col p-3">
       <Tabs default-value="latest" class="w-full">
         <TabsList class="grid w-full grid-cols-2">
-          <TabsTrigger value="latest">Latest</TabsTrigger>
-          <TabsTrigger value="pinned">Pinned</TabsTrigger>
+          <TabsTrigger :disabled="loading" value="latest">Latest</TabsTrigger>
+          <TabsTrigger :disabled="loading" value="pinned">Pinned</TabsTrigger>
         </TabsList>
         <div class="my-3">
           <Select :disabled="loading || tasks.length < 1" class="relative" default-value="all">
@@ -28,12 +28,20 @@
           </Select>
         </div>
         <TabsContent value="latest" class="w-full">
+          <div v-if="loading" class="flex w-full flex-col gap-3">
+            <div v-for="index in 6" class="h-24 w-full animate-pulse rounded-lg bg-border"></div>
+          </div>
+
           <div v-if="tasks.length < 1" class="mt-40 w-full text-center text-2xl font-semibold text-foreground">No tasks</div>
           <div v-if="tasks.length >= 1" class="flex w-full flex-col gap-3">
             <Task v-for="task in tasks" :data="task" />
           </div>
         </TabsContent>
         <TabsContent value="pinned">
+          <div v-if="loading" class="flex w-full flex-col gap-3">
+            <div v-for="index in 10" class="h-24 w-full animate-pulse rounded-lg bg-border"></div>
+          </div>
+
           <div v-if="tasks.length < 1" class="mt-40 w-full text-center text-2xl font-semibold text-foreground">No tasks</div>
           <div v-if="tasks.length >= 1" class="flex w-full flex-col gap-3">
             <Task v-for="task in tasks" :data="task" />
@@ -47,6 +55,7 @@
 <script>
 export default {
   props: ['projects', 'loading', 'tasks'],
+
   mounted() {
     setTimeout(() => {
       console.log(this.tasks)

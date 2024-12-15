@@ -48,20 +48,26 @@
                 <ComboboxGroup>
                   <ComboboxLabel class="px-[25px] text-xs leading-[25px] text-muted-foreground">Members</ComboboxLabel>
 
-                  <ComboboxItem class="data-[highlighted]:bg-grass8 relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="data.createdBy[0].email">
+                  <ComboboxItem class="relative flex h-[25px] cursor-pointer select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="data.createdBy[0].email">
                     <ComboboxItemIndicator class="absolute left-0 inline-flex w-[25px] items-center justify-center">
                       <Icon icon="radix-icons:check" />
                     </ComboboxItemIndicator>
                     <span>
-                      {{ data.createdBy[0].email }}
+                      {{ data.createdBy[0].name + ' ' + data.createdBy[0].surname }}
+                      <span class="text-xs text-muted-foreground">
+                        {{ data.createdBy[0].email }}
+                      </span>
                     </span>
                   </ComboboxItem>
-                  <ComboboxItem v-for="(member, index) in data.members" :key="index" class="data-[highlighted]:bg-grass8 relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="member.email">
+                  <ComboboxItem v-for="(member, index) in data.members" :key="index" class="relative flex h-[25px] cursor-pointer select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="member.email">
                     <ComboboxItemIndicator class="absolute left-0 inline-flex w-[25px] items-center justify-center">
                       <Icon icon="radix-icons:check" />
                     </ComboboxItemIndicator>
                     <span>
-                      {{ member.email }}
+                      {{ member.name + ' ' + member.surname }}
+                      <span class="text-xs text-muted-foreground">
+                        {{ member.email }}
+                      </span>
                     </span>
                   </ComboboxItem>
                 </ComboboxGroup>
@@ -82,7 +88,7 @@
                 <input hidden />
               </PopoverTrigger>
               <PopoverContent class="w-auto p-0">
-                <Calendar v-model:placeholder="placeholder" v-model="dueDate" calendar-label="Date of birth" initial-focus />
+                <Calendar v-model="dueDate" calendar-label="Date of birth" initial-focus />
               </PopoverContent>
             </Popover>
           </div>
@@ -158,6 +164,8 @@ export default {
 
       const creatorEmail = this.data.createdBy[0].email
       const creatorUid = JSON.parse(localStorage.getItem('user')).uid
+      const creatorName = JSON.parse(localStorage.getItem('user')).name
+      const creatorSurname = JSON.parse(localStorage.getItem('user')).surname
 
       const task = {
         id: Date.now().toString(),
@@ -166,13 +174,15 @@ export default {
         createdBy: {
           uid: this.data.createdBy[0].uid,
           email: creatorEmail,
+          name: creatorName,
+          surname: creatorSurname,
         },
         members: assignedEmails.map((email) => {
           if (email === creatorEmail) {
-            return { uid: creatorUid, email }
+            return { uid: creatorUid, email, name: creatorName, surname: creatorSurname }
           }
           const member = membersList.find((m) => m.email === email)
-          return member ? { uid: member.uid, email: member.email } : { uid: null, email }
+          return member ? { uid: member.uid, email: member.email, name: member.name, surname: member.surname } : { uid: null, email, name: null, surname: null }
         }),
         state: this.state,
         priority: this.priority,
