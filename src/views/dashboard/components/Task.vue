@@ -1,11 +1,11 @@
 <template>
   <Dialog>
-    <div class="flex flex-row items-center gap-5 rounded-lg border border-border p-4 text-foreground">
+    <div class="relative flex flex-row items-center gap-5 rounded-lg border border-border p-4 text-foreground">
       <div>
         <Checkbox />
       </div>
       <DialogTrigger as-child>
-        <div class="flex w-full cursor-pointer flex-col">
+        <div class="relative flex w-full cursor-pointer flex-col">
           <div class="text-[1rem] font-semibold">
             {{ data.name }}
           </div>
@@ -13,6 +13,25 @@
           <div class="text-sm text-muted-foreground">Tracked time: {{ data.timeRecords ? formatTime(data.time) : '0h' }}</div>
         </div>
       </DialogTrigger>
+      <div class="absolute right-5 top-1/2 -translate-y-1/2 transform">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <Button v-if="!data.taskPinned" @click="pin" variant="ghost">
+                <Pin class="size-5" />
+              </Button>
+              <Button v-if="data.taskPinned" @click="unPin" variant="ghost">
+                <PinOff fill="white" class="size-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent class="border-border">
+              <p class="text-center">
+                {{ !data.taskPinned ? 'Click to pin this task' : 'Click to unpin this task' }}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
     </div>
 
     <DialogContent class="max-h-[90dvh] grid-rows-[auto_minmax(0,1fr)_auto] sm:max-w-[500px]">
@@ -232,6 +251,71 @@ export default {
         toast.error('Failed to add time. Please try again.')
       }
     },
+    async pin() {
+      try {
+        const projectDocRef = doc(db, 'projects', this.data.projectId)
+        const projectDocSnap = await getDoc(projectDocRef)
+
+        if (!projectDocSnap.exists()) {
+          throw new Error('Project not found.')
+        }
+
+        const projectData = projectDocSnap.data()
+        const tasks = projectData.tasks || []
+
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === this.data.id) {
+            return { ...task, taskPinned: true }
+          }
+          return task
+        })
+
+        await updateDoc(projectDocRef, { tasks: updatedTasks })
+
+        const updatedTask = updatedTasks.find((task) => task.id === this.data.id)
+        if (updatedTask) {
+          this.data.taskPinned = updatedTask.taskPinned
+        }
+
+        toast.success('Task pinned successfully.')
+      } catch (error) {
+        console.error('Error pinning task:', error)
+        toast.error('Failed to pin task. Please try again.')
+      }
+    },
+
+    async unPin() {
+      try {
+        const projectDocRef = doc(db, 'projects', this.data.projectId)
+        const projectDocSnap = await getDoc(projectDocRef)
+
+        if (!projectDocSnap.exists()) {
+          throw new Error('Project not found.')
+        }
+
+        const projectData = projectDocSnap.data()
+        const tasks = projectData.tasks || []
+
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === this.data.id) {
+            return { ...task, taskPinned: false }
+          }
+          return task
+        })
+
+        await updateDoc(projectDocRef, { tasks: updatedTasks })
+
+        const updatedTask = updatedTasks.find((task) => task.id === this.data.id)
+        if (updatedTask) {
+          this.data.taskPinned = updatedTask.taskPinned
+        }
+
+        toast.success('Task unpinned successfully.')
+      } catch (error) {
+        console.error('Error unpinning task:', error)
+        toast.error('Failed to unpin task. Please try again.')
+      }
+    },
   },
 }
 </script>
@@ -244,8 +328,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field'
 import { Label } from 'radix-vue'
-import { Check, X } from 'lucide-vue-next'
+import { Check, X, Pin, PinOff } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 </script>
 
 <style scoped>

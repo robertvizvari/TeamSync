@@ -200,6 +200,7 @@ export default {
           tasks: arrayUnion(plainTask),
         })
 
+        this.$emit('project-created')
         toast.success('Task added successfully.')
         this.resetForm()
       } catch (error) {

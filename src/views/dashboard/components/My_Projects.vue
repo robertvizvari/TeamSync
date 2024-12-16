@@ -2,7 +2,7 @@
   <div class="h-dvh p-4 pb-36 sm:ml-64">
     <div class="mt-20 h-full">
       <div class="mb-2">
-        <DialogButton :initialLoading="loading" />
+        <DialogButton :initialLoading="loading" @project-created="handleProjectCreated" />
       </div>
       <div class="flex h-full flex-row gap-5 overflow-x-auto overflow-y-hidden pb-3">
         <Transition name="fade">
@@ -124,7 +124,7 @@
             </div>
           </CardContent>
           <CardFooter class="mt-auto flex justify-between gap-2 px-6 pb-6 pt-3">
-            <DialogTaskButton :data="data" />
+            <DialogTaskButton :data="data" @project-created="handleProjectCreated" />
           </CardFooter>
         </Card>
       </div>
@@ -148,6 +148,9 @@ export default {
     },
     toggleDescription(project) {
       project.showDescription = !project.showDescription
+    },
+    handleProjectCreated(projectId) {
+      this.$emit('project-created', projectId)
     },
   },
 }

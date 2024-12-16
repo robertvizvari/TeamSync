@@ -5,7 +5,7 @@
     <Navbar @toggle-sidebar="toggleSidebar" />
 
     <MyTasks v-if="urlId === 'mytasks'" :projects="projects" :tasks="tasks" :loading="loading" />
-    <MyProjects v-if="urlId === 'myprojects'" :projects="projects" :loading="loading" />
+    <MyProjects v-if="urlId === 'myprojects'" :projects="projects" :loading="loading" @project-created="refetch" />
   </div>
 </template>
 
@@ -61,11 +61,44 @@ export default {
 
         this.projects = fetchedProjects
         this.tasks = userTasks
-        this.loading = false
       } catch (error) {
         console.error('Error fetching projects and tasks:', error)
         toast.error('Failed to load data. Please try again.')
+      } finally {
         this.loading = false
+      }
+    },
+    async refetch() {
+      try {
+        const user = JSON.parse(localStorage.getItem('user'))
+        if (!user || !user.uid) {
+          toast.error('User not logged in.')
+          return
+        }
+
+        const userId = user.uid
+        const projectsRef = collection(db, 'projects')
+        const querySnapshot = await getDocs(projectsRef)
+
+        const fetchedProjects = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })).filter((project) => project.createdBy[0].uid === userId || project.members.some((member) => member.uid === userId && member.state === 'accepted'))
+
+        const userTasks = fetchedProjects.flatMap((project) => {
+          const tasks = Array.isArray(project.tasks) ? project.tasks : []
+          return tasks
+            .filter((task) => task.members.some((member) => member.uid === userId))
+            .map((task) => ({
+              ...task,
+              projectId: project.id,
+              projectName: project.projectName,
+              projectImage: project.projectImage,
+            }))
+        })
+
+        this.projects = fetchedProjects
+        this.tasks = userTasks
+      } catch (error) {
+        console.error('Error fetching projects and tasks:', error)
+        toast.error('Failed to load data. Please try again.')
       }
     },
   },
