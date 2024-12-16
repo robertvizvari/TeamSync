@@ -150,9 +150,6 @@ export default {
       project.showDescription = !project.showDescription
     },
   },
-  mounted() {
-    console.log(this.projects)
-  },
 }
 </script>
 

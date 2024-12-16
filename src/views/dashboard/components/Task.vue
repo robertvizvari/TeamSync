@@ -45,20 +45,24 @@
           <ul v-if="data.timeRecords" class="w-full">
             <li v-for="(record, index) in data.timeRecords.slice(0, 2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">
               +{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}
-              <span>
+              <span @mouseover="recordHoveredIndex = index + 1" @mouseleave="recordHoveredIndex = null">
                 - {{ record.addedBy.name + ' ' + record.addedBy.surname }}
-                <span class="text-[0.6rem] text-muted-foreground">
-                  {{ record.addedBy.email }}
-                </span>
+                <Transition>
+                  <span v-if="recordHoveredIndex === index + 1" class="text-[0.6rem] text-muted-foreground">
+                    {{ record.addedBy.email }}
+                  </span>
+                </Transition>
               </span>
             </li>
             <li v-if="showTimeRecords" v-for="(record, index) in data.timeRecords.slice(2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">
               +{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}
-              <span>
+              <span @mouseover="recordHoveredIndex = index + 1" @mouseleave="recordHoveredIndex = null">
                 - {{ record.addedBy.name + ' ' + record.addedBy.surname }}
-                <span class="text-[0.6rem] text-muted-foreground">
-                  {{ record.addedBy.email }}
-                </span>
+                <Transition>
+                  <span v-if="recordHoveredIndex === index + 1" class="text-[0.6rem] text-muted-foreground">
+                    {{ record.addedBy.email }}
+                  </span>
+                </Transition>
               </span>
             </li>
           </ul>
@@ -138,6 +142,7 @@ export default {
         minutes: 0,
       },
       hoveredIndex: null,
+      recordHoveredIndex: null,
     }
   },
   methods: {

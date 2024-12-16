@@ -7,7 +7,7 @@
           <TabsTrigger :disabled="loading" value="pinned">Pinned</TabsTrigger>
         </TabsList>
         <div class="my-3">
-          <Select :disabled="loading || tasks.length < 1" class="relative" default-value="all">
+          <Select v-model="selectValue" :disabled="loading || tasks.length < 1" class="relative" default-value="all">
             <SelectTrigger class="relative text-foreground sm:max-w-[200px]">
               <SelectValue class="text-foreground" placeholder="Select a project" />
               <div v-if="loading" class="absolute right-1 z-[1]">
@@ -19,9 +19,9 @@
                 <SelectLabel>
                   {{ projects.length > 0 ? 'Projects' : 'No projects' }}
                 </SelectLabel>
-                <SelectItem value="all">Show all</SelectItem>
+                <SelectItem value="all" class="cursor-pointer transition-all duration-300 ease-in-out">Show all</SelectItem>
                 <div v-if="projects.length > 0">
-                  <SelectItem v-for="project in projects" :value="project.id">{{ project.projectName }}</SelectItem>
+                  <SelectItem v-for="project in projects" :value="project.id" class="cursor-pointer transition-all duration-300 ease-in-out">{{ project.projectName }}</SelectItem>
                 </div>
               </SelectGroup>
             </SelectContent>
@@ -33,8 +33,12 @@
           </div>
 
           <div v-if="tasks.length < 1" class="mt-40 w-full text-center text-2xl font-semibold text-foreground">No tasks</div>
-          <div v-if="tasks.length >= 1" class="flex w-full flex-col gap-3">
-            <Task v-for="task in tasks" :data="task" />
+          <div v-if="tasks.length >= 1" class="flex w-full flex-col gap-0">
+            <div v-for="task in tasks" :key="task.id">
+              <div :class="(index !== 0 && selectValue == 'all') || (index !== 0 && selectValue == task.projectId) ? 'mt-3' : ''">
+                <Task v-if="selectValue == 'all' || selectValue == task.projectId" :data="task" />
+              </div>
+            </div>
           </div>
         </TabsContent>
         <TabsContent value="pinned">
@@ -55,11 +59,10 @@
 <script>
 export default {
   props: ['projects', 'loading', 'tasks'],
-
-  mounted() {
-    setTimeout(() => {
-      console.log(this.tasks)
-    }, 5000)
+  data() {
+    return {
+      selectValue: 'all',
+    }
   },
 }
 </script>
@@ -70,3 +73,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { RefreshCw } from 'lucide-vue-next'
 </script>
+
+<style>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.25s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>
