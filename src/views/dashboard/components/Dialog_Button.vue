@@ -239,8 +239,6 @@ export default {
 
         this.$emit('project-created', projectId)
 
-        toast.success('Project created successfully!')
-
         this.image = ''
         this.name = ''
         this.description = ''

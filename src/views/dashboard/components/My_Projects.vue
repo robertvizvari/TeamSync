@@ -30,7 +30,7 @@
           </CardHeader>
           <CardContent class="hidden_scrollbar flex w-full flex-col gap-2 overflow-y-auto">
             <div>
-              <div v-if="data.members.length == 0" class="font-semibold">No other members</div>
+              <div v-if="data.members.length == 0" class="border-b border-border py-4 font-semibold">No other members</div>
 
               <Accordion v-if="data.members.length > 0" type="single" collapsible>
                 <AccordionItem value="item-1">
@@ -74,7 +74,7 @@
                     <AccordionTrigger>Tasks ({{ data.tasks.length }})</AccordionTrigger>
                     <AccordionContent class="text-[1rem]">
                       <ul>
-                        <li class="relative flex flex-col rounded-md bg-border p-3" v-for="(task, index) in data.tasks" :key="index" :class="index != 0 ? 'mt-2' : ''">
+                        <li class="relative flex flex-col rounded-md bg-secondary p-3" v-for="(task, index) in data.tasks" :key="index" :class="index != 0 ? 'mt-2' : ''">
                           <span class="flex flex-row items-center gap-3 font-semibold">
                             {{ task.name }} - {{ task.time ? formatTime(task.time) : '0h' }}
                             <span v-if="task.state == 'todo'" class="select-none rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
@@ -118,7 +118,7 @@
                 </Accordion>
               </div>
 
-              <div v-if="!data.tasks">
+              <div v-if="!data.tasks" class="border-b border-border py-4">
                 <span class="font-semibold">No tasks</span>
               </div>
             </div>

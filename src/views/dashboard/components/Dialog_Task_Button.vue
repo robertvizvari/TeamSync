@@ -201,7 +201,6 @@ export default {
         })
 
         this.$emit('project-created')
-        toast.success('Task added successfully.')
         this.resetForm()
       } catch (error) {
         console.error('Error adding task:', error)

@@ -17,10 +17,10 @@
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger as-child>
-              <Button v-if="!data.taskPinned" @click="pin" variant="ghost">
+              <Button v-if="!data.taskPinned" @click="pin" :disabled="pinLoading" variant="ghost">
                 <Pin class="size-5" />
               </Button>
-              <Button v-if="data.taskPinned" @click="unPin" variant="ghost">
+              <Button v-if="data.taskPinned" @click="unPin" :disabled="pinLoading" variant="ghost">
                 <PinOff fill="white" class="size-5" />
               </Button>
             </TooltipTrigger>
@@ -61,6 +61,7 @@
             <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">All time records:</span>
             <span class="ml-auto cursor-pointer font-semibold text-primary" @click="showAddTime = true">Add time</span>
           </span>
+          <span v-if="!data.timeRecords">No time records</span>
           <ul v-if="data.timeRecords" class="w-full">
             <li v-for="(record, index) in data.timeRecords.slice(0, 2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">
               +{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}
@@ -162,6 +163,7 @@ export default {
       },
       hoveredIndex: null,
       recordHoveredIndex: null,
+      pinLoading: false,
     }
   },
   methods: {
@@ -244,14 +246,13 @@ export default {
         this.newTime.hours = 0
         this.newTime.minutes = 0
         this.showAddTime = false
-
-        toast.success('Time successfully added.')
       } catch (error) {
         console.error('Error adding time:', error)
         toast.error('Failed to add time. Please try again.')
       }
     },
     async pin() {
+      this.pinLoading = true
       try {
         const projectDocRef = doc(db, 'projects', this.data.projectId)
         const projectDocSnap = await getDoc(projectDocRef)
@@ -276,15 +277,16 @@ export default {
         if (updatedTask) {
           this.data.taskPinned = updatedTask.taskPinned
         }
-
-        toast.success('Task pinned successfully.')
       } catch (error) {
         console.error('Error pinning task:', error)
         toast.error('Failed to pin task. Please try again.')
+      } finally {
+        this.pinLoading = false
       }
     },
 
     async unPin() {
+      this.pinLoading = true
       try {
         const projectDocRef = doc(db, 'projects', this.data.projectId)
         const projectDocSnap = await getDoc(projectDocRef)
@@ -309,11 +311,11 @@ export default {
         if (updatedTask) {
           this.data.taskPinned = updatedTask.taskPinned
         }
-
-        toast.success('Task unpinned successfully.')
       } catch (error) {
         console.error('Error unpinning task:', error)
         toast.error('Failed to unpin task. Please try again.')
+      } finally {
+        this.pinLoading = false
       }
     },
   },
