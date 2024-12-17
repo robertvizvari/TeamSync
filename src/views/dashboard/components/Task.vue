@@ -21,7 +21,7 @@
                 <Pin class="size-5" />
               </Button>
               <Button v-if="data.taskPinned" @click="unPin" :disabled="pinLoading" variant="ghost">
-                <PinOff fill="white" class="size-5" />
+                <PinOff class="size-5 text-red-400" />
               </Button>
             </TooltipTrigger>
             <TooltipContent class="border-border">
