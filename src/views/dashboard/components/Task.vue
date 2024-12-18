@@ -2,7 +2,7 @@
   <Dialog>
     <div class="relative flex flex-row items-center gap-5 rounded-lg border border-border p-4 text-foreground">
       <div>
-        <Checkbox />
+        <Checkbox :checked="data.checked" @update:checked="toggleChecked" :disabled="checkLoading" />
       </div>
       <DialogTrigger as-child>
         <div class="relative flex w-full cursor-pointer flex-col">
@@ -164,6 +164,7 @@ export default {
       hoveredIndex: null,
       recordHoveredIndex: null,
       pinLoading: false,
+      checkLoading: false,
     }
   },
   methods: {
@@ -284,7 +285,6 @@ export default {
         this.pinLoading = false
       }
     },
-
     async unPin() {
       this.pinLoading = true
       try {
@@ -316,6 +316,41 @@ export default {
         toast.error('Failed to unpin task. Please try again.')
       } finally {
         this.pinLoading = false
+      }
+    },
+    async toggleChecked() {
+      if (this.checkLoading) return
+      this.checkLoading = true
+
+      try {
+        const projectDocRef = doc(db, 'projects', this.data.projectId)
+        const projectDocSnap = await getDoc(projectDocRef)
+
+        if (!projectDocSnap.exists()) {
+          throw new Error('Project not found.')
+        }
+
+        const projectData = projectDocSnap.data()
+        const tasks = projectData.tasks || []
+
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === this.data.id) {
+            return { ...task, checked: !task.checked }
+          }
+          return task
+        })
+
+        await updateDoc(projectDocRef, { tasks: updatedTasks })
+
+        const updatedTask = updatedTasks.find((task) => task.id === this.data.id)
+        if (updatedTask) {
+          this.data.checked = updatedTask.checked
+        }
+      } catch (error) {
+        console.error('Error updating task checked state:', error)
+        toast.error('Failed to update task checked state. Please try again.')
+      } finally {
+        this.checkLoading = false
       }
     },
   },

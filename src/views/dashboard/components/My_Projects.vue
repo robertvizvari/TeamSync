@@ -79,11 +79,11 @@
                       <ul>
                         <li class="relative flex flex-col rounded-md bg-secondary p-3" v-for="(task, index) in data.tasks" :key="index" :class="index != 0 ? 'mt-2' : ''">
                           <span class="flex flex-row items-center gap-3 font-semibold">
-                            {{ task.name }} - {{ task.time ? formatTime(task.time) : '0h' }}
-                            <span v-if="task.state == 'todo'" class="select-none rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
-                            <span v-else-if="task.state == 'inProgress'" class="select-none rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
-                            <span v-else-if="task.state == 'finished'" class="select-none rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
-                            <span v-else-if="task.state == 'cancelled'" class="select-none rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">Cancelled</span>
+                            <span class="text-wrap">{{ task.name }} - {{ task.time ? formatTime(task.time) : '0h' }}</span>
+                            <span v-if="task.state == 'todo'" class="select-none whitespace-nowrap rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
+                            <span v-else-if="task.state == 'inProgress'" class="select-none whitespace-nowrap rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
+                            <span v-else-if="task.state == 'finished'" class="select-none whitespace-nowrap rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
+                            <span v-else-if="task.state == 'cancelled'" class="select-none whitespace-nowrap rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">Cancelled</span>
                           </span>
 
                           <span class="text-sm text-muted-foreground">{{ task.members.length }} {{ task.members.length > 1 ? 'members' : 'member' }}</span>

@@ -34,6 +34,7 @@
 
           <div v-if="tasks.length < 1" class="mt-40 w-full text-center text-2xl font-semibold text-foreground">No tasks</div>
           <div v-if="tasks.length >= 1" class="flex w-full flex-col gap-0">
+            <span class="py-1 text-sm font-semibold text-secondary">Unchecked</span>
             <div v-for="(task, index) in tasks" :key="task.id">
               <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="(selectValue == 'all' && index != 0) || (selectValue == task.projectId && index != 0) ? 'mt-3' : ''">
                 <Task :data="task" />

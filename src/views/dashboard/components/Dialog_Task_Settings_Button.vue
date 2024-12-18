@@ -58,19 +58,35 @@
         </div>
       </div>
       <DialogFooter>
+        <Button @click="showDialog = true" :disabled="loading" class="border-red-500 text-red-500 hover:bg-red-500 hover:text-white" variant="outline">Delete</Button>
         <Button v-if="!loading" class="w-full text-white" :disabled="!hasChanges || loading || image === '' || name.trim() === ''" @click="saveChanges">Save changes</Button>
         <Button v-if="loading" disabled class="w-full text-white">
           Save changes
           <RefreshCw class="mr-2 h-4 animate-spin" />
         </Button>
       </DialogFooter>
+
+      <Transition name="fade">
+        <div v-if="showDialog" @click="showDialog = false" class="pointer-events-auto fixed left-1/2 top-1/2 z-[9999] flex h-screen w-screen -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black bg-opacity-60">
+          <div class="pointer-events-auto grid w-full max-w-lg gap-4 border border-border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
+            <div class="flex flex-col gap-y-2 text-center sm:text-left">
+              <h2 class="text-lg font-semibold text-foreground">Are you absolutely sure?</h2>
+              <p class="text-sm text-muted-foreground">Are you sure you want to delete this project? This action cannot be undone.</p>
+            </div>
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2">
+              <Button @click="showDialog = false" class="mt-2 font-normal text-foreground sm:mt-0" size="sm" variant="outline">Cancel</Button>
+              <Button @click="deleteProject" class="bg-red-500 font-normal text-white hover:bg-red-400" size="sm">Delete</Button>
+            </div>
+          </div>
+        </div>
+      </Transition>
     </DialogContent>
   </Dialog>
 </template>
 
 <script>
 import { db } from '@/firebase'
-import { doc, updateDoc, arrayUnion, arrayRemove, collection, query, where, getDocs, serverTimestamp } from 'firebase/firestore'
+import { doc, updateDoc, arrayUnion, arrayRemove, collection, query, where, getDocs, serverTimestamp, deleteDoc } from 'firebase/firestore'
 import { toast } from 'vue-sonner'
 import emailjs from '@emailjs/browser'
 
@@ -83,6 +99,7 @@ export default {
       description: '',
       inviteEmails: [],
       loading: false,
+      showDialog: false,
     }
   },
   mounted() {
@@ -197,6 +214,27 @@ export default {
       }
     },
 
+    async deleteProject() {
+      this.loading = true
+      try {
+        const projectId = this.data.id
+        const projectDocRef = doc(db, 'projects', projectId)
+
+        await deleteDoc(projectDocRef)
+
+        this.$emit('project-created', projectId)
+
+        this.showDialog = false
+
+        toast.success('Project deleted successfully.')
+      } catch (error) {
+        console.error('Error deleting project:', error)
+        toast.error('Failed to delete project. Please try again.')
+      } finally {
+        this.loading = false
+      }
+    },
+
     arraysEqual(arr1, arr2) {
       if (arr1.length !== arr2.length) return false
       return arr1.every((item) => arr2.includes(item)) && arr2.every((item) => arr1.includes(item))
@@ -228,3 +266,15 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

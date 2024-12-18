@@ -29,10 +29,6 @@ const checkbox = ref(null)
 
 const isChecked = ref(false)
 
-const handleCheckChange = (checked) => {
-  isChecked.value = checked
-}
-
 watch(
   checkbox,
   (el) => {
@@ -49,8 +45,8 @@ watch(
 </script>
 
 <template>
-  <CheckboxRoot ref="checkbox" v-bind="forwarded" :class="cn('peer h-5 w-5 shrink-0 rounded-sm border border-primary ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-white', props.class)" @checked-change="handleCheckChange">
-    <CheckboxIndicator :class="isChecked ? 'scale-100' : 'scale-0'" class="flex h-full w-full items-center justify-center transition-transform duration-300">
+  <CheckboxRoot ref="checkbox" v-bind="forwarded" :class="cn('peer h-5 w-5 shrink-0 rounded-sm border border-primary ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-white', props.class)">
+    <CheckboxIndicator class="flex h-full w-full items-center justify-center transition-transform duration-300">
       <slot>
         <Check class="h-4 w-4" style="opacity: 100%" />
       </slot>
