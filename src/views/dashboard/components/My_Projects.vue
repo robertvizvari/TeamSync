@@ -25,16 +25,19 @@
                 </AvatarFallback>
               </Avatar>
               <span>{{ data.projectName }}</span>
+              <span v-if="userId == data.createdBy[0].uid && userId !== ''" class="ml-auto">
+                <DialogTaskSettingsButton :data="data" @project-created="handleProjectCreated" />
+              </span>
             </CardTitle>
-            <span @click="toggleDescription(data)" :class="data.showDescription ? '' : 'line-clamp-2'" class="cursor-pointer text-sm font-normal text-muted-foreground transition-all duration-200 hover:text-foreground">{{ data.description }}</span>
+            <span @click="toggleDescription(data)" :class="data.showDescription ? '' : 'line-clamp-1'" class="cursor-pointer text-sm font-normal text-muted-foreground transition-all duration-200 hover:text-foreground">{{ data.description }}</span>
           </CardHeader>
           <CardContent class="hidden_scrollbar flex w-full flex-col gap-2 overflow-y-auto">
             <div>
-              <div v-if="data.members.length == 0" class="border-b border-border py-4 font-semibold">No other members</div>
+              <div v-if="data.members.length == 0" :class="data.description == '' ? 'py-4' : 'mt-[-4px] pb-4'" class="border-b border-border font-semibold">No other members</div>
 
               <Accordion v-if="data.members.length > 0" type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>
+                  <AccordionTrigger :class="data.description !== '' ? 'mt-[-4px] pt-0' : ''">
                     Members
                     <!-- ({{ data.members.length + 1 }}) -->
                   </AccordionTrigger>
@@ -56,7 +59,7 @@
                           {{ index + 2 + '. ' + member.name + ' ' + member.surname }}
                         </span>
                         <Transition>
-                          <span v-if="hoveredIndex === index + 1" class="text-xs text-muted-foreground">
+                          <span v-if="hoveredIndex === index + 1 && member.state === 'accepted'" class="text-xs text-muted-foreground">
                             {{ member.email }}
                           </span>
                         </Transition>
@@ -138,6 +141,8 @@ export default {
   data() {
     return {
       hoveredIndex: null,
+      showSettings: false,
+      userId: '',
     }
   },
   methods: {
@@ -153,6 +158,9 @@ export default {
       this.$emit('project-created', projectId)
     },
   },
+  mounted() {
+    this.userId = JSON.parse(localStorage.getItem('user')).uid
+  },
 }
 </script>
 
@@ -160,12 +168,14 @@ export default {
 import { reactive } from 'vue'
 
 import { Button } from '@/components/ui/button'
+import { Settings } from 'lucide-vue-next'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import DialogButton from '../components/Dialog_Button.vue'
 import DialogTaskButton from './Dialog_Task_Button.vue'
+import DialogTaskSettingsButton from './Dialog_Task_Settings_Button.vue'
 </script>
 
 <style scoped>
