@@ -156,9 +156,16 @@ export default {
     },
     async validateAndSendInvites(emails, projectId, projectName) {
       const validMembers = []
+      const userEmail = JSON.parse(localStorage.getItem('user')).email
+
       for (const email of emails) {
         try {
           const trimmedEmail = email.trim()
+
+          if (trimmedEmail === userEmail) {
+            throw new Error("You can't add your own email.")
+          }
+
           const userQuery = query(collection(db, 'users'), where('email', '==', trimmedEmail))
           const userSnapshot = await getDocs(userQuery)
 
@@ -191,7 +198,8 @@ export default {
           }
         } catch (error) {
           console.error(`Error validating or sending email to ${email}:`, error)
-          throw new Error(`Failed to validate or send invite to ${email}.`)
+          this.loading = false
+          throw new Error(error.message || `Failed to validate or send invite to ${email}.`)
         }
       }
       return validMembers
@@ -216,7 +224,8 @@ export default {
         try {
           validMembers = await this.validateAndSendInvites(this.inviteEmails, projectId, this.name)
         } catch (error) {
-          toast.error('Failed to send invites. Aborting project creation.')
+          toast.error(error.message || 'Failed to send invites. Aborting project creation.')
+          this.loading = false
           return
         }
 

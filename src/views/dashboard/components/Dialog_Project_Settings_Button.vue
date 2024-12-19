@@ -117,6 +117,12 @@ export default {
         const projectName = this.name
         const projectDocRef = doc(db, 'projects', projectId)
 
+        const createdByEmail = this.data.createdBy[0].email
+        if (this.inviteEmails.includes(createdByEmail)) {
+          toast.error("You can't add your own email.")
+          throw new Error("You can't add your own email.")
+        }
+
         const currentEmails = this.data.members.map((member) => member.email)
         const newInviteEmails = this.inviteEmails.filter((email) => !currentEmails.includes(email))
         const removedEmails = currentEmails.filter((email) => !this.inviteEmails.includes(email))
@@ -154,7 +160,11 @@ export default {
         toast.success('Project updated successfully!')
       } catch (error) {
         console.error('Error updating project:', error)
-        toast.error('Failed to update project. Please try again.')
+        if (error.message === "You can't add your own email.") {
+          toast.error("You can't add your own email.")
+        } else {
+          toast.error('Failed to update project. Please try again.')
+        }
       } finally {
         this.loading = false
       }

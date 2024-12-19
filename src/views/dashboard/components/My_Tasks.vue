@@ -31,29 +31,45 @@
           <div v-if="loading" class="flex w-full flex-col gap-3">
             <div v-for="index in 6" class="h-24 w-full animate-pulse rounded-lg bg-border"></div>
           </div>
-
-          <div v-if="tasks.length < 1" class="mt-40 w-full text-center text-2xl font-semibold text-foreground">No tasks</div>
-          <div v-if="tasks.length >= 1" class="flex w-full flex-col gap-0">
-            <span class="py-1 text-sm font-semibold text-secondary">Unchecked</span>
-            <div v-for="(task, index) in tasks" :key="task.id">
-              <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="(selectValue == 'all' && index != 0) || (selectValue == task.projectId && index != 0) ? 'mt-3' : ''">
-                <Task :data="task" />
+          <div v-else>
+            <section>
+              <div v-for="(task, index) in tasksUnchecked" :key="task.id">
+                <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
+                  <Task :data="task" />
+                </div>
               </div>
-            </div>
+            </section>
+
+            <section class="mt-3">
+              <div v-for="(task, index) in tasksChecked" :key="task.id">
+                <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
+                  <Task :data="task" />
+                </div>
+              </div>
+            </section>
           </div>
         </TabsContent>
+
         <TabsContent value="pinned">
           <div v-if="loading" class="flex w-full flex-col gap-3">
-            <div v-for="index in 10" class="h-24 w-full animate-pulse rounded-lg bg-border"></div>
+            <div v-for="index in 6" class="h-24 w-full animate-pulse rounded-lg bg-border"></div>
           </div>
-
-          <div v-if="tasks.length < 1" class="mt-40 w-full text-center text-2xl font-semibold text-foreground">No tasks</div>
-          <div v-if="tasks.length >= 1" class="flex w-full flex-col gap-0">
-            <div v-for="(task, index) in tasks" :key="task.id">
-              <div v-if="(selectValue == 'all' && task.taskPinned) || (selectValue == task.projectId && task.taskPinned)" :class="(selectValue == 'all' && index != 0) || (selectValue == task.projectId && index != 0) ? 'mt-3' : ''">
-                <Task :data="task" />
+          <div v-else>
+            <section v-if="tasksPinnedUnchecked.length > 0">
+              <div v-for="(task, index) in tasksPinnedUnchecked" :key="task.id">
+                <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
+                  <Task :data="task" />
+                </div>
               </div>
-            </div>
+            </section>
+
+            <section class="mt-3">
+              <div v-for="(task, index) in tasksPinnedChecked" :key="task.id">
+                <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
+                  <Task :data="task" />
+                </div>
+              </div>
+            </section>
           </div>
         </TabsContent>
       </Tabs>
@@ -68,6 +84,21 @@ export default {
     return {
       selectValue: 'all',
     }
+  },
+  computed: {
+    tasksUnchecked() {
+      return this.tasks.filter((task) => !task.checked)
+    },
+    tasksChecked() {
+      return this.tasks.filter((task) => task.checked)
+    },
+    tasksPinnedUnchecked() {
+      return this.tasks.filter((task) => !task.checked && task.taskPinned)
+    },
+
+    tasksPinnedChecked() {
+      return this.tasks.filter((task) => task.checked && task.taskPinned)
+    },
   },
 }
 </script>

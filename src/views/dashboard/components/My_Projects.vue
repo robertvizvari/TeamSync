@@ -33,16 +33,15 @@
           </CardHeader>
           <CardContent class="hidden_scrollbar flex w-full flex-col gap-2 overflow-y-auto">
             <div>
-              <div v-if="data.members.length == 0" :class="data.description == '' ? 'py-4' : 'mt-[-4px] pb-4'" class="border-b border-border font-semibold">No other members</div>
+              <div v-if="acceptedMembersCount(data.members) < 1" :class="data.description == '' ? 'py-4' : 'mt-[-4px] pb-4'" class="border-b border-border font-semibold">No other members</div>
 
-              <Accordion v-if="data.members.length > 0" type="single" collapsible>
+              <Accordion v-if="acceptedMembersCount(data.members) >= 1" type="single" collapsible>
                 <AccordionItem value="item-1">
                   <AccordionTrigger :class="data.description !== '' ? 'mt-[-4px] pt-0' : ''">
-                    Members
-                    <!-- ({{ data.members.length + 1 }}) -->
+                    <span>Members ({{ data.members.filter((member) => member.state === 'accepted').length + 1 }})</span>
                   </AccordionTrigger>
                   <AccordionContent class="text-[1rem]">
-                    <ul>
+                    <ul v-if="acceptedMembersCount(data.members) > 0">
                       <li class="mt-1 flex flex-row gap-0">
                         <div>
                           <span class="mr-1 cursor-pointer" @mouseover="hoveredIndex = 0" @mouseleave="hoveredIndex = null">1. {{ data.createdBy[0].name + ' ' + data.createdBy[0].surname }}</span>
@@ -77,13 +76,13 @@
                     <AccordionTrigger>Tasks ({{ data.tasks.length }})</AccordionTrigger>
                     <AccordionContent class="text-[1rem]">
                       <ul>
-                        <li class="relative flex flex-col rounded-md bg-secondary p-3" v-for="(task, index) in data.tasks" :key="index" :class="index != 0 ? 'mt-2' : ''">
-                          <span class="flex flex-row items-center gap-3 font-semibold">
+                        <li class="relative flex flex-col overflow-hidden rounded-md bg-secondary p-3" v-for="(task, index) in sortedTasksByChecked(data.tasks)" :key="index" :class="index != 0 ? 'mt-2' : ''">
+                          <span class="flex flex-row items-start gap-3 font-semibold">
                             <span class="text-wrap">{{ task.name }} - {{ task.time ? formatTime(task.time) : '0h' }}</span>
-                            <span v-if="task.state == 'todo'" class="select-none whitespace-nowrap rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
-                            <span v-else-if="task.state == 'inProgress'" class="select-none whitespace-nowrap rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
-                            <span v-else-if="task.state == 'finished'" class="select-none whitespace-nowrap rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
-                            <span v-else-if="task.state == 'cancelled'" class="select-none whitespace-nowrap rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">Cancelled</span>
+                            <span v-if="task.state == 'todo'" class="ml-auto select-none whitespace-nowrap rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
+                            <span v-else-if="task.state == 'inProgress'" class="ml-auto select-none whitespace-nowrap rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
+                            <span v-else-if="task.state == 'finished'" class="ml-auto select-none whitespace-nowrap rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
+                            <span v-else-if="task.state == 'cancelled'" class="ml-auto select-none whitespace-nowrap rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">Cancelled</span>
                           </span>
 
                           <span class="text-sm text-muted-foreground">{{ task.members.length }} {{ task.members.length > 1 ? 'members' : 'member' }}</span>
@@ -91,9 +90,9 @@
                           <TooltipProvider>
                             <Tooltip class="border-border">
                               <TooltipTrigger as-child>
-                                <div v-if="task.priority == 'high'" class="absolute right-3 top-1/2 size-2 -translate-y-1/2 transform cursor-help rounded-full bg-red-500"></div>
-                                <div v-else-if="task.priority == 'medium'" class="absolute right-3 top-1/2 size-2 -translate-y-1/2 transform cursor-help rounded-full bg-amber-500"></div>
-                                <div v-else-if="task.priority == 'low'" class="absolute right-3 top-1/2 size-2 -translate-y-1/2 transform cursor-help rounded-full bg-emerald-500"></div>
+                                <div v-if="task.priority == 'high'" class="absolute bottom-0 right-0 h-[0.2rem] w-full cursor-help bg-red-500"></div>
+                                <div v-else-if="task.priority == 'medium'" class="absolute bottom-0 right-0 h-[0.2rem] w-full cursor-help bg-amber-500"></div>
+                                <div v-else-if="task.priority == 'low'" class="absolute bottom-0 right-0 h-[0.2rem] w-full cursor-help bg-emerald-500"></div>
                               </TooltipTrigger>
                               <TooltipContent>
                                 <p v-if="task.priority == 'high'">
@@ -157,7 +156,14 @@ export default {
     handleProjectCreated(projectId) {
       this.$emit('project-created', projectId)
     },
+    sortedTasksByChecked(tasks) {
+      return tasks.slice().sort((a, b) => a.checked - b.checked)
+    },
+    acceptedMembersCount(members) {
+      return members.filter((member) => member.state === 'accepted').length
+    },
   },
+
   mounted() {
     this.userId = JSON.parse(localStorage.getItem('user')).uid
   },
@@ -175,7 +181,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import DialogButton from '../components/Dialog_Button.vue'
 import DialogTaskButton from './Dialog_Task_Button.vue'
-import DialogTaskSettingsButton from './Dialog_Task_Settings_Button.vue'
+import DialogTaskSettingsButton from './Dialog_Project_Settings_Button.vue'
 </script>
 
 <style scoped>
