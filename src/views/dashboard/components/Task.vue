@@ -6,7 +6,7 @@
       </div>
       <DialogTrigger as-child>
         <div class="relative flex w-full cursor-pointer flex-col">
-          <div class="text-[1rem] font-semibold">
+          <div class="flex flex-row items-center gap-2 text-[1rem] font-semibold">
             {{ data.name }}
           </div>
           <div class="text-sm">Project: {{ data.projectName }}</div>
@@ -14,6 +14,7 @@
         </div>
       </DialogTrigger>
       <div class="absolute right-5 top-1/2 -translate-y-1/2 transform">
+        <DialogTaskSettingsButton :data="data" :projects="projects" />
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger as-child>
@@ -157,7 +158,7 @@ import { db } from '@/firebase'
 import { toast } from 'vue-sonner'
 
 export default {
-  props: ['data'],
+  props: ['data', 'projects'],
   data() {
     return {
       showAddTime: false,
@@ -173,6 +174,7 @@ export default {
       checkLoading: false,
       state: 'todo',
       priority: 'medium',
+      editMode: true,
     }
   },
   methods: {
@@ -366,6 +368,7 @@ export default {
 </script>
 
 <script setup>
+import DialogTaskSettingsButton from './Dialog_Task_Settings_Button.vue'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
@@ -373,7 +376,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field'
 import { Label } from 'radix-vue'
-import { Check, X, Pin, PinOff } from 'lucide-vue-next'
+import { Check, X, Pin, PinOff, RefreshCw, Edit, Settings } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 </script>

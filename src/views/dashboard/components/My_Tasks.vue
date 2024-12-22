@@ -35,7 +35,7 @@
             <section>
               <div v-for="(task, index) in tasksUnchecked" :key="task.id">
                 <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
-                  <Task :data="task" />
+                  <Task :data="task" :projects="projects" />
                 </div>
               </div>
             </section>
@@ -43,7 +43,7 @@
             <section class="mt-3">
               <div v-for="(task, index) in tasksChecked" :key="task.id">
                 <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
-                  <Task :data="task" />
+                  <Task :data="task" :projects="projects" />
                 </div>
               </div>
             </section>
