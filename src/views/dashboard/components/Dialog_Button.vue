@@ -83,6 +83,7 @@ export default {
       description: '',
       inviteEmails: [],
       loading: false,
+      errorOccurred: false,
     }
   },
   methods: {
@@ -155,10 +156,13 @@ export default {
       })
     },
     async validateAndSendInvites(emails, projectId, projectName) {
+      this.errorOccurred = false
       const validMembers = []
       const userEmail = JSON.parse(localStorage.getItem('user')).email
 
       for (const email of emails) {
+        if (this.errorOccurred) break
+
         try {
           const trimmedEmail = email.trim()
 
@@ -195,10 +199,13 @@ export default {
             )
           } else {
             toast.error(`User with email ${trimmedEmail} is not registered.`)
+            this.errorOccurred = true
+            throw new Error(`User with email ${trimmedEmail} is not registered.`)
           }
         } catch (error) {
-          console.error(`Error validating or sending email to ${email}:`, error)
+          this.errorOccurred = true
           this.loading = false
+          console.error(`Error validating or sending email to ${email}:`, error)
           throw new Error(error.message || `Failed to validate or send invite to ${email}.`)
         }
       }
@@ -207,12 +214,15 @@ export default {
 
     async createProject() {
       this.loading = true
+      this.errorOccurred = false
 
       try {
         if (!this.name || !this.image) {
           toast.warning('Project name and image are required.')
           return
         }
+
+        if (this.errorOccurred) return
 
         const userId = JSON.parse(localStorage.getItem('user')).uid
         const userEmail = JSON.parse(localStorage.getItem('user')).email
@@ -225,6 +235,7 @@ export default {
           validMembers = await this.validateAndSendInvites(this.inviteEmails, projectId, this.name)
         } catch (error) {
           toast.error(error.message || 'Failed to send invites. Aborting project creation.')
+          this.errorOccurred = true
           this.loading = false
           return
         }
@@ -241,6 +252,7 @@ export default {
 
           await setDoc(doc(db, 'projects', projectId), projectData)
         } catch (error) {
+          this.errorOccurred = true
           console.error('Error creating project:', error)
           toast.error('Failed to create project. Please try again.')
           return
@@ -254,6 +266,7 @@ export default {
         this.inviteEmails = []
         this.loading = false
       } catch (error) {
+        this.errorOccurred = true
         console.error('Unexpected error during project creation:', error)
         toast.error('An unexpected error occurred. Please try again.')
         this.loading = false

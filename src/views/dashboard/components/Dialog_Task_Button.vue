@@ -167,6 +167,8 @@ export default {
       const creatorName = JSON.parse(localStorage.getItem('user')).name
       const creatorSurname = JSON.parse(localStorage.getItem('user')).surname
 
+      const validDueDate = this.dueDate && this.dueDate instanceof Date && !isNaN(this.dueDate) ? this.dueDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+
       const task = {
         id: Date.now().toString(),
         name: this.name,
@@ -186,7 +188,7 @@ export default {
         }),
         state: this.state,
         priority: this.priority,
-        dueDate: this.dueDate || null,
+        dueDate: validDueDate,
         createdAt: setTimeout(() => {
           Date.now()
         }, 100),

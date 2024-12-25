@@ -14,7 +14,7 @@
         </div>
       </DialogTrigger>
       <div class="absolute right-5 top-1/2 -translate-y-1/2 transform">
-        <DialogTaskSettingsButton :data="data" :projects="projects" />
+        <DialogTaskSettingsButton :data="data" :projects="projects" @project-created="$emit('project-created')" />
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger as-child>

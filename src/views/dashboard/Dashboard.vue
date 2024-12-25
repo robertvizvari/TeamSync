@@ -4,7 +4,7 @@
 
     <Navbar @toggle-sidebar="toggleSidebar" />
 
-    <MyTasks v-if="urlId === 'mytasks'" :projects="projects" :tasks="tasks" :loading="loading" />
+    <MyTasks v-if="urlId === 'mytasks'" :projects="projects" :tasks="tasks" :loading="loading" @project-created="refetch" />
     <MyProjects v-if="urlId === 'myprojects'" :projects="projects" :loading="loading" @project-created="refetch" />
   </div>
 </template>

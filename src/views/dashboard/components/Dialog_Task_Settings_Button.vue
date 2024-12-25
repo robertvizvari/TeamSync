@@ -117,18 +117,34 @@
         </div>
       </div>
       <DialogFooter>
-        <Button v-if="!loading" @click="addTask" class="w-full text-white">Add task</Button>
+        <Button v-if="userIsCreator" @click="showDialog = true" class="border-red-500 text-red-500 hover:bg-red-500 hover:text-white" variant="outline">Delete</Button>
+        <Button v-if="!loading" @click="editTask" :disabled="!isFormValid" class="w-full text-white">Edit task</Button>
         <Button v-if="loading" disabled class="w-full text-white">
-          Add task
+          Edit task
           <RefreshCw class="mr-2 h-4 animate-spin" />
         </Button>
       </DialogFooter>
+
+      <Transition name="fade">
+        <div v-if="showDialog" @click="showDialog = false" class="pointer-events-auto fixed left-1/2 top-1/2 z-[9999] flex h-screen w-screen -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black bg-opacity-60">
+          <div class="pointer-events-auto grid w-full max-w-lg gap-4 border border-border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
+            <div class="flex flex-col gap-y-2 text-center sm:text-left">
+              <h2 class="text-lg font-semibold text-foreground">Are you absolutely sure?</h2>
+              <p class="text-sm text-muted-foreground">Are you sure you want to delete this task? This action cannot be undone.</p>
+            </div>
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2">
+              <Button @click="showDialog = false" class="mt-2 font-normal text-foreground sm:mt-0" size="sm" variant="outline">Cancel</Button>
+              <Button @click="deleteTask" class="bg-red-500 font-normal text-white hover:bg-red-400" size="sm">Delete</Button>
+            </div>
+          </div>
+        </div>
+      </Transition>
     </DialogContent>
   </Dialog>
 </template>
 
 <script>
-import { doc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'
+import { doc, updateDoc, arrayUnion, arrayRemove, serverTimestamp, getDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
 import { toast } from 'vue-sonner'
 
@@ -146,17 +162,20 @@ export default {
       searchTerm: '',
       projectMembers: [],
       projectCreatedBy: [],
+      originalData: {},
+      showDialog: false,
+      userIsCreator: false,
     }
   },
   methods: {
-    async addTask() {
+    async editTask() {
       if (!this.name.trim()) {
         toast.error('Task name cannot be empty.')
         return
       }
 
       if (!this.data.id) {
-        toast.error('Invalid project ID. Cannot add the task.')
+        toast.error('Invalid project ID. Cannot edit the task.')
         return
       }
 
@@ -165,64 +184,98 @@ export default {
       const membersList = Array.isArray(this.data.members) ? this.data.members : []
       const assignedEmails = Array.isArray(this.assignMembers) ? this.assignMembers : []
 
-      const creatorEmail = this.data.createdBy[0].email
+      const creatorEmail = this.projectCreatedBy[0].email
       const creatorUid = JSON.parse(localStorage.getItem('user')).uid
       const creatorName = JSON.parse(localStorage.getItem('user')).name
       const creatorSurname = JSON.parse(localStorage.getItem('user')).surname
 
-      const task = {
-        id: Date.now().toString(),
+      console.log(creatorEmail, creatorUid, creatorName, creatorSurname)
+
+      const updatedMembers = assignedEmails.map((email) => {
+        if (email === creatorEmail) {
+          console.log(creatorUid, email, creatorName, creatorSurname)
+          return { uid: creatorUid, email, name: creatorName, surname: creatorSurname }
+        }
+        const member = this.projectMembers.find((m) => m.email === email)
+        return member ? { uid: member.uid, email: member.email, name: member.name, surname: member.surname } : { uid: null, email, name: null, surname: null } // Fallback for new members
+      })
+
+      const updatedTask = {
+        ...this.data,
         name: this.name,
         description: this.description || '',
-        createdBy: {
-          uid: this.data.createdBy[0].uid,
-          email: creatorEmail,
-          name: creatorName,
-          surname: creatorSurname,
-        },
-        members: assignedEmails.map((email) => {
-          if (email === creatorEmail) {
-            return { uid: creatorUid, email, name: creatorName, surname: creatorSurname }
-          }
-          const member = membersList.find((m) => m.email === email)
-          return member ? { uid: member.uid, email: member.email, name: member.name, surname: member.surname } : { uid: null, email, name: null, surname: null }
-        }),
+        members: updatedMembers,
         state: this.state,
         priority: this.priority,
         dueDate: this.dueDate || null,
-        createdAt: setTimeout(() => {
-          Date.now()
-        }, 100),
+        updatedAt: serverTimestamp(),
       }
 
-      const plainTask = JSON.parse(JSON.stringify(task))
+      const plainUpdatedTask = JSON.parse(JSON.stringify(updatedTask, (key, value) => (value === undefined ? null : value)))
 
       try {
-        const projectRef = doc(db, 'projects', this.data.id)
-        await updateDoc(projectRef, {
-          tasks: arrayUnion(plainTask),
-        })
+        const projectRef = doc(db, 'projects', this.data.projectId)
+        const projectSnap = await getDoc(projectRef)
+
+        if (!projectSnap.exists()) {
+          toast.error('Project does not exist.')
+          return
+        }
+
+        const projectData = projectSnap.data()
+
+        const updatedTasks = projectData.tasks.map((task) => (task.id === this.data.id ? plainUpdatedTask : task))
+
+        await updateDoc(projectRef, { tasks: updatedTasks })
 
         this.$emit('project-created')
-        this.resetForm()
+        toast.success('Task updated successfully.')
       } catch (error) {
-        console.error('Error adding task:', error)
-        toast.error('Failed to add the task. Please try again.')
+        console.error('Error updating task:', error)
+        toast.error('Failed to update the task. Please try again.')
       } finally {
         this.loading = false
       }
     },
 
-    resetForm() {
-      this.name = ''
-      this.description = ''
-      this.assignMembers = []
-      this.state = 'todo'
-      this.priority = 'medium'
-      this.dueDate = ''
+    async deleteTask() {
+      if (!this.data.id) {
+        toast.error('Invalid task ID. Cannot delete the task.')
+        return
+      }
+
+      try {
+        this.loading = true
+
+        const projectRef = doc(db, 'projects', this.data.projectId)
+        const projectSnap = await getDoc(projectRef)
+
+        if (!projectSnap.exists()) {
+          toast.error('Project does not exist.')
+          return
+        }
+
+        const projectData = projectSnap.data()
+
+        const updatedTasks = projectData.tasks.filter((task) => task.id !== this.data.id)
+
+        await updateDoc(projectRef, {
+          tasks: updatedTasks,
+        })
+
+        this.$emit('project-created')
+        toast.success('Task deleted successfully.')
+      } catch (error) {
+        console.error('Error deleting task:', error)
+        toast.error('Failed to delete the task. Please try again.')
+      } finally {
+        this.loading = false
+      }
     },
   },
   mounted() {
+    this.userIsCreator = this.data.createdBy.uid === JSON.parse(localStorage.getItem('user')).uid
+
     this.name = this.data.name
     this.description = this.data.description
 
@@ -239,8 +292,20 @@ export default {
     this.loading = this.data.loading
     this.searchTerm = this.data.searchTerm
 
-    console.log(this.projectCreatedBy)
-    console.log('Filtered Project Members:', this.projectMembers)
+    this.originalData = {
+      name: this.name,
+      description: this.description,
+      state: this.state,
+      priority: this.priority,
+      dueDate: this.dueDate,
+      assignMembers: [...this.assignMembers],
+    }
+  },
+
+  computed: {
+    isFormValid() {
+      return this.name.trim() !== '' && this.assignMembers.length > 0 && (this.name !== this.originalData.name || this.description !== this.originalData.description || this.state !== this.originalData.state || this.priority !== this.originalData.priority || this.dueDate !== this.originalData.dueDate || JSON.stringify(this.assignMembers) !== JSON.stringify(this.originalData.assignMembers))
+    },
   },
 }
 </script>
@@ -276,5 +341,15 @@ import { Icon } from '@iconify/vue'
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(-30px);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
