@@ -29,7 +29,9 @@
                 <DialogTaskSettingsButton :data="data" @project-created="handleProjectCreated" />
               </span>
             </CardTitle>
-            <span @click="toggleDescription(data)" :class="data.showDescription ? '' : 'line-clamp-1'" class="cursor-pointer text-sm font-normal text-muted-foreground transition-all duration-200 hover:text-foreground">{{ data.description }}</span>
+            <span @click="toggleDescription(data)" :class="data.showDescription ? '' : 'line-clamp-1'" class="cursor-pointer text-sm font-normal text-muted-foreground transition-all duration-200 hover:text-foreground" style="overflow-wrap: anywhere">
+              {{ data.description }}
+            </span>
           </CardHeader>
           <CardContent class="hidden_scrollbar flex w-full flex-col gap-2 overflow-y-auto">
             <div>

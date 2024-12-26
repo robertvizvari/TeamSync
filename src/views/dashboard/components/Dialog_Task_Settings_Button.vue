@@ -82,14 +82,14 @@
             <Popover>
               <PopoverTrigger as-child>
                 <Button variant="outline" class="ps-3 text-start font-normal text-foreground sm:w-[250px]">
-                  <span>{{ dueDate ? dueDate : 'Pick a date' }}</span>
-                  <CalendarIcon v-if="!dueDate" class="ms-auto h-4 w-4 opacity-50" />
-                  <X v-if="dueDate" @click="dueDate = ''" class="ms-auto h-4 w-4 opacity-50 transition-all duration-300 hover:text-red-500" />
+                  <span>{{ dueDate && newDueDate == '' ? dueDate : newDueDate }}</span>
+                  <CalendarIcon v-if="dueDate == 'Pick a date' && !newDueDate" class="ms-auto h-4 w-4 opacity-50" />
+                  <X v-if="dueDate !== 'Pick a date' || newDueDate" @click="(dueDate = 'Pick a date'), (newDueDate = '')" class="ms-auto h-4 w-4 opacity-50 transition-all duration-300 hover:text-red-500" />
                 </Button>
                 <input hidden />
               </PopoverTrigger>
               <PopoverContent class="w-auto p-0">
-                <Calendar v-model="dueDate" calendar-label="Date of birth" initial-focus />
+                <Calendar v-model="newDueDate" @click="dueDate = 'Pick a date'" calendar-label="Date of birth" initial-focus />
               </PopoverContent>
             </Popover>
           </div>
@@ -147,6 +147,7 @@
 import { doc, updateDoc, arrayUnion, arrayRemove, serverTimestamp, getDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
 import { toast } from 'vue-sonner'
+import { set } from '@vueuse/core'
 
 export default {
   props: ['data', 'projects'],
@@ -165,6 +166,7 @@ export default {
       originalData: {},
       showDialog: false,
       userIsCreator: false,
+      newDueDate: '',
     }
   },
   methods: {
@@ -189,7 +191,7 @@ export default {
       const creatorName = JSON.parse(localStorage.getItem('user')).name
       const creatorSurname = JSON.parse(localStorage.getItem('user')).surname
 
-      console.log(creatorEmail, creatorUid, creatorName, creatorSurname)
+      const validDueDate = this.dueDate === 'Pick a date' ? (this.newDueDate ? new Date(this.newDueDate).toISOString().split('T')[0] : null) : this.dueDate ? new Date(this.dueDate).toISOString().split('T')[0] : null
 
       const updatedMembers = assignedEmails.map((email) => {
         if (email === creatorEmail) {
@@ -197,7 +199,7 @@ export default {
           return { uid: creatorUid, email, name: creatorName, surname: creatorSurname }
         }
         const member = this.projectMembers.find((m) => m.email === email)
-        return member ? { uid: member.uid, email: member.email, name: member.name, surname: member.surname } : { uid: null, email, name: null, surname: null } // Fallback for new members
+        return member ? { uid: member.uid, email: member.email, name: member.name, surname: member.surname } : { uid: null, email, name: null, surname: null }
       })
 
       const updatedTask = {
@@ -207,7 +209,7 @@ export default {
         members: updatedMembers,
         state: this.state,
         priority: this.priority,
-        dueDate: this.dueDate || null,
+        dueDate: validDueDate,
         updatedAt: serverTimestamp(),
       }
 
@@ -298,13 +300,14 @@ export default {
       state: this.state,
       priority: this.priority,
       dueDate: this.dueDate,
+      newDueDate: this.newDueDate,
       assignMembers: [...this.assignMembers],
     }
   },
 
   computed: {
     isFormValid() {
-      return this.name.trim() !== '' && this.assignMembers.length > 0 && (this.name !== this.originalData.name || this.description !== this.originalData.description || this.state !== this.originalData.state || this.priority !== this.originalData.priority || this.dueDate !== this.originalData.dueDate || JSON.stringify(this.assignMembers) !== JSON.stringify(this.originalData.assignMembers))
+      return this.name.trim() !== '' && this.assignMembers.length > 0 && (this.name !== this.originalData.name || this.description !== this.originalData.description || this.state !== this.originalData.state || this.priority !== this.originalData.priority || this.dueDate !== this.originalData.dueDate || this.newDueDate !== this.originalData.newDueDate || JSON.stringify(this.assignMembers) !== JSON.stringify(this.originalData.assignMembers))
     },
   },
 }

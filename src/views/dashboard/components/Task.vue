@@ -40,22 +40,23 @@
         <DialogTitle class="mx-auto text-foreground">
           {{ data.name }}
         </DialogTitle>
-        <DialogDescription class="flex items-center gap-2">
-          <Avatar>
-            <AvatarImage v-if="data.projectImage" :src="data.projectImage" alt="@radix-vue" />
-            <AvatarFallback class="uppercase">
-              {{ data.name.slice(0, 2) }}
-            </AvatarFallback>
-          </Avatar>
-          <span class="text-md text-foreground">
-            {{ data.projectName }}
+        <DialogDescription class="flex-col">
+          <div class="flex items-center gap-2">
+            <Avatar>
+              <AvatarImage v-if="data.projectImage" :src="data.projectImage" alt="@radix-vue" />
+              <AvatarFallback class="uppercase">
+                {{ data.name.slice(0, 2) }}
+              </AvatarFallback>
+            </Avatar>
+            <span class="text-md text-foreground">
+              {{ data.projectName }}
+            </span>
+          </div>
+          <span v-if="data.description" @click="showDesc = !showDesc" class="cursor-pointer hover:text-foreground">
+            <span :class="showDesc ? '' : 'line-clamp-1'" class="transition-all duration-200">
+              {{ data.description }}
+            </span>
           </span>
-          <!-- <span>
-            <span v-if="data.state == 'todo'" class="ml-auto select-none whitespace-nowrap rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
-            <span v-else-if="data.state == 'inProgress'" class="ml-auto select-none whitespace-nowrap rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
-            <span v-else-if="data.state == 'finished'" class="ml-auto select-none whitespace-nowrap rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
-            <span v-else-if="data.state == 'cancelled'" class="ml-auto select-none whitespace-nowrap rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">Cancelled</span>
-          </span> -->
         </DialogDescription>
       </DialogHeader>
       <div class="grid gap-4 overflow-y-auto pb-4">
@@ -175,6 +176,7 @@ export default {
       state: 'todo',
       priority: 'medium',
       editMode: true,
+      showDesc: false,
     }
   },
   methods: {

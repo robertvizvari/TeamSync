@@ -32,19 +32,23 @@
             <div v-for="index in 6" class="h-24 w-full animate-pulse rounded-lg bg-border"></div>
           </div>
           <div v-else>
-            <section>
-              <div v-for="(task, index) in tasksUnchecked" :key="task.id">
-                <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
-                  <Task :data="task" :projects="projects" @project-created="$emit('project-created')" />
+            <section v-if="filteredTasksUnchecked.length < 1 && filteredTasksChecked.length < 1">
+              <div class="flex w-full flex-col items-center justify-center">
+                <div class="mt-64 text-xl font-semibold text-foreground">
+                  {{ selectValue === 'all' ? 'No tasks' : `No tasks in ${findProjectName(selectValue)}` }}
                 </div>
               </div>
             </section>
 
+            <section>
+              <div v-for="(task, index) in filteredTasksUnchecked" :key="task.id" :class="index != 0 ? 'mt-3' : ''">
+                <Task :data="task" :projects="projects" @project-created="$emit('project-created')" />
+              </div>
+            </section>
+
             <section class="mt-3">
-              <div v-for="(task, index) in tasksChecked" :key="task.id">
-                <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
-                  <Task :data="task" :projects="projects" @project-created="$emit('project-created')" />
-                </div>
+              <div v-for="(task, index) in filteredTasksChecked" :key="task.id" :class="index != 0 ? 'mt-3' : ''">
+                <Task :data="task" :projects="projects" @project-created="$emit('project-created')" />
               </div>
             </section>
           </div>
@@ -55,19 +59,23 @@
             <div v-for="index in 6" class="h-24 w-full animate-pulse rounded-lg bg-border"></div>
           </div>
           <div v-else>
-            <section v-if="tasksPinnedUnchecked.length > 0">
-              <div v-for="(task, index) in tasksPinnedUnchecked" :key="task.id">
-                <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
-                  <Task :data="task" />
+            <section v-if="filteredTasksPinnedUnchecked.length < 1 && filteredTasksPinnedChecked.length < 1">
+              <div class="flex w-full flex-col items-center justify-center">
+                <div class="mt-64 text-xl font-semibold text-foreground">
+                  {{ selectValue === 'all' ? 'No pinned tasks' : `No pinned tasks in ${findProjectName(selectValue)}` }}
                 </div>
               </div>
             </section>
 
+            <section>
+              <div v-for="(task, index) in filteredTasksPinnedUnchecked" :key="task.id" :class="index != 0 ? 'mt-3' : ''">
+                <Task :data="task" :projects="projects" />
+              </div>
+            </section>
+
             <section class="mt-3">
-              <div v-for="(task, index) in tasksPinnedChecked" :key="task.id">
-                <div v-if="selectValue == 'all' || selectValue == task.projectId" :class="index != 0 ? 'mt-3' : ''">
-                  <Task :data="task" />
-                </div>
+              <div v-for="(task, index) in filteredTasksPinnedChecked" :key="task.id" :class="index != 0 ? 'mt-3' : ''">
+                <Task :data="task" :projects="projects" />
               </div>
             </section>
           </div>
@@ -85,6 +93,11 @@ export default {
       selectValue: 'all',
     }
   },
+  methods: {
+    findProjectName(id) {
+      return this.projects.find((project) => project.id === id).projectName
+    },
+  },
   computed: {
     tasksUnchecked() {
       return this.tasks.filter((task) => !task.checked)
@@ -95,9 +108,20 @@ export default {
     tasksPinnedUnchecked() {
       return this.tasks.filter((task) => !task.checked && task.taskPinned)
     },
-
     tasksPinnedChecked() {
       return this.tasks.filter((task) => task.checked && task.taskPinned)
+    },
+    filteredTasksUnchecked() {
+      return this.selectValue === 'all' ? this.tasksUnchecked : this.tasksUnchecked.filter((task) => task.projectId === this.selectValue)
+    },
+    filteredTasksChecked() {
+      return this.selectValue === 'all' ? this.tasksChecked : this.tasksChecked.filter((task) => task.projectId === this.selectValue)
+    },
+    filteredTasksPinnedUnchecked() {
+      return this.selectValue === 'all' ? this.tasksPinnedUnchecked : this.tasksPinnedUnchecked.filter((task) => task.projectId === this.selectValue)
+    },
+    filteredTasksPinnedChecked() {
+      return this.selectValue === 'all' ? this.tasksPinnedChecked : this.tasksPinnedChecked.filter((task) => task.projectId === this.selectValue)
     },
   },
 }
