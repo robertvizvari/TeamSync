@@ -14,13 +14,35 @@
 
 #### Frontend:
 
-- [**Vue.js**](https://vuejs.org/)
-- [**Tailwind CSS**](https://tailwindcss.com/)
-- [**shadcn**](https://www.shadcn-vue.com/)
+- [**Vue.js**](https://vuejs.org/): Used for building the user interface and managing application logic.
+- [**Tailwind CSS**](https://tailwindcss.com/): Provides utility-first CSS for designing responsive and modern layouts.
+- [**shadcn**](https://www.shadcn-vue.com/): Enhances UI components with customizable and reusable elements.
 
 #### Backend:
 
-- [**Firebase**](https://firebase.google.com/)
+- [**Firebase**](https://firebase.google.com/): Manages backend functionalities like database, authentication, and file storage.
+- [**EmailJS**](https://www.emailjs.com/): Used for sending email invitations to team members.
+
+### Usage
+
+You can use **TeamSync** either on the web at [TeamSync App](https://teamsync-app.vercel.app) or as an open-source project by downloading and customizing it to your needs.
+
+### Environment Variables
+
+To run the app, make sure to add the following environment variables in a `.env` file:
+
+```
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID
+
+VITE_EMAILJS_SERVICE_ID
+VITE_EMAILJS_TEMPLATE_ID
+VITE_EMAILJS_PUBLIC_KEY
+```
 
 ### Requirements
 
@@ -32,9 +54,6 @@ Before you start, make sure you have the following tools installed:
 
 ```bash
 git clone https://github.com/robertvizvari/TeamSync.git
-```
-
-```bash
 npm i && npm run dev
 ```
 
@@ -54,13 +73,35 @@ npm i && npm run dev
 
 ### Frontend:
 
-- [**Vue.js**](https://vuejs.org/)
-- [**Tailwind CSS**](https://tailwindcss.com/)
-- [**shadcn**](https://www.shadcn-vue.com/)
+- [**Vue.js**](https://vuejs.org/): Používa sa na vytváranie používateľského rozhrania a správu logiky aplikácie.
+- [**Tailwind CSS**](https://tailwindcss.com/): Poskytuje utility-first CSS na navrhovanie responzívnych a moderných rozložení.
+- [**shadcn**](https://www.shadcn-vue.com/): Zlepšuje UI komponenty pomocou prispôsobiteľných a znovu použiteľných prvkov.
 
 ### Backend:
 
-- [**Firebase**](https://firebase.google.com/)
+- [**Firebase**](https://firebase.google.com/): Spravuje backendové funkcionality ako databázu, autentifikáciu a ukladanie súborov.
+- [**EmailJS**](https://www.emailjs.com/): Používa sa na odosielanie emailových pozvánok členom tímu.
+
+## Používanie
+
+Aplikáciu **TeamSync** môžete používať buď na webe na [TeamSync App](https://teamsync-app.vercel.app), alebo ako open-source projekt, ktorý si môžete stiahnuť a prispôsobiť podľa svojich potrieb.
+
+## Parametre prostredia
+
+Aby aplikácia fungovala, pridajte nasledujúce premenné prostredia do `.env` súboru:
+
+```
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_APP_ID
+
+VITE_EMAILJS_SERVICE_ID
+VITE_EMAILJS_TEMPLATE_ID
+VITE_EMAILJS_PUBLIC_KEY
+```
 
 ## Požiadavky
 
@@ -72,8 +113,4 @@ Predtým ako začnete, uistite sa, že máte nainštalované nasledujúce nástr
 
 ```bash
 git clone https://github.com/robertvizvari/TeamSync.git
-```
-
-```bash
 npm i && npm run dev
-```
