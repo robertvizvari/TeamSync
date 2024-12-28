@@ -1,0 +1,292 @@
+{
+  "navbar": {
+    "_comment": "This content is inside Navbar.vue",
+
+    "sidebar": {
+      "openButton": "Seitenleiste öffnen",
+      "logoText": "TeamSync"
+    },
+    "userMenu": {
+      "openUserMenu": "Benutzermenü öffnen",
+      "profile": {
+        "name": "Name",
+        "email": "E-Mail"
+      },
+      "dashboard": "Dashboard",
+      "account": "Konto",
+      "settings": "Einstellungen",
+      "logout": "Abmelden",
+      "confirmation": {
+        "title": "Sind Sie sich absolut sicher?",
+        "description": "Sind Sie sicher, dass Sie sich abmelden möchten? Alle nicht gespeicherten Änderungen können verloren gehen. Klicken Sie auf 'Abmelden', um sich abzumelden, oder auf 'Abbrechen', um angemeldet zu bleiben.",
+        "cancel": "Abbrechen",
+        "confirm": "Abmelden"
+      }
+    }
+  },
+
+  "sidebar": {
+    "_comment": "This content is inside Sidebar.vue",
+
+    "links": {
+      "mytasks": {
+        "id": "mytasks",
+        "name": "Meine Aufgaben",
+        "icon": "radix-icons:check-circled"
+      },
+      "myprojects": {
+        "id": "myprojects",
+        "name": "Meine Projekte",
+        "icon": "radix-icons:card-stack"
+      }
+    }
+  },
+
+  "my_tasks": {
+    "_comment": "This content is inside My_Tasks.vue",
+
+    "tabs": {
+      "latest": "Neueste",
+      "pinned": "Angeheftet"
+    },
+    "select": {
+      "placeholder": "Wählen Sie ein Projekt",
+      "noProjects": "Keine Projekte",
+      "showAll": "Alle anzeigen",
+      "projects": "Projekte",
+      "noTasksAll": "Keine Aufgaben",
+      "noTasksProject": "Keine Aufgaben in {{projectName}}",
+      "noPinnedTasksAll": "Keine angehefteten Aufgaben",
+      "noPinnedTasksProject": "Keine angehefteten Aufgaben in {{projectName}}"
+    }
+  },
+
+  "task": {
+    "_comment": "This content is inside Task.vue",
+
+    "dialogs": {
+      "task": {
+        "project": "Projekt: ",
+        "trackedTime": "Verfolgte Zeit: ",
+        "allTimeRecords": "Alle Zeitaufzeichnungen: ",
+        "noTimeRecords": "Keine Zeitaufzeichnungen",
+        "addTime": "Zeit hinzufügen",
+        "members": "Mitglieder",
+        "addHoursMinutes": "Stunden und Minuten hinzufügen:",
+        "completeTask": "Aufgabe abschließen",
+        "startTracking": "Tracking starten"
+      }
+    },
+    "tooltips": {
+      "pinTask": {
+        "pin": "Klicken Sie hier, um diese Aufgabe anzuheften",
+        "unPin": "Klicken Sie hier, um diese Aufgabe zu lösen"
+      }
+    },
+    "toasts": {
+      "addTime": "Zeit konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut.",
+      "pinTask": "Aufgabe konnte nicht angeheftet werden. Bitte versuchen Sie es erneut.",
+      "unPinTask": "Aufgabe konnte nicht gelöst werden. Bitte versuchen Sie es erneut.",
+      "toggleChecked": "Aufgabenstatus konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
+    },
+    "labels": {
+      "hours": "Stunden",
+      "minutes": "Minuten"
+    }
+  },
+
+  "dialog_task_settings_button": {
+    "_comment": "This content is inside Dialog_Task_Settings_Button.vue",
+
+    "dialog": {
+      "editTaskTitle": "Aufgabe bearbeiten",
+      "editTaskDescription": "Arbeiten Sie mit Ihrem Team zusammen, um Aufgaben zuzuweisen und Ihre Ziele im Blick zu behalten.",
+      "taskName": {
+        "label": "Name",
+        "placeholder": "Wichtige Aufgabe"
+      },
+      "taskDescription": {
+        "label": "Beschreibung",
+        "optionalText": "(optional)",
+        "placeholder": "Diese Aufgabe ist sehr wichtig..."
+      },
+      "assignMembers": {
+        "label": "Mitglieder zuweisen",
+        "placeholder": "Mitglieder..."
+      },
+      "dueDate": {
+        "label": "Fälligkeitsdatum",
+        "pickDate": "Datum auswählen"
+      },
+      "state": {
+        "todo": "Zu erledigen",
+        "inProgress": "In Bearbeitung",
+        "finished": "Abgeschlossen",
+        "cancelled": "Abgebrochen"
+      },
+      "priority": {
+        "low": "Niedrig",
+        "medium": "Mittel",
+        "high": "Hoch"
+      },
+      "buttons": {
+        "delete": "Löschen",
+        "edit": "Aufgabe bearbeiten",
+        "cancel": "Abbrechen"
+      },
+      "deleteDialog": {
+        "confirmationTitle": "Sind Sie sich absolut sicher?",
+        "confirmationDescription": "Sind Sie sicher, dass Sie diese Aufgabe löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "confirmDeleteButton": "Löschen",
+        "cancelButton": "Abbrechen"
+      },
+      "toasts": {
+        "taskNameEmpty": "Aufgabenname darf nicht leer sein.",
+        "invalidProjectId": "Ungültige Projekt-ID. Aufgabe kann nicht bearbeitet werden.",
+        "invalidTaskId": "Ungültige Aufgaben-ID. Aufgabe kann nicht bearbeitet werden.",
+        "projectDoesNotExist": "Projekt existiert nicht.",
+        "taskUpdated": "Aufgabe erfolgreich aktualisiert.",
+        "taskUpdateFailed": "Aufgabe konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+        "taskDeleted": "Aufgabe erfolgreich gelöscht.",
+        "taskDeleteFailed": "Aufgabe konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
+      }
+    }
+  },
+
+  "my_projects": {
+    "_comment": "This content is inside My_Projects.vue",
+
+    "tasks": {
+      "noProjects": "Keine Projekte",
+      "noOtherMembers": "Keine weiteren Mitglieder",
+      "noTasks": "Keine Aufgaben",
+      "tasks": "Aufgaben",
+      "members": "Mitglieder",
+      "members_lowercase": "mitglieder",
+      "member_lowercase": "mitglied"
+    },
+    "priorities": {
+      "firstHalf": "Diese Aufgabe hat ",
+      "secondHalf": " Priorität.",
+      "hSign": "hohe",
+      "mSign": "mittlere",
+      "lSign": "niedrige"
+    },
+    "taskStates": {
+      "todo": "Zu erledigen",
+      "inProgress": "In Bearbeitung",
+      "finished": "Abgeschlossen",
+      "cancelled": "Abgebrochen"
+    }
+  },
+
+  "dialog_task_button": {
+    "_comment": "This content is inside Dialog_Task_Button.vue",
+
+    "tasks": {
+      "addTask": "Aufgabe hinzufügen",
+      "taskDescrpition": "Arbeiten Sie mit Ihrem Team zusammen, um Aufgaben zuzuweisen und Ihre Ziele im Blick zu behalten.",
+      "name": "Name",
+      "description": "Beschreibung",
+      "optional": "(optional)",
+      "assignMembers": "Mitglieder zuweisen",
+      "members": "Mitglieder...",
+      "members_basic": "Mitglieder",
+      "pick_a_date": "Datum auswählen",
+      "dueDate": "Fälligkeitsdatum",
+      "state": "Status",
+      "priority": "Priorität",
+      "descriptionPlaceholder": "Diese Aufgabe ist sehr wichtig...",
+      "namePlaceholder": "Wichtige Aufgabe",
+
+      "stateLabels": {
+        "todo": "Zu erledigen",
+        "inProgress": "In Bearbeitung",
+        "finished": "Abgeschlossen",
+        "cancelled": "Abgebrochen"
+      },
+      "priorityLabels": {
+        "low": "Niedrig",
+        "medium": "Mittel",
+        "high": "Hoch"
+      },
+      "toasts": {
+        "toastErrorNameEmpty": "Der Aufgabenname darf nicht leer sein.",
+        "toastErrorInvalidProjectID": "Ungültige Projekt-ID. Aufgabe kann nicht hinzugefügt werden.",
+        "toastErrorAdding": "Aufgabe konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut."
+      }
+    }
+  },
+
+  "dialog_button": {
+    "_comment": "This content is inside Dialog_Button.vue",
+
+    "project": {
+      "createProject": "Projekt erstellen",
+      "createProject_basic": "Projekt erstellen",
+      "projectDescription": "Arbeiten Sie mit Ihrem Team zusammen, um Ihre Ziele gemeinsam zu planen, zu erstellen und zu erreichen.",
+      "image": "Bild",
+      "name": "Name",
+      "description": "Beschreibung",
+      "optional": "(optional)",
+      "inviteTeammates": "Laden Sie Ihr Team ein",
+      "firstHalf": "Nach Eingabe der korrekten E-Mail-Adresse drücken Sie ",
+      "secondHalf": ", um eine weitere hinzuzufügen.",
+      "please": "Bitte geben Sie keine mehrere Adressen in ein Feld ein.",
+      "descriptionPlaceholder": "Dieses Projekt ist sehr wichtig...",
+      "namePlaceholder": "Wichtiges Projekt",
+      "toasts": {
+        "toastErrorInvalidFileType": "Ungültiger Dateityp. Bitte laden Sie ein Bild hoch.",
+        "toastErrorImageTooLarge": "Das komprimierte Bild ist immer noch zu groß. Bitte wählen Sie ein kleineres Bild.",
+        "toastErrorProcessingImage": "Bild konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.",
+        "toastErrorInvalidEmail": "Der Benutzer mit der E-Mail {{trimmedEmail}} ist nicht registriert.",
+        "toastErrorProjectCreation": "Projekt konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+        "toastErrorSendInvites": "Einladungen konnten nicht gesendet werden. Projekt wird nicht erstellt.",
+        "toastErrorUnexpected": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+        "toastErrorMissingInfo": "Projektname und Bild sind erforderlich."
+      }
+    }
+  },
+
+  "dialog_project_settings_button": {
+    "_comment": "This content is inside Dialog_Project_Settings_Button.vue",
+
+    "project": {
+      "editProject": "Projekt bearbeiten",
+      "editProject_basic": "Projekt bearbeiten",
+      "projectDescription": "Arbeiten Sie mit Ihrem Team zusammen, um Ihre Ziele gemeinsam zu planen, zu erstellen und zu erreichen.",
+      "image": "Bild",
+      "name": "Name",
+      "description": "Beschreibung",
+      "optional": "(optional)",
+      "inviteTeammates": "Laden Sie Ihr Team ein",
+      "firstHalf": "Nach Eingabe der korrekten E-Mail-Adresse drücken Sie ",
+      "secondHalf": ", um eine weitere hinzuzufügen.",
+      "please": "Bitte geben Sie keine mehrere Adressen in ein Feld ein.",
+      "descriptionPlaceholder": "Dieses Projekt ist sehr wichtig...",
+      "namePlaceholder": "Wichtiges Projekt",
+      "deleteProject": "Löschen",
+      "toasts": {
+        "toastErrorInvalidFileType": "Ungültiger Dateityp. Bitte laden Sie ein Bild hoch.",
+        "toastErrorImageTooLarge": "Das komprimierte Bild ist immer noch zu groß. Bitte wählen Sie ein kleineres Bild.",
+        "toastErrorProcessingImage": "Bild konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.",
+        "toastErrorInvalidEmail": "Der Benutzer mit der E-Mail {{trimmedEmail}} ist nicht registriert.",
+        "toastErrorProjectCreation": "Projekt konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+        "toastErrorSendInvites": "Einladungen konnten nicht gesendet werden. Projekt wird nicht erstellt.",
+        "toastErrorUnexpected": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+        "toastErrorMissingInfo": "Projektname und Bild sind erforderlich.",
+        "toastErrorOwnEmail": "Sie können Ihre eigene E-Mail nicht hinzufügen",
+        "toastErrorFailedToDelete": "Projekt konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.",
+        "toastErrorFailedToUpdate": "Projekt konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+        "projectUpdated": "Projekt erfolgreich aktualisiert.",
+        "projectDeleted": "Projekt erfolgreich gelöscht."
+      },
+      "confirmation": {
+        "title": "Sind Sie sich absolut sicher?",
+        "description": "Sind Sie sicher, dass Sie dieses Projekt löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "cancel": "Abbrechen",
+        "confirm": "Löschen"
+      }
+    }
+  }
+}

@@ -1,35 +1,35 @@
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button class="text-muted-foreground" size="sm" variant="outline" :disabled="initialLoading">Create a project</Button>
+      <Button class="text-muted-foreground" size="sm" variant="outline" :disabled="initialLoading">{{ $t('dialog_button.project.createProject') }}</Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[500px]">
       <DialogHeader>
-        <DialogTitle class="text-foreground">Create a project</DialogTitle>
-        <DialogDescription>Work with your team to plan, create, and achieve your goals together.</DialogDescription>
+        <DialogTitle class="text-foreground">{{ $t('dialog_button.project.createProject') }}</DialogTitle>
+        <DialogDescription>{{ $t('dialog_button.project.projectDescription') }}</DialogDescription>
       </DialogHeader>
       <div class="grid gap-5 py-4">
         <div class="flex w-full flex-col gap-2">
-          <Label for="image" class="text-foreground">Image</Label>
+          <Label for="image" class="text-foreground">{{ $t('dialog_button.project.image') }}</Label>
           <div class="flex items-center gap-5">
             <img v-if="image" :src="image || ''" class="h-12 w-12 rounded-full object-cover" />
             <input :disabled="loading" id="image" type="file" accept="image/*" @change="handleImageUpload" class="hover:file:bg-primary-dark block w-full text-sm text-foreground file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-white" />
           </div>
         </div>
         <div class="flex w-full flex-col gap-2">
-          <Label for="name" class="text-foreground">Name</Label>
-          <Input v-model="name" :disabled="loading" id="name" class="text-foreground" placeholder="Important Project" maxlength="50" />
+          <Label for="name" class="text-foreground">{{ $t('dialog_button.project.name') }}</Label>
+          <Input v-model="name" :disabled="loading" id="name" class="text-foreground" :placeholder="$t('dialog_button.project.namePlaceholder')" maxlength="50" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="description" class="flex gap-1 text-foreground">
-            Description
-            <p class="mt-[-1px] text-xs text-muted-foreground">(optional)</p>
+            {{ $t('dialog_button.project.description') }}
+            <p class="mt-[-1px] text-xs text-muted-foreground">{{ $t('dialog_button.project.optional') }}</p>
           </Label>
-          <Textarea v-model="description" :disabled="loading" id="description" class="h-40 resize-none text-foreground" placeholder="This project is very important..." maxlength="500" />
+          <Textarea v-model="description" :disabled="loading" id="description" class="h-40 resize-none text-foreground" :placeholder="$t('dialog_button.project.descriptionPlaceholder')" maxlength="500" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="invite" class="flex items-center gap-2 text-foreground">
-            Invite your teammates
+            {{ $t('dialog_button.project.inviteTeammates') }}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger as-child>
@@ -37,11 +37,11 @@
                 </TooltipTrigger>
                 <TooltipContent class="border-border">
                   <p class="text-center">
-                    After entering the correct email address, press
+                    {{ $t('dialog_button.project.firstHalf') }}
                     <kbd class="rounded-lg border border-gray-200 bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800 dark:border-gray-500 dark:bg-gray-600 dark:text-gray-100">Enter</kbd>
-                    to add another one.
+                    {{ $t('dialog_button.project.secondHalf') }}
                     <br />
-                    Please do not enter multiple addresses in a single field.
+                    {{ $t('dialog_button.project.please') }}
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -53,14 +53,14 @@
               <TagsInputItemDelete />
             </TagsInputItem>
 
-            <TagsInputInput id="invite" class="text-foreground" placeholder="teammate@email.com" />
+            <TagsInputInput id="invite" class="text-foreground" :placeholder="'teammate@email.com'" />
           </TagsInput>
         </div>
       </div>
       <DialogFooter>
-        <Button v-if="!loading" class="w-full text-white" :disabled="image == '' || name == ''" @click="createProject">Create project</Button>
+        <Button v-if="!loading" class="w-full text-white" :disabled="image == '' || name == ''" @click="createProject">{{ $t('dialog_button.project.createProject_basic') }}</Button>
         <Button v-if="loading" disabled class="w-full text-white">
-          Create project
+          {{ $t('dialog_button.project.createProject_basic') }}
           <RefreshCw class="mr-2 h-4 animate-spin" />
         </Button>
       </DialogFooter>
@@ -95,14 +95,14 @@ export default {
           try {
             const compressedDataUrl = await this.compressImage(file, 800, 800)
             if (compressedDataUrl.length > 1048487) {
-              toast.error('Compressed image is still too large. Please choose a smaller image.')
+              toast.error(this.$t('dialog_button.project.toasts.toastErrorImageTooLarge'))
               return
             } else {
               this.image = compressedDataUrl
             }
           } catch (error) {
             console.error('Error compressing image:', error)
-            toast.error('Failed to process the image. Please try again.')
+            toast.error(this.$t('dialog_button.project.toasts.toastErrorProcessingImage'))
           }
         } else {
           const reader = new FileReader()
@@ -112,7 +112,7 @@ export default {
           reader.readAsDataURL(file)
         }
       } else {
-        toast.error('Invalid file type. Please upload an image.')
+        toast.error(this.$t('dialog_button.project.toasts.toastErrorInvalidFileType'))
       }
     },
     compressImage(file, maxWidth, maxHeight) {
@@ -198,7 +198,7 @@ export default {
               import.meta.env.VITE_EMAILJS_PUBLIC_KEY
             )
           } else {
-            toast.error(`User with email ${trimmedEmail} is not registered.`)
+            toast.error(this.$t('dialog_button.project.toasts.toastErrorInvalidFileType'))
             this.errorOccurred = true
             throw new Error(`User with email ${trimmedEmail} is not registered.`)
           }
@@ -218,7 +218,7 @@ export default {
 
       try {
         if (!this.name || !this.image) {
-          toast.warning('Project name and image are required.')
+          toast.warning(this.$t('dialog_button.project.toasts.toastErrorMissingInfo'))
           return
         }
 
@@ -234,7 +234,7 @@ export default {
         try {
           validMembers = await this.validateAndSendInvites(this.inviteEmails, projectId, this.name)
         } catch (error) {
-          toast.error(error.message || 'Failed to send invites. Aborting project creation.')
+          toast.error(error.message || this.$t('dialog_button.project.toasts.toastErrorSendInvites'))
           this.errorOccurred = true
           this.loading = false
           return
@@ -254,7 +254,7 @@ export default {
         } catch (error) {
           this.errorOccurred = true
           console.error('Error creating project:', error)
-          toast.error('Failed to create project. Please try again.')
+          toast.error(this.$t('dialog_button.project.toasts.toastErrorProjectCreation'))
           return
         }
 
@@ -268,7 +268,7 @@ export default {
       } catch (error) {
         this.errorOccurred = true
         console.error('Unexpected error during project creation:', error)
-        toast.error('An unexpected error occurred. Please try again.')
+        toast.error(this.$t('dialog_button.project.toasts.toastErrorUnexpected'))
         this.loading = false
       }
     },

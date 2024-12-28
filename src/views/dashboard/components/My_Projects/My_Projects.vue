@@ -12,7 +12,7 @@
         </Transition>
 
         <div v-if="projects.length == 0 && !loading" class="flex h-full w-full flex-col items-center justify-center">
-          <span class="text-2xl font-semibold text-foreground">No projects</span>
+          <span class="text-2xl font-semibold text-foreground">{{ $t('my_projects.tasks.noProjects') }}</span>
         </div>
 
         <Card v-if="projects.length > 0 && !loading" v-for="data in projects" :key="data.id" class="mb-5 flex h-full w-[350px] shrink-0 flex-col border-border">
@@ -35,12 +35,12 @@
           </CardHeader>
           <CardContent class="hidden_scrollbar flex w-full flex-col gap-2 overflow-y-auto">
             <div>
-              <div v-if="acceptedMembersCount(data.members) < 1" :class="data.description == '' ? 'py-4' : 'mt-[-4px] pb-4'" class="border-b border-border font-semibold">No other members</div>
+              <div v-if="acceptedMembersCount(data.members) < 1" :class="data.description == '' ? 'py-4' : 'mt-[-4px] pb-4'" class="border-b border-border font-semibold">{{ $t('my_projects.tasks.noOtherMembers') }}</div>
 
               <Accordion v-if="acceptedMembersCount(data.members) >= 1" type="single" collapsible>
                 <AccordionItem value="item-1">
                   <AccordionTrigger :class="data.description !== '' ? 'mt-[-4px] pt-0' : ''">
-                    <span>Members ({{ data.members.filter((member) => member.state === 'accepted').length + 1 }})</span>
+                    <span>{{ $t('my_projects.tasks.members') }} ({{ data.members.filter((member) => member.state === 'accepted').length + 1 }})</span>
                   </AccordionTrigger>
                   <AccordionContent class="text-[1rem]">
                     <ul v-if="acceptedMembersCount(data.members) > 0">
@@ -75,19 +75,19 @@
               <div>
                 <Accordion v-if="data.tasks && data.tasks.length > 0" type="single" collapsible defaultValue="item-1">
                   <AccordionItem value="item-1">
-                    <AccordionTrigger>Tasks ({{ data.tasks.length }})</AccordionTrigger>
+                    <AccordionTrigger>{{ $t('my_projects.tasks.tasks') }} ({{ data.tasks.length }})</AccordionTrigger>
                     <AccordionContent class="text-[1rem]">
                       <ul>
                         <li class="relative flex flex-col overflow-hidden rounded-md bg-secondary p-3" v-for="(task, index) in sortedTasksByChecked(data.tasks)" :key="index" :class="index != 0 ? 'mt-2' : ''">
                           <span class="flex flex-row items-start gap-3 font-semibold">
                             <span class="text-wrap">{{ task.name }} - {{ task.time ? formatTime(task.time) : '0h' }}</span>
-                            <span v-if="task.state == 'todo'" class="ml-auto select-none whitespace-nowrap rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">To do</span>
-                            <span v-else-if="task.state == 'inProgress'" class="ml-auto select-none whitespace-nowrap rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">In progress</span>
-                            <span v-else-if="task.state == 'finished'" class="ml-auto select-none whitespace-nowrap rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">Finished</span>
-                            <span v-else-if="task.state == 'cancelled'" class="ml-auto select-none whitespace-nowrap rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">Cancelled</span>
+                            <span v-if="task.state == 'todo'" class="ml-auto select-none whitespace-nowrap rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">{{ $t('my_projects.taskStates.todo') }}</span>
+                            <span v-else-if="task.state == 'inProgress'" class="ml-auto select-none whitespace-nowrap rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">{{ $t('my_projects.taskStates.inProgress') }}</span>
+                            <span v-else-if="task.state == 'finished'" class="ml-auto select-none whitespace-nowrap rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">{{ $t('my_projects.taskStates.finished') }}</span>
+                            <span v-else-if="task.state == 'cancelled'" class="ml-auto select-none whitespace-nowrap rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">{{ $t('my_projects.taskStates.cancelled') }}</span>
                           </span>
 
-                          <span class="text-sm text-muted-foreground">{{ task.members.length }} {{ task.members.length > 1 ? 'members' : 'member' }}</span>
+                          <span class="text-sm text-muted-foreground">{{ task.members.length }} {{ task.members.length > 1 ? $t('my_projects.tasks.members_lowercase') : $t('my_projects.tasks.member_lowercase') }}</span>
 
                           <TooltipProvider>
                             <Tooltip class="border-border">
@@ -98,19 +98,19 @@
                               </TooltipTrigger>
                               <TooltipContent>
                                 <p v-if="task.priority == 'high'">
-                                  This task is
-                                  <span class="text-red-500">high</span>
-                                  priority.
+                                  {{ $t('my_projects.priorities.firstHalf') }}
+                                  <span class="text-red-500">{{ $t('my_projects.priorities.hSign') }}</span>
+                                  {{ $t('my_projects.priorities.secondHalf') }}
                                 </p>
                                 <p v-else-if="task.priority == 'medium'">
-                                  This task is
-                                  <span class="text-amber-500">medium</span>
-                                  priority.
+                                  {{ $t('my_projects.priorities.firstHalf') }}
+                                  <span class="text-amber-500">{{ $t('my_projects.priorities.mSign') }}</span>
+                                  {{ $t('my_projects.priorities.secondHalf') }}
                                 </p>
                                 <p v-else-if="task.priority == 'low'">
-                                  This task is
-                                  <span class="text-emerald-500">low</span>
-                                  priority.
+                                  {{ $t('my_projects.priorities.firstHalf') }}
+                                  <span class="text-emerald-500">{{ $t('my_projects.priorities.lSign') }}</span>
+                                  {{ $t('my_projects.priorities.secondHalf') }}
                                 </p>
                               </TooltipContent>
                             </Tooltip>
@@ -123,7 +123,7 @@
               </div>
 
               <div v-if="!data.tasks" class="border-b border-border py-4">
-                <span class="font-semibold">No tasks</span>
+                <span class="font-semibold">{{ $t('my_projects.tasks.noTasks') }}</span>
               </div>
             </div>
           </CardContent>
@@ -173,17 +173,13 @@ export default {
 </script>
 
 <script setup>
-import { reactive } from 'vue'
-
-import { Button } from '@/components/ui/button'
-import { Settings } from 'lucide-vue-next'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import DialogButton from '../components/Dialog_Button.vue'
-import DialogTaskButton from './Dialog_Task_Button.vue'
-import DialogTaskSettingsButton from './Dialog_Project_Settings_Button.vue'
+import DialogButton from './components/Dialog_Button.vue'
+import DialogTaskButton from './components/Dialog_Task_Button.vue'
+import DialogTaskSettingsButton from './components/Dialog_Project_Settings_Button.vue'
 </script>
 
 <style scoped>

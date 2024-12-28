@@ -119,9 +119,9 @@ export default {
 </script>
 
 <script setup>
-import Sidebar from './components/Sidebar.vue'
-import Navbar from './components/Navbar.vue'
+import Sidebar from './components/Navigation/Sidebar.vue'
+import Navbar from './components/Navigation/Navbar.vue'
 
-import MyTasks from './components/My_Tasks.vue'
-import MyProjects from './components/My_Projects.vue'
+import MyTasks from './components/My_Tasks/My_Tasks.vue'
+import MyProjects from './components/My_Projects/My_Projects.vue'
 </script>

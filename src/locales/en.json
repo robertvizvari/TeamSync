@@ -1,0 +1,292 @@
+{
+  "navbar": {
+    "_comment": "This content is inside Navbar.vue",
+
+    "sidebar": {
+      "openButton": "Open sidebar",
+      "logoText": "TeamSync"
+    },
+    "userMenu": {
+      "openUserMenu": "Open user menu",
+      "profile": {
+        "name": "Name",
+        "email": "Email"
+      },
+      "dashboard": "Dashboard",
+      "account": "Account",
+      "settings": "Settings",
+      "logout": "Log out",
+      "confirmation": {
+        "title": "Are you absolutely sure?",
+        "description": "Are you sure you want to log out? Any unsaved changes may be lost. Click 'Log out' to log out, or 'Cancel' to stay logged in.",
+        "cancel": "Cancel",
+        "confirm": "Log out"
+      }
+    }
+  },
+
+  "sidebar": {
+    "_comment": "This content is inside Sidebar.vue",
+
+    "links": {
+      "mytasks": {
+        "id": "mytasks",
+        "name": "My tasks",
+        "icon": "radix-icons:check-circled"
+      },
+      "myprojects": {
+        "id": "myprojects",
+        "name": "My projects",
+        "icon": "radix-icons:card-stack"
+      }
+    }
+  },
+
+  "my_tasks": {
+    "_comment": "This content is inside My_Tasks.vue",
+
+    "tabs": {
+      "latest": "Latest",
+      "pinned": "Pinned"
+    },
+    "select": {
+      "placeholder": "Select a project",
+      "noProjects": "No projects",
+      "showAll": "Show all",
+      "projects": "Projects",
+      "noTasksAll": "No tasks",
+      "noTasksProject": "No tasks in {{projectName}}",
+      "noPinnedTasksAll": "No pinned tasks",
+      "noPinnedTasksProject": "No pinned tasks in {{projectName}}"
+    }
+  },
+
+  "task": {
+    "_comment": "This content is inside Task.vue",
+
+    "dialogs": {
+      "task": {
+        "project": "Project: ",
+        "trackedTime": "Tracked time: ",
+        "allTimeRecords": "All time records: ",
+        "noTimeRecords": "No time records",
+        "addTime": "Add time",
+        "members": "Members",
+        "addHoursMinutes": "Add hours and minutes:",
+        "completeTask": "Complete task",
+        "startTracking": "Start tracking"
+      }
+    },
+    "tooltips": {
+      "pinTask": {
+        "pin": "Click to pin this task",
+        "unPin": "Click to unpin this task"
+      }
+    },
+    "toasts": {
+      "addTime": "Failed to add time. Please try again.",
+      "pinTask": "Failed to pin task. Please try again.",
+      "unPinTask": "Failed to unpin task. Please try again.",
+      "toggleChecked": "Failed to update task checked state. Please try again."
+    },
+    "labels": {
+      "hours": "Hours",
+      "minutes": "Minutes"
+    }
+  },
+
+  "dialog_task_settings_button": {
+    "_comment": "This content is inside Dialog_Task_Settings_Button.vue",
+
+    "dialog": {
+      "editTaskTitle": "Edit task",
+      "editTaskDescription": "Work with your team to assign tasks and stay on track toward your goals.",
+      "taskName": {
+        "label": "Name",
+        "placeholder": "Important task"
+      },
+      "taskDescription": {
+        "label": "Description",
+        "optionalText": "(optional)",
+        "placeholder": "This task is very important..."
+      },
+      "assignMembers": {
+        "label": "Assign members",
+        "placeholder": "Members..."
+      },
+      "dueDate": {
+        "label": "Due date",
+        "pickDate": "Pick a date"
+      },
+      "state": {
+        "todo": "To do",
+        "inProgress": "In progress",
+        "finished": "Finished",
+        "cancelled": "Cancelled"
+      },
+      "priority": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "buttons": {
+        "delete": "Delete",
+        "edit": "Edit task",
+        "cancel": "Cancel"
+      },
+      "deleteDialog": {
+        "confirmationTitle": "Are you absolutely sure?",
+        "confirmationDescription": "Are you sure you want to delete this task? This action cannot be undone.",
+        "confirmDeleteButton": "Delete",
+        "cancelButton": "Cancel"
+      },
+      "toasts": {
+        "taskNameEmpty": "Task name cannot be empty.",
+        "invalidProjectId": "Invalid project ID. Cannot edit the task.",
+        "invalidTaskId": "Invalid task ID. Cannot edit the task.",
+        "projectDoesNotExist": "Project does not exist.",
+        "taskUpdated": "Task updated successfully.",
+        "taskUpdateFailed": "Failed to update the task. Please try again.",
+        "taskDeleted": "Task deleted successfully.",
+        "taskDeleteFailed": "Failed to delete the task. Please try again."
+      }
+    }
+  },
+
+  "my_projects": {
+    "_comment": "This content is inside My_Projects.vue",
+
+    "tasks": {
+      "noProjects": "No projects",
+      "noOtherMembers": "No other members",
+      "noTasks": "No tasks",
+      "tasks": "Tasks",
+      "members": "Members",
+      "members_lowercase": "members",
+      "member_lowercase": "member"
+    },
+    "priorities": {
+      "firstHalf": "This task is ",
+      "secondHalf": " priority.",
+      "hSign": "high",
+      "mSign": "medium",
+      "lSign": "low"
+    },
+    "taskStates": {
+      "todo": "To do",
+      "inProgress": "In progress",
+      "finished": "Finished",
+      "cancelled": "Cancelled"
+    }
+  },
+
+  "dialog_task_button": {
+    "_comment": "This content is inside Dialog_Task_Button.vue",
+
+    "tasks": {
+      "addTask": "Add task",
+      "taskDescrpition": "Work with your team to assign tasks and stay on track toward your goals.",
+      "name": "Name",
+      "description": "Description",
+      "optional": "(optional)",
+      "assignMembers": "Assign members",
+      "members": "Members...",
+      "members_basic": "Members",
+      "pick_a_date": "Pick a date",
+      "dueDate": "Due date",
+      "state": "state",
+      "priority": "priority",
+      "descriptionPlaceholder": "This task is very important...",
+      "namePlaceholder": "Important task",
+
+      "stateLabels": {
+        "todo": "To do",
+        "inProgress": "In progress",
+        "finished": "Finished",
+        "cancelled": "Cancelled"
+      },
+      "priorityLabels": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "toasts": {
+        "toastErrorNameEmpty": "Task name cannot be empty.",
+        "toastErrorInvalidProjectID": "Invalid project ID. Cannot add the task.",
+        "toastErrorAdding": "Failed to add the task. Please try again."
+      }
+    }
+  },
+
+  "dialog_button": {
+    "_comment": "This content is inside Dialog_Button.vue",
+
+    "project": {
+      "createProject": "Create a project",
+      "createProject_basic": "Create project",
+      "projectDescription": "Work with your team to plan, create, and achieve your goals together.",
+      "image": "Image",
+      "name": "Name",
+      "description": "Description",
+      "optional": "(optional)",
+      "inviteTeammates": "Invite your teammates",
+      "firstHalf": "After entering the correct email address, press ",
+      "secondHalf": " to add another one.",
+      "please": "Please do not enter multiple addresses in a single field.",
+      "descriptionPlaceholder": "This project is very important...",
+      "namePlaceholder": "Important Project",
+      "toasts": {
+        "toastErrorInvalidFileType": "Invalid file type. Please upload an image.",
+        "toastErrorImageTooLarge": "Compressed image is still too large. Please choose a smaller image.",
+        "toastErrorProcessingImage": "Failed to process the image. Please try again.",
+        "toastErrorInvalidEmail": "User with email {{trimmedEmail}} is not registered.",
+        "toastErrorProjectCreation": "Failed to create project. Please try again.",
+        "toastErrorSendInvites": "Failed to send invites. Aborting project creation.",
+        "toastErrorUnexpected": "An unexpected error occurred. Please try again.",
+        "toastErrorMissingInfo": "Project name and image are required."
+      }
+    }
+  },
+
+  "dialog_project_settings_button": {
+    "_comment": "This content is inside Dialog_Project_Settings_Button.vue",
+
+    "project": {
+      "editProject": "Create a project",
+      "editProject_basic": "Create project",
+      "projectDescription": "Work with your team to plan, create, and achieve your goals together.",
+      "image": "Image",
+      "name": "Name",
+      "description": "Description",
+      "optional": "(optional)",
+      "inviteTeammates": "Invite your teammates",
+      "firstHalf": "After entering the correct email address, press ",
+      "secondHalf": " to add another one.",
+      "please": "Please do not enter multiple addresses in a single field.",
+      "descriptionPlaceholder": "This project is very important...",
+      "namePlaceholder": "Important Project",
+      "deleteProject": "Delete",
+      "toasts": {
+        "toastErrorInvalidFileType": "Invalid file type. Please upload an image.",
+        "toastErrorImageTooLarge": "Compressed image is still too large. Please choose a smaller image.",
+        "toastErrorProcessingImage": "Failed to process the image. Please try again.",
+        "toastErrorInvalidEmail": "User with email {{trimmedEmail}} is not registered.",
+        "toastErrorProjectCreation": "Failed to create project. Please try again.",
+        "toastErrorSendInvites": "Failed to send invites. Aborting project creation.",
+        "toastErrorUnexpected": "An unexpected error occurred. Please try again.",
+        "toastErrorMissingInfo": "Project name and image are required.",
+        "toastErrorOwnEmail": "You cannot add your own email",
+        "toastErrorFailedToDelete": "Failed to delete the project. Please try again.",
+        "toastErrorFailedToUpdate": "Failed to update the project. Please try again.",
+        "projectUpdated": "Project updated successfully.",
+        "projectDeleted": "Project deleted successfully."
+      },
+      "confirmation": {
+        "title": "Are you absolutely sure?",
+        "description": "Are you sure you want to delete this project? This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      }
+    }
+  }
+}

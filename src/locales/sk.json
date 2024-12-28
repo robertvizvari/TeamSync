@@ -1,0 +1,292 @@
+{
+  "navbar": {
+    "_comment": "This content is inside Navbar.vue",
+
+    "sidebar": {
+      "openButton": "Otvoriť postrannú lištu",
+      "logoText": "TeamSync"
+    },
+    "userMenu": {
+      "openUserMenu": "Otvoriť používateľské menu",
+      "profile": {
+        "name": "Meno",
+        "email": "E-mail"
+      },
+      "dashboard": "Panel",
+      "account": "Účet",
+      "settings": "Nastavenia",
+      "logout": "Odhlásiť sa",
+      "confirmation": {
+        "title": "Ste si úplne istí?",
+        "description": "Naozaj sa chcete odhlásiť? Akékoľvek neuložené zmeny môžu byť stratené. Kliknite na 'Odhlásiť sa' pre odhlásenie alebo 'Zrušiť' pre pokračovanie v prihlásení.",
+        "cancel": "Zrušiť",
+        "confirm": "Odhlásiť sa"
+      }
+    }
+  },
+
+  "sidebar": {
+    "_comment": "This content is inside Sidebar.vue",
+
+    "links": {
+      "mytasks": {
+        "id": "mytasks",
+        "name": "Moje úlohy",
+        "icon": "radix-icons:check-circled"
+      },
+      "myprojects": {
+        "id": "myprojects",
+        "name": "Moje projekty",
+        "icon": "radix-icons:card-stack"
+      }
+    }
+  },
+
+  "my_tasks": {
+    "_comment": "This content is inside My_Tasks.vue",
+
+    "tabs": {
+      "latest": "Najnovšie",
+      "pinned": "Pripnuté"
+    },
+    "select": {
+      "placeholder": "Vyberte projekt",
+      "noProjects": "Žiadne projekty",
+      "showAll": "Zobraziť všetko",
+      "projects": "Projekty",
+      "noTasksAll": "Žiadne úlohy",
+      "noTasksProject": "Žiadne úlohy v {{projectName}}",
+      "noPinnedTasksAll": "Žiadne pripnuté úlohy",
+      "noPinnedTasksProject": "Žiadne pripnuté úlohy v {{projectName}}"
+    }
+  },
+
+  "task": {
+    "_comment": "This content is inside Task.vue",
+
+    "dialogs": {
+      "task": {
+        "project": "Projekt: ",
+        "trackedTime": "Sledovaný čas: ",
+        "allTimeRecords": "Všetky časové záznamy: ",
+        "noTimeRecords": "Žiadne časové záznamy",
+        "addTime": "Pridať čas",
+        "members": "Členovia",
+        "addHoursMinutes": "Pridajte hodiny a minúty:",
+        "completeTask": "Dokončiť úlohu",
+        "startTracking": "Začať sledovanie"
+      }
+    },
+    "tooltips": {
+      "pinTask": {
+        "pin": "Kliknite na pripnutie tejto úlohy",
+        "unPin": "Kliknite na odopnutie tejto úlohy"
+      }
+    },
+    "toasts": {
+      "addTime": "Nepodarilo sa pridať čas. Skúste to znova.",
+      "pinTask": "Nepodarilo sa pripnúť úlohu. Skúste to znova.",
+      "unPinTask": "Nepodarilo sa odopnúť úlohu. Skúste to znova.",
+      "toggleChecked": "Nepodarilo sa aktualizovať stav označenia úlohy. Skúste to znova."
+    },
+    "labels": {
+      "hours": "Hodiny",
+      "minutes": "Minúty"
+    }
+  },
+
+  "dialog_task_settings_button": {
+    "_comment": "This content is inside Dialog_Task_Settings_Button.vue",
+
+    "dialog": {
+      "editTaskTitle": "Upraviť úlohu",
+      "editTaskDescription": "Spolupracujte so svojím tímom na prideľovaní úloh a sledujte pokrok v dosahovaní cieľov.",
+      "taskName": {
+        "label": "Názov",
+        "placeholder": "Dôležitá úloha"
+      },
+      "taskDescription": {
+        "label": "Popis",
+        "optionalText": "(voliteľné)",
+        "placeholder": "Táto úloha je veľmi dôležitá..."
+      },
+      "assignMembers": {
+        "label": "Priradiť členov",
+        "placeholder": "Členovia..."
+      },
+      "dueDate": {
+        "label": "Dátum splnenia",
+        "pickDate": "Vyberte dátum"
+      },
+      "state": {
+        "todo": "Na vykonanie",
+        "inProgress": "Prebieha",
+        "finished": "Dokončené",
+        "cancelled": "Zrušené"
+      },
+      "priority": {
+        "low": "Nízka",
+        "medium": "Stredná",
+        "high": "Vysoká"
+      },
+      "buttons": {
+        "delete": "Vymazať",
+        "edit": "Upraviť úlohu",
+        "cancel": "Zrušiť"
+      },
+      "deleteDialog": {
+        "confirmationTitle": "Ste si úplne istí?",
+        "confirmationDescription": "Naozaj chcete vymazať túto úlohu? Táto akcia sa nedá vrátiť späť.",
+        "confirmDeleteButton": "Vymazať",
+        "cancelButton": "Zrušiť"
+      },
+      "toasts": {
+        "taskNameEmpty": "Názov úlohy nemôže byť prázdny.",
+        "invalidProjectId": "Neplatné ID projektu. Nie je možné upraviť úlohu.",
+        "invalidTaskId": "Neplatné ID úlohy. Nie je možné upraviť úlohu.",
+        "projectDoesNotExist": "Projekt neexistuje.",
+        "taskUpdated": "Úloha bola úspešne aktualizovaná.",
+        "taskUpdateFailed": "Nepodarilo sa aktualizovať úlohu. Skúste to znova.",
+        "taskDeleted": "Úloha bola úspešne vymazaná.",
+        "taskDeleteFailed": "Nepodarilo sa vymazať úlohu. Skúste to znova."
+      }
+    }
+  },
+
+  "my_projects": {
+    "_comment": "This content is inside My_Projects.vue",
+
+    "tasks": {
+      "noProjects": "Žiadne projekty",
+      "noOtherMembers": "Žiadny iní členovia",
+      "noTasks": "Žiadne úlohy",
+      "tasks": "Úlohy",
+      "members": "Členovia",
+      "members_lowercase": "členovia",
+      "member_lowercase": "člen"
+    },
+    "priorities": {
+      "firstHalf": "Táto úloha má ",
+      "secondHalf": " prioritu.",
+      "hSign": "vysokú",
+      "mSign": "strednú",
+      "lSign": "nízku"
+    },
+    "taskStates": {
+      "todo": "Na vykonanie",
+      "inProgress": "Prebieha",
+      "finished": "Dokončené",
+      "cancelled": "Zrušené"
+    }
+  },
+
+  "dialog_task_button": {
+    "_comment": "This content is inside Dialog_Task_Button.vue",
+
+    "tasks": {
+      "addTask": "Pridať úlohu",
+      "taskDescrpition": "Pracujte so svojím tímom na priradení úloh a zostaňte na ceste k dosiahnutiu svojich cieľov.",
+      "name": "Názov",
+      "description": "Popis",
+      "optional": "(voliteľné)",
+      "assignMembers": "Priradiť členov",
+      "members": "Členovia...",
+      "members_basic": "Členovia",
+      "pick_a_date": "Vybrať dátum",
+      "dueDate": "Dátum splnenia",
+      "state": "Stav",
+      "priority": "Priorita",
+      "descriptionPlaceholder": "Táto úloha je veľmi dôležitá...",
+      "namePlaceholder": "Dôležitá úloha",
+
+      "stateLabels": {
+        "todo": "Na spracovanie",
+        "inProgress": "Prebieha",
+        "finished": "Dokončené",
+        "cancelled": "Zrušené"
+      },
+      "priorityLabels": {
+        "low": "Nízka",
+        "medium": "Stredná",
+        "high": "Vysoká"
+      },
+      "toasts": {
+        "toastErrorNameEmpty": "Názov úlohy nemôže byť prázdny.",
+        "toastErrorInvalidProjectID": "Neplatné ID projektu. Nie je možné pridať úlohu.",
+        "toastErrorAdding": "Nepodarilo sa pridať úlohu. Skúste to znova."
+      }
+    }
+  },
+
+  "dialog_button": {
+    "_comment": "This content is inside Dialog_Button.vue",
+
+    "project": {
+      "createProject": "Vytvoriť projekt",
+      "createProject_basic": "Vytvoriť projekt",
+      "projectDescription": "Pracujte so svojím tímom na plánovaní, vytváraní a dosahovaní cieľov spoločne.",
+      "image": "Obrázok",
+      "name": "Názov",
+      "description": "Popis",
+      "optional": "(voliteľné)",
+      "inviteTeammates": "Pozvať členov tímu",
+      "firstHalf": "Po zadaní správnej e-mailovej adresy stlačte ",
+      "secondHalf": " na pridanie ďalšej.",
+      "please": "Prosím, nezadávajte viacero adries do jedného poľa.",
+      "descriptionPlaceholder": "Tento projekt je veľmi dôležitý...",
+      "namePlaceholder": "Dôležitý projekt",
+      "toasts": {
+        "toastErrorInvalidFileType": "Neplatný typ súboru. Nahrajte obrázok.",
+        "toastErrorImageTooLarge": "Komprimovaný obrázok je stále príliš veľký. Vyberte menší obrázok.",
+        "toastErrorProcessingImage": "Nepodarilo sa spracovať obrázok. Skúste to znova.",
+        "toastErrorInvalidEmail": "Používateľ s e-mailom {{trimmedEmail}} nie je registrovaný.",
+        "toastErrorProjectCreation": "Nepodarilo sa vytvoriť projekt. Skúste to znova.",
+        "toastErrorSendInvites": "Nepodarilo sa odoslať pozvánky. Zastavuje sa vytváranie projektu.",
+        "toastErrorUnexpected": "Vyskytla sa neočakávaná chyba. Skúste to znova.",
+        "toastErrorMissingInfo": "Názov a obrázok projektu sú povinné."
+      }
+    }
+  },
+
+  "dialog_project_settings_button": {
+    "_comment": "This content is inside Dialog_Project_Settings_Button.vue",
+
+    "project": {
+      "editProject": "Upraviť projekt",
+      "editProject_basic": "Upraviť projekt",
+      "projectDescription": "Pracujte so svojím tímom na plánovaní, vytváraní a dosahovaní cieľov spoločne.",
+      "image": "Obrázok",
+      "name": "Názov",
+      "description": "Popis",
+      "optional": "(voliteľné)",
+      "inviteTeammates": "Pozvať členov tímu",
+      "firstHalf": "Po zadaní správnej e-mailovej adresy stlačte ",
+      "secondHalf": " na pridanie ďalšej.",
+      "please": "Prosím, nezadávajte viacero adries do jedného poľa.",
+      "descriptionPlaceholder": "Tento projekt je veľmi dôležitý...",
+      "namePlaceholder": "Dôležitý projekt",
+      "deleteProject": "Vymazať",
+      "toasts": {
+        "toastErrorInvalidFileType": "Neplatný typ súboru. Nahrajte obrázok.",
+        "toastErrorImageTooLarge": "Komprimovaný obrázok je stále príliš veľký. Vyberte menší obrázok.",
+        "toastErrorProcessingImage": "Nepodarilo sa spracovať obrázok. Skúste to znova.",
+        "toastErrorInvalidEmail": "Používateľ s e-mailom {{trimmedEmail}} nie je registrovaný.",
+        "toastErrorProjectCreation": "Nepodarilo sa vytvoriť projekt. Skúste to znova.",
+        "toastErrorSendInvites": "Nepodarilo sa odoslať pozvánky. Zastavuje sa vytváranie projektu.",
+        "toastErrorUnexpected": "Vyskytla sa neočakávaná chyba. Skúste to znova.",
+        "toastErrorMissingInfo": "Názov a obrázok projektu sú povinné.",
+        "toastErrorOwnEmail": "Nemôžete pridať vlastný e-mail",
+        "toastErrorFailedToDelete": "Nepodarilo sa vymazať projekt. Skúste to znova.",
+        "toastErrorFailedToUpdate": "Nepodarilo sa aktualizovať projekt. Skúste to znova.",
+        "projectUpdated": "Projekt bol úspešne aktualizovaný.",
+        "projectDeleted": "Projekt bol úspešne vymazaný."
+      },
+      "confirmation": {
+        "title": "Ste si úplne istý?",
+        "description": "Naozaj chcete vymazať tento projekt? Táto akcia je nevratná.",
+        "cancel": "Zrušiť",
+        "confirm": "Vymazať"
+      }
+    }
+  }
+}

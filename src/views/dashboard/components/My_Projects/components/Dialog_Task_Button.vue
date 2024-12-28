@@ -1,27 +1,27 @@
 <template>
   <Dialog>
     <DialogTrigger as-child>
-      <Button class="w-full border-primary text-primary hover:text-primary" size="sm" variant="outline">Add task</Button>
+      <Button class="w-full border-primary text-primary hover:text-primary" size="sm" variant="outline">{{ $t('dialog_task_button.tasks.addTask') }}</Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[500px]">
       <DialogHeader>
-        <DialogTitle class="text-foreground">Add a task</DialogTitle>
-        <DialogDescription>Work with your team to assign tasks and stay on track toward your goals.</DialogDescription>
+        <DialogTitle class="text-foreground">{{ $t('dialog_task_button.tasks.addTask') }}</DialogTitle>
+        <DialogDescription>{{ $t('dialog_task_button.tasks.taskDescrpition') }}</DialogDescription>
       </DialogHeader>
       <div class="grid gap-5 py-4">
         <div class="flex w-full flex-col gap-2">
-          <Label for="name" class="text-foreground">Name</Label>
-          <Input v-model="name" :disabled="loading" id="name" class="text-foreground" placeholder="Important task" maxlength="50" />
+          <Label for="name" class="text-foreground">{{ $t('dialog_task_button.tasks.name') }}</Label>
+          <Input v-model="name" :disabled="loading" id="name" class="text-foreground" :placeholder="$t('dialog_task_button.tasks.namePlaceholder')" :maxlength="50" />
         </div>
         <div class="flex w-full flex-col gap-2">
           <Label for="description" class="flex gap-1 text-foreground">
-            Description
-            <p class="mt-[-1px] text-xs text-muted-foreground">(optional)</p>
+            {{ $t('dialog_task_button.tasks.description') }}
+            <p class="mt-[-1px] text-xs text-muted-foreground">{{ $t('dialog_task_button.tasks.optional') }}</p>
           </Label>
-          <Textarea v-model="description" :disabled="loading" id="description" class="h-32 resize-none text-foreground" placeholder="This task is very important..." maxlength="250" />
+          <Textarea v-model="description" :disabled="loading" id="description" class="h-32 resize-none text-foreground" :placeholder="$t('dialog_task_button.tasks.descriptionPlaceholder')" maxlength="250" />
         </div>
         <div class="flex w-full flex-col gap-2">
-          <Label for="invite" class="text-sm text-foreground">Assign members</Label>
+          <Label for="invite" class="text-sm text-foreground">{{ $t('dialog_task_button.tasks.assignMembers') }}</Label>
           <ComboboxRoot v-model="assignMembers" v-model:search-term="searchTerm" multiple class="relative mx-auto w-full">
             <ComboboxAnchor class="inline-flex w-full items-center justify-between gap-[5px] rounded-lg border border-border bg-background p-2 text-[13px] leading-none text-foreground outline-none">
               <TagsInputRoot v-slot="{ modelValue: tags }" :model-value="assignMembers" delimiter="" class="flex flex-wrap items-center gap-2 rounded-lg">
@@ -33,7 +33,7 @@
                 </TagsInputItem>
 
                 <ComboboxInput as-child>
-                  <TagsInputInput placeholder="Members..." class="placeholder:text-mauve10 flex-1 rounded !bg-transparent px-1 focus:outline-none" @keydown.enter.prevent />
+                  <TagsInputInput :placeholder="$t('dialog_task_button.tasks.members')" class="placeholder:text-mauve10 flex-1 rounded !bg-transparent px-1 focus:outline-none" @keydown.enter.prevent />
                 </ComboboxInput>
               </TagsInputRoot>
 
@@ -46,7 +46,7 @@
                 <ComboboxEmpty class="py-2 text-center text-xs font-medium text-gray-400" />
 
                 <ComboboxGroup>
-                  <ComboboxLabel class="px-[25px] text-xs leading-[25px] text-muted-foreground">Members</ComboboxLabel>
+                  <ComboboxLabel class="px-[25px] text-xs leading-[25px] text-muted-foreground">{{ $t('dialog_task_button.tasks.members_basic') }}"</ComboboxLabel>
 
                   <ComboboxItem class="relative flex h-[25px] cursor-pointer select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="data.createdBy[0].email">
                     <ComboboxItemIndicator class="absolute left-0 inline-flex w-[25px] items-center justify-center">
@@ -77,11 +77,11 @@
         </div>
         <div class="flex gap-2">
           <div class="flex w-full flex-col gap-2">
-            <Label class="flex gap-1 text-foreground">Due date</Label>
+            <Label class="flex gap-1 text-foreground">{{ $t('dialog_task_button.tasks.dueDate') }}</Label>
             <Popover>
               <PopoverTrigger as-child>
                 <Button variant="outline" class="ps-3 text-start font-normal text-foreground sm:w-[250px]">
-                  <span>{{ dueDate ? dueDate : 'Pick a date' }}</span>
+                  <span>{{ dueDate ? dueDate : $t('dialog_task_button.tasks.pick_a_date') }}</span>
                   <CalendarIcon v-if="!dueDate" class="ms-auto h-4 w-4 opacity-50" />
                   <X v-if="dueDate" @click="dueDate = ''" class="ms-auto h-4 w-4 opacity-50 transition-all duration-300 hover:text-red-500" />
                 </Button>
@@ -93,32 +93,32 @@
             </Popover>
           </div>
           <div class="flex w-full flex-col gap-2">
-            <Label class="flex gap-1 text-foreground">State</Label>
+            <Label class="flex gap-1 text-foreground">{{ $t('dialog_task_button.tasks.state') }}</Label>
             <div class="relative inline-block h-4">
               <Transition name="slide-up">
-                <Button class="absolute w-full text-white" v-if="state === 'todo'" @click="state = 'inProgress'">To do</Button>
-                <Button class="absolute w-full bg-amber-500 px-4 text-white hover:bg-amber-600" v-else-if="state === 'inProgress'" @click="state = 'finished'">In progress</Button>
-                <Button class="absolute w-full bg-emerald-600 px-4 text-white hover:bg-emerald-700" v-else-if="state === 'finished'" @click="state = 'cancelled'">Finished</Button>
-                <Button class="absolute w-full px-4 text-white" v-else-if="state === 'cancelled'" @click="state = 'todo'" variant="destructive">Cancelled</Button>
+                <Button class="absolute w-full text-white" v-if="state === 'todo'" @click="state = 'inProgress'">{{ $t('dialog_task_button.tasks.stateLabels.todo') }}</Button>
+                <Button class="absolute w-full bg-amber-500 px-4 text-white hover:bg-amber-600" v-else-if="state === 'inProgress'" @click="state = 'finished'">{{ $t('dialog_task_button.tasks.stateLabels.inProgress') }}</Button>
+                <Button class="absolute w-full bg-emerald-600 px-4 text-white hover:bg-emerald-700" v-else-if="state === 'finished'" @click="state = 'cancelled'">{{ $t('dialog_task_button.tasks.stateLabels.finished') }}</Button>
+                <Button class="absolute w-full px-4 text-white" v-else-if="state === 'cancelled'" @click="state = 'todo'" variant="destructive">{{ $t('dialog_task_button.tasks.stateLabels.cancelled') }}</Button>
               </Transition>
             </div>
           </div>
           <div class="flex w-full flex-col gap-2">
-            <Label class="flex gap-1 text-foreground">Priority</Label>
+            <Label class="flex gap-1 text-foreground">{{ $t('dialog_task_button.tasks.priority') }}</Label>
             <div class="relative inline-block h-4">
               <Transition name="slide-up">
-                <Button class="absolute w-full bg-emerald-600 px-4 text-white hover:bg-emerald-700" v-if="priority === 'low'" @click="priority = 'medium'">Low</Button>
-                <Button class="absolute w-full bg-amber-500 px-4 text-white hover:bg-amber-600" v-else-if="priority === 'medium'" @click="priority = 'high'">Meduim</Button>
-                <Button class="absolute w-full px-4 text-white" v-else-if="priority === 'high'" @click="priority = 'low'" variant="destructive">High</Button>
+                <Button class="absolute w-full bg-emerald-600 px-4 text-white hover:bg-emerald-700" v-if="priority === 'low'" @click="priority = 'medium'">{{ $t('dialog_task_button.tasks.priorityLabels.low') }}</Button>
+                <Button class="absolute w-full bg-amber-500 px-4 text-white hover:bg-amber-600" v-else-if="priority === 'medium'" @click="priority = 'high'">{{ $t('dialog_task_button.tasks.priorityLabels.medium') }}</Button>
+                <Button class="absolute w-full px-4 text-white" v-else-if="priority === 'high'" @click="priority = 'low'" variant="destructive">{{ $t('dialog_task_button.tasks.priorityLabels.high') }}</Button>
               </Transition>
             </div>
           </div>
         </div>
       </div>
       <DialogFooter>
-        <Button v-if="!loading" @click="addTask" class="w-full text-white" :disabled="name == '' || assignMembers == [] || assignMembers.length < 1">Add task</Button>
+        <Button v-if="!loading" @click="addTask" class="w-full text-white" :disabled="name == '' || assignMembers == [] || assignMembers.length < 1">{{ $t('dialog_task_button.tasks.addTask') }}</Button>
         <Button v-if="loading" disabled class="w-full text-white">
-          Add task
+          {{ $t('dialog_task_button.tasks.addTask') }}
           <RefreshCw class="mr-2 h-4 animate-spin" />
         </Button>
       </DialogFooter>
@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import { doc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore'
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { db } from '@/firebase'
 import { toast } from 'vue-sonner'
 
@@ -148,12 +148,12 @@ export default {
   methods: {
     async addTask() {
       if (!this.name.trim()) {
-        toast.error('Task name cannot be empty.')
+        toast.error(this.$t('dialog_task_button.tasks.toasts.toastErrorNameEmpty'))
         return
       }
 
       if (!this.data.id) {
-        toast.error('Invalid project ID. Cannot add the task.')
+        toast.error(this.$t('dialog_task_button.tasks.toasts.toastErrorInvalidProjectID'))
         return
       }
 
@@ -206,7 +206,7 @@ export default {
         this.resetForm()
       } catch (error) {
         console.error('Error adding task:', error)
-        toast.error('Failed to add the task. Please try again.')
+        toast.error(this.$t('dialog_task_button.tasks.toasts.toastErrorAdding'))
       } finally {
         this.loading = false
       }

@@ -9,8 +9,8 @@
           <div class="flex flex-row items-center gap-2 text-[1rem] font-semibold">
             {{ data.name }}
           </div>
-          <div class="text-sm">Project: {{ data.projectName }}</div>
-          <div class="text-sm text-muted-foreground">Tracked time: {{ data.timeRecords ? formatTime(data.time) : '0h' }}</div>
+          <div class="text-sm">{{ $t('task.dialogs.task.project') }} {{ data.projectName }}</div>
+          <div class="text-sm text-muted-foreground">{{ $t('task.dialogs.task.trackedTime') }} {{ data.timeRecords ? formatTime(data.time) : '0h' }}</div>
         </div>
       </DialogTrigger>
       <div class="absolute right-5 top-1/2 -translate-y-1/2 transform">
@@ -27,7 +27,7 @@
             </TooltipTrigger>
             <TooltipContent class="border-border">
               <p class="text-center">
-                {{ !data.taskPinned ? 'Click to pin this task' : 'Click to unpin this task' }}
+                {{ !data.taskPinned ? $t('task.tooltips.pinTask.pin') : $t('task.tooltips.pinTask.unPin') }}
               </p>
             </TooltipContent>
           </Tooltip>
@@ -62,15 +62,19 @@
         </DialogHeader>
         <div class="grid gap-4 overflow-y-auto pb-4">
           <div class="flex flex-col items-start text-foreground">
-            <span class="text-md text-muted-foreground">Tracked time:</span>
+            <span class="text-md text-muted-foreground">{{ $t('task.dialogs.task.trackedTime') }}</span>
             <span class="text-md font-semibold">{{ data.timeRecords ? formatTime(data.time) : '0h' }}</span>
           </div>
           <div @mouseover="showTimeRecords = true" @mouseleave="showTimeRecords = false" class="group flex cursor-pointer flex-col items-start text-foreground">
             <span class="text-md flex w-full text-muted-foreground">
-              <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">All time records:</span>
-              <span class="ml-auto cursor-pointer font-semibold text-primary" @click="showAddTime = true">Add time</span>
+              <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">{{ $t('task.dialogs.task.allTimeRecords') }}</span>
+              <span class="ml-auto cursor-pointer font-semibold text-primary" @click="showAddTime = true">
+                {{ $t('task.dialogs.task.addTime') }}
+              </span>
             </span>
-            <span v-if="!data.timeRecords">No time records</span>
+            <span v-if="!data.timeRecords">
+              {{ $t('task.dialogs.task.noTimeRecords') }}
+            </span>
             <ul v-if="data.timeRecords" class="w-full">
               <li v-for="(record, index) in data.timeRecords.slice(0, 2)" :key="index" class="mt-1 w-full rounded-[2px] bg-border p-1 text-sm">
                 +{{ formatTime(record.timeAdded) }} on {{ formatDate(record.dateAdded) }}
@@ -97,7 +101,8 @@
             </ul>
           </div>
           <div @mouseover="showMembers = true" @mouseleave="showMembers = false" class="group line-clamp-1 flex cursor-pointer flex-col items-start text-foreground">
-            <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">Members ({{ data.members.length }}):</span>
+            <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">{{ $t('task.dialogs.task.members') }} ({{ data.members.length }}):</span>
+
             <span v-for="(member, index) in data.members.slice(0, 2)" @mouseover="hoveredIndex = index + 1" @mouseleave="hoveredIndex = null" class="text-md font-semibold">
               {{ index + 1 + '. ' + member.name + ' ' + member.surname }}
               <Transition>
@@ -115,14 +120,14 @@
           <div v-if="showAddTime" class="outer hole-shadow rounded">
             <div class="inner flex flex-col gap-2 rounded p-4 text-foreground">
               <label class="flex w-full flex-row items-center text-lg">
-                <span>Add hours and minutes:</span>
+                <span>{{ $t('task.dialogs.task.addHoursMinutes') }}</span>
                 <span class="ml-auto">
                   <X @click="(showAddTime = false), (newTime.hours = 0), (newTime.minutes = 0)" class="size-4 cursor-pointer" />
                 </span>
               </label>
               <div class="flex items-end gap-2">
                 <NumberField id="hours" v-model.number="newTime.hours" :min="0">
-                  <Label for="hours">Hours</Label>
+                  <Label for="hours">{{ $t('task.labels.hours') }}</Label>
                   <NumberFieldContent>
                     <NumberFieldDecrement />
                     <NumberFieldInput />
@@ -131,7 +136,7 @@
                 </NumberField>
 
                 <NumberField id="minutes" v-model.number="newTime.minutes" :min="0" :max="59">
-                  <Label for="minutes">Minutes</Label>
+                  <Label for="minutes">{{ $t('task.labels.minutes') }}</Label>
                   <NumberFieldContent>
                     <NumberFieldDecrement />
                     <NumberFieldInput />
@@ -147,8 +152,8 @@
           </div>
         </Transition>
         <DialogFooter>
-          <Button :disabled="showAddTime" class="mt-2 w-full border-primary font-normal text-primary hover:text-primary sm:m-0" variant="outline">Complete task</Button>
-          <Button :disabled="showAddTime" class="w-full font-normal text-foreground text-white">Start tracking</Button>
+          <Button :disabled="showAddTime" class="mt-2 w-full border-primary font-normal text-primary hover:text-primary sm:m-0" variant="outline">{{ $t('task.dialogs.task.completeTask') }}</Button>
+          <Button :disabled="showAddTime" class="w-full font-normal text-foreground text-white">{{ $t('task.dialogs.task.startTracking') }}</Button>
         </DialogFooter>
       </div>
     </DialogContent>
@@ -263,7 +268,7 @@ export default {
         this.showAddTime = false
       } catch (error) {
         console.error('Error adding time:', error)
-        toast.error('Failed to add time. Please try again.')
+        toast.error(this.$t('task.toasts.addTime'))
       }
     },
     async pin() {
@@ -294,7 +299,7 @@ export default {
         }
       } catch (error) {
         console.error('Error pinning task:', error)
-        toast.error('Failed to pin task. Please try again.')
+        toast.error(this.$t('task.toasts.pinTask'))
       } finally {
         this.pinLoading = false
       }
@@ -327,7 +332,7 @@ export default {
         }
       } catch (error) {
         console.error('Error unpinning task:', error)
-        toast.error('Failed to unpin task. Please try again.')
+        toast.error(this.$t('task.toasts.unPinTask'))
       } finally {
         this.pinLoading = false
       }
@@ -362,7 +367,7 @@ export default {
         }
       } catch (error) {
         console.error('Error updating task checked state:', error)
-        toast.error('Failed to update task checked state. Please try again.')
+        toast.error(this.$t('task.toasts.toggleChecked'))
       } finally {
         this.checkLoading = false
       }
@@ -377,10 +382,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Input } from '@/components/ui/input'
 import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from '@/components/ui/number-field'
 import { Label } from 'radix-vue'
-import { Check, X, Pin, PinOff, RefreshCw, Edit, Settings } from 'lucide-vue-next'
+import { Check, X, Pin, PinOff } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 </script>

@@ -6,31 +6,31 @@
     <DialogContent class="sm:max-w-[500px]">
       <div class="max-h-[90dvh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle class="text-left text-foreground">Edit project</DialogTitle>
-          <DialogDescription class="text-left">Use this page to edit your project details. Make the necessary changes and save to update your project.</DialogDescription>
+          <DialogTitle class="text-left text-foreground">{{ $t('dialog_button.project.editProject') }}</DialogTitle>
+          <DialogDescription class="text-left">{{ $t('dialog_button.project.projectDescription') }}</DialogDescription>
         </DialogHeader>
         <div class="grid gap-5 py-4">
           <div class="flex w-full flex-col gap-2">
-            <Label for="image" class="text-foreground">Image</Label>
+            <Label for="image" class="text-foreground">{{ $t('dialog_button.project.image') }}</Label>
             <div class="flex items-center gap-5">
               <img v-if="image" :src="image || ''" class="h-12 w-12 rounded-full object-cover" />
               <input :disabled="loading" id="image" type="file" accept="image/*" @change="handleImageUpload" class="hover:file:bg-primary-dark block w-full text-sm text-foreground file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-white" />
             </div>
           </div>
           <div class="flex w-full flex-col gap-2">
-            <Label for="name" class="text-foreground">Name</Label>
-            <Input v-model="name" :disabled="loading" id="name" class="text-foreground" placeholder="Important Project" maxlength="50" />
+            <Label for="name" class="text-foreground">{{ $t('dialog_button.project.name') }}</Label>
+            <Input v-model="name" :disabled="loading" id="name" class="text-foreground" :placeholder="$t('dialog_button.project.namePlaceholder')" maxlength="50" />
           </div>
           <div class="flex w-full flex-col gap-2">
             <Label for="description" class="flex gap-1 text-foreground">
-              Description
-              <p class="mt-[-1px] text-xs text-muted-foreground">(optional)</p>
+              {{ $t('dialog_button.project.description') }}
+              <p class="mt-[-1px] text-xs text-muted-foreground">{{ $t('dialog_button.project.optional') }}</p>
             </Label>
-            <Textarea v-model="description" :disabled="loading" id="description" class="h-40 resize-none text-foreground" placeholder="This project is very important..." maxlength="500" />
+            <Textarea v-model="description" :disabled="loading" id="description" class="h-40 resize-none text-foreground" :placeholder="$t('dialog_button.project.descriptionPlaceholder')" maxlength="500" />
           </div>
           <div class="flex w-full flex-col gap-2">
             <Label for="invite" class="flex items-center gap-2 text-foreground">
-              Invite your teammates
+              {{ $t('dialog_button.project.inviteTeammates') }}
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger as-child>
@@ -38,11 +38,11 @@
                   </TooltipTrigger>
                   <TooltipContent class="border-border">
                     <p class="text-center">
-                      After entering the correct email address, press
+                      {{ $t('dialog_button.project.firstHalf') }}
                       <kbd class="rounded-lg border border-gray-200 bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800 dark:border-gray-500 dark:bg-gray-600 dark:text-gray-100">Enter</kbd>
-                      to add another one.
+                      {{ $t('dialog_button.project.secondHalf') }}
                       <br />
-                      Please do not enter multiple addresses in a single field.
+                      {{ $t('dialog_button.project.please') }}
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -59,10 +59,10 @@
           </div>
         </div>
         <DialogFooter>
-          <Button @click="showDialog = true" :disabled="loading" class="mt-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white sm:mt-0" variant="outline">Delete</Button>
-          <Button v-if="!loading" class="w-full text-white" :disabled="!hasChanges || loading || image === '' || name.trim() === ''" @click="saveChanges">Save changes</Button>
+          <Button @click="showDialog = true" :disabled="loading" class="mt-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white sm:mt-0" variant="outline">{{ $t('dialog_button.project.deleteProject') }}</Button>
+          <Button v-if="!loading" class="w-full text-white" :disabled="!hasChanges || loading || image === '' || name.trim() === ''" @click="saveChanges">{{ $t('dialog_button.project.editProject') }}</Button>
           <Button v-if="loading" disabled class="w-full text-white">
-            Save changes
+            {{ $t('dialog_button.project.editProject_basic') }}
             <RefreshCw class="mr-2 h-4 animate-spin" />
           </Button>
         </DialogFooter>
@@ -71,12 +71,12 @@
           <div v-if="showDialog" @click="showDialog = false" class="pointer-events-auto fixed left-1/2 top-1/2 z-[9999] flex h-screen w-screen -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black bg-opacity-60">
             <div class="pointer-events-auto grid w-full max-w-lg gap-4 border border-border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
               <div class="flex flex-col gap-y-2 text-center sm:text-left">
-                <h2 class="text-lg font-semibold text-foreground">Are you absolutely sure?</h2>
-                <p class="text-sm text-muted-foreground">Are you sure you want to delete this project? This action cannot be undone.</p>
+                <h2 class="text-lg font-semibold text-foreground">{{ $t('dialog_button.project.confirmation.title') }}</h2>
+                <p class="text-sm text-muted-foreground">{{ $t('dialog_button.project.confirmation.description') }}</p>
               </div>
               <div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2">
-                <Button @click="showDialog = false" class="mt-2 font-normal text-foreground sm:mt-0" size="sm" variant="outline">Cancel</Button>
-                <Button @click="deleteProject" class="bg-red-500 font-normal text-white hover:bg-red-400" size="sm">Delete</Button>
+                <Button @click="showDialog = false" class="mt-2 font-normal text-foreground sm:mt-0" size="sm" variant="outline">{{ $t('dialog_button.project.confirmation.cancel') }}</Button>
+                <Button @click="deleteProject" class="bg-red-500 font-normal text-white hover:bg-red-400" size="sm">{{ $t('dialog_button.project.confirmation.confirm') }}</Button>
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@ export default {
 
         const createdByEmail = this.data.createdBy[0].email
         if (this.inviteEmails.includes(createdByEmail)) {
-          toast.error("You can't add your own email.")
+          toast.error(this.$t('dialog_button.project.toasts.toastErrorOwnEmail'))
           throw new Error("You can't add your own email.")
         }
 
@@ -159,13 +159,13 @@ export default {
 
         await updateDoc(projectDocRef, updates)
         this.$emit('project-created', projectId)
-        toast.success('Project updated successfully!')
+        toast.success(this.$t('dialog_button.project.toasts.projectUpdated'))
       } catch (error) {
         console.error('Error updating project:', error)
         if (error.message === "You can't add your own email.") {
-          toast.error("You can't add your own email.")
+          toast.error(this.$t('dialog_button.project.toasts.toastErrorOwnEmail'))
         } else {
-          toast.error('Failed to update project. Please try again.')
+          toast.error(this.$t('dialog_button.project.toasts.toastErrorFailedToUpdate'))
         }
       } finally {
         this.loading = false
@@ -205,7 +205,7 @@ export default {
               import.meta.env.VITE_EMAILJS_PUBLIC_KEY
             )
           } else {
-            toast.error(`User with email ${trimmedEmail} is not registered.`)
+            toast.error(this.$t('dialog_button.project.toasts.toastErrorInvalidEmail'))
           }
         } catch (error) {
           console.error(`Error validating or sending email to ${email}:`, error)
@@ -238,10 +238,10 @@ export default {
 
         this.showDialog = false
 
-        toast.success('Project deleted successfully.')
+        toast.success(this.$t('dialog_button.project.toasts.projectDeleted'))
       } catch (error) {
         console.error('Error deleting project:', error)
-        toast.error('Failed to delete project. Please try again.')
+        toast.error(this.$t('dialog_button.project.toasts.toastErrorFailedToDelete'))
       } finally {
         this.loading = false
       }

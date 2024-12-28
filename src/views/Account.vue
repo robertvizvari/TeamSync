@@ -143,7 +143,7 @@ export default {
 </script>
 
 <script setup>
-import Navbar from './dashboard/components/Navbar.vue'
+import Navbar from './dashboard/components/Navigation/Navbar.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 </script>

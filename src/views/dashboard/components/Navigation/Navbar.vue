@@ -4,14 +4,14 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
           <button v-if="$route.path !== '/account'" @click="toggleSidebar()" data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 sm:hidden">
-            <span class="sr-only">Open sidebar</span>
+            <span class="sr-only">{{ $t('navbar.sidebar.openButton') }}</span>
             <svg class="h-6 w-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
               <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
             </svg>
           </button>
           <router-link to="/dashboard/mytasks" class="ms-2 flex md:me-24">
             <Logo class="mr-2 size-10" />
-            <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl">TeamSync</span>
+            <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl">{{ $t('navbar.sidebar.logoText') }}</span>
           </router-link>
         </div>
         <div class="flex items-center">
@@ -20,7 +20,7 @@
           <div class="ms-3 flex items-center">
             <div>
               <button @click="userSettings = !userSettings" type="button" class="flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                <span class="sr-only">Open user menu</span>
+                <span class="sr-only">{{ $t('navbar.userMenu.openUserMenu') }}</span>
                 <Avatar :class="!user.profilePicture ? 'border border-gray-600' : ''" class="h-8 w-8 rounded-full">
                   <AvatarImage :src="user.profilePicture" alt="User photo" />
                   <AvatarFallback v-if="user && user.name && user.surname" class="text-md font-bold uppercase">
@@ -37,10 +37,10 @@
                 </div>
                 <ul class="pt-1" role="none">
                   <li>
-                    <router-link v-if="$route.path == '/account'" to="/dashboard/mytasks" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</router-link>
-                    <router-link v-if="$route.path !== '/account'" to="/account" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Account</router-link>
-                    <router-link to="#" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</router-link>
-                    <span @click="showDialog = true" class="block cursor-pointer px-4 py-2 text-sm text-red-400 transition-all duration-150 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-red-500" role="menuitem">Log out</span>
+                    <router-link v-if="$route.path == '/account'" to="/dashboard/mytasks" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">{{ $t('navbar.userMenu.dashboard') }}</router-link>
+                    <router-link v-if="$route.path !== '/account'" to="/account" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">{{ $t('navbar.userMenu.account') }}</router-link>
+                    <router-link to="#" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">{{ $t('navbar.userMenu.settings') }}</router-link>
+                    <span @click="showDialog = true" class="block cursor-pointer px-4 py-2 text-sm text-red-400 transition-all duration-150 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-red-500" role="menuitem">{{ $t('navbar.userMenu.logout') }}</span>
                   </li>
                 </ul>
               </div>
@@ -56,12 +56,12 @@
       <div v-if="showDialog" @click="showDialog = false" class="fixed left-1/2 top-1/2 z-[9999] flex h-screen w-screen -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-black bg-opacity-60">
         <div class="grid w-full max-w-lg gap-4 border border-border bg-background p-6 shadow-lg duration-200 sm:rounded-lg" style="pointer-events: auto">
           <div class="flex flex-col gap-y-2 text-center sm:text-left">
-            <h2 class="text-lg font-semibold text-foreground">Are you absolutely sure?</h2>
-            <p class="text-sm text-muted-foreground">Are you sure you want to log out? Any unsaved changes may be lost. Click "Log out" to log out, or "Cancel" to stay logged in.</p>
+            <h2 class="text-lg font-semibold text-foreground">{{ $t('navbar.userMenu.confirmation.title') }}</h2>
+            <p class="text-sm text-muted-foreground">{{ $t('navbar.userMenu.confirmation.description') }}</p>
           </div>
           <div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-x-2">
-            <Button @click="showDialog = false" class="mt-2 font-normal text-foreground sm:mt-0" size="sm" variant="outline">Cancel</Button>
-            <Button @click="logout" class="bg-red-500 font-normal text-white hover:bg-red-400" size="sm">Log out</Button>
+            <Button @click="showDialog = false" class="mt-2 font-normal text-foreground sm:mt-0" size="sm" variant="outline">{{ $t('navbar.userMenu.confirmation.cancel') }}</Button>
+            <Button @click="logout" class="bg-red-500 font-normal text-white hover:bg-red-400" size="sm">{{ $t('navbar.userMenu.confirmation.confirm') }}</Button>
           </div>
         </div>
       </div>
@@ -72,7 +72,6 @@
 <script>
 import { getAuth, signOut } from 'firebase/auth'
 import { toast } from 'vue-sonner'
-import { useRouter } from 'vue-router'
 
 export default {
   data() {
