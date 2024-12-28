@@ -8,9 +8,9 @@
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="z-[9999] border-border">
-      <DropdownMenuItem :disabled="mode == 'light'" @click="mode = 'light'">Light</DropdownMenuItem>
-      <DropdownMenuItem :disabled="mode == 'dark'" @click="mode = 'dark'">Dark</DropdownMenuItem>
-      <DropdownMenuItem @click="mode = 'auto'">System</DropdownMenuItem>
+      <DropdownMenuItem :disabled="mode == 'light'" @click="mode = 'light'">{{ $t('buttons.light') }}</DropdownMenuItem>
+      <DropdownMenuItem :disabled="mode == 'dark'" @click="mode = 'dark'">{{ $t('buttons.dark') }}</DropdownMenuItem>
+      <DropdownMenuItem @click="mode = 'auto'">{{ $t('buttons.system') }}</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

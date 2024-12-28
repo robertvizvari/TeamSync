@@ -2,7 +2,10 @@
   <div class="flex h-dvh w-full items-center justify-center bg-background">
     <Navbar />
 
-    <div class="mx-auto w-full max-w-lg rounded-lg bg-background p-6 shadow-lg">
+    <div class="relative mx-auto w-full max-w-lg rounded-lg bg-background p-6 shadow-lg">
+      <div class="absolute right-5 top-5">
+        <LanguageChange />
+      </div>
       <div class="mb-4 flex items-center justify-center">
         <template v-if="!isEditing">
           <img v-if="profilePicture" :src="profilePicture || ''" alt="Profile Picture" class="h-24 w-24 rounded-full border-2 border-primary" />
@@ -17,20 +20,20 @@
       </div>
 
       <div class="mb-4">
-        <label class="block text-sm font-medium text-foreground">Name</label>
+        <label class="block text-sm font-medium text-foreground">{{ $t('account.name') }}</label>
         <Input v-model="name" :disabled="!isEditing" class="mt-1 bg-background text-foreground" />
       </div>
 
       <div class="mb-4">
-        <label class="block text-sm font-medium text-foreground">Surname</label>
+        <label class="block text-sm font-medium text-foreground">{{ $t('account.surname') }}</label>
         <Input v-model="surname" :disabled="!isEditing" class="mt-1 bg-background text-foreground" />
       </div>
 
       <div class="flex flex-row items-center gap-2">
-        <Button @click="discard" v-if="isEditing" class="mt-1 w-[40%] border-red-500 text-red-500 hover:bg-red-500 hover:text-white" variant="outline">Discard</Button>
+        <Button @click="discard" v-if="isEditing" class="mt-1 w-[40%] border-red-500 text-red-500 hover:bg-red-500 hover:text-white" variant="outline">{{ $t('account.discard') }}</Button>
 
         <Button @click="toggleEdit" :class="!isEditing ? 'border-primary text-primary hover:text-primary' : 'text-white'" class="mt-1 w-full" :variant="!isEditing ? 'outline' : ''" :disabled="isEditing && originalName?.trim() === name.trim() && originalSurname?.trim() === surname.trim() && originalProfilePicture?.trim() === profilePicture.trim()">
-          {{ isEditing ? 'Save' : 'Edit' }}
+          {{ isEditing ? $t('account.save') : $t('account.edit') }}
         </Button>
       </div>
     </div>
@@ -101,7 +104,7 @@ export default {
       const userUid = this.user.uid || localStorage.getItem('uid')
 
       if (!userUid) {
-        toast.error('User not found or missing UID')
+        toast.error(this.$t('account.toasts.toastErrorUserNotFound'))
         return
       }
 
@@ -120,9 +123,9 @@ export default {
           profilePicture: this.profilePicture,
         })
 
-        toast.success('Profile updated successfully!')
+        toast.success(this.$t('account.toasts.toastProfileUpdated'))
       } catch (error) {
-        toast.error('Failed to update profile. Please try again.')
+        toast.error(this.$t('account.toasts.toastErrorProfileNotUpdated'))
         console.error(error)
       }
     },
@@ -144,6 +147,7 @@ export default {
 
 <script setup>
 import Navbar from './dashboard/components/Navigation/Navbar.vue'
+import LanguageChange from '@/components/Language_Change.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 </script>

@@ -55,9 +55,9 @@
       "showAll": "Alle anzeigen",
       "projects": "Projekte",
       "noTasksAll": "Keine Aufgaben",
-      "noTasksProject": "Keine Aufgaben in {{projectName}}",
+      "noTasksProject": "Keine Aufgaben in ",
       "noPinnedTasksAll": "Keine angehefteten Aufgaben",
-      "noPinnedTasksProject": "Keine angehefteten Aufgaben in {{projectName}}"
+      "noPinnedTasksProject": "Keine angehefteten Aufgaben in "
     }
   },
 
@@ -118,6 +118,8 @@
         "label": "Fälligkeitsdatum",
         "pickDate": "Datum auswählen"
       },
+      "priority_basic": "Priorität",
+      "state_basic": "Status",
       "state": {
         "todo": "Zu erledigen",
         "inProgress": "In Bearbeitung",
@@ -287,6 +289,38 @@
         "cancel": "Abbrechen",
         "confirm": "Löschen"
       }
+    }
+  },
+
+  "account": {
+    "name": "Name",
+    "surname": "Nachname",
+    "edit": "Bearbeiten",
+    "save": "Speichern",
+    "discard": "Verwerfen",
+    "toasts": {
+      "toastErrorUserNotFound": "Benutzer nicht gefunden oder UID fehlt",
+      "toastProfileUpdated": "Profil erfolgreich aktualisiert!",
+      "toastErrorProfileNotUpdated": "Profil konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
+    }
+  },
+
+  "404": {
+    "h1_404": "404 Nicht Gefunden",
+    "h1_whoops": "Hoppla! Diese Seite existiert nicht.",
+    "p_sorry": "Entschuldigung, wir können diese Seite nicht finden. Auf der Startseite gibt es viel zu entdecken.",
+    "router_link": "Zurück zur Startseite"
+  },
+
+  "buttons": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System",
+    "languages": {
+      "en": "Englisch",
+      "sk": "Slowakisch",
+      "es": "Spanisch",
+      "de": "Deutsch"
     }
   }
 }

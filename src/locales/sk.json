@@ -55,9 +55,9 @@
       "showAll": "Zobraziť všetko",
       "projects": "Projekty",
       "noTasksAll": "Žiadne úlohy",
-      "noTasksProject": "Žiadne úlohy v {{projectName}}",
+      "noTasksProject": "Žiadne úlohy v ",
       "noPinnedTasksAll": "Žiadne pripnuté úlohy",
-      "noPinnedTasksProject": "Žiadne pripnuté úlohy v {{projectName}}"
+      "noPinnedTasksProject": "Žiadne pripnuté úlohy v "
     }
   },
 
@@ -118,6 +118,8 @@
         "label": "Dátum splnenia",
         "pickDate": "Vyberte dátum"
       },
+      "priority_basic": "Priorita",
+      "state_basic": "Stav",
       "state": {
         "todo": "Na vykonanie",
         "inProgress": "Prebieha",
@@ -287,6 +289,38 @@
         "cancel": "Zrušiť",
         "confirm": "Vymazať"
       }
+    }
+  },
+
+  "account": {
+    "name": "Meno",
+    "surname": "Priezvisko",
+    "edit": "Upraviť",
+    "save": "Uložiť",
+    "discard": "Zrušiť",
+    "toasts": {
+      "toastErrorUserNotFound": "Používateľ nebol nájdený alebo chýba UID",
+      "toastProfileUpdated": "Profil bol úspešne aktualizovaný!",
+      "toastErrorProfileNotUpdated": "Nepodarilo sa aktualizovať profil. Skúste to znova."
+    }
+  },
+
+  "404": {
+    "h1_404": "404 Nenájdené",
+    "h1_whoops": "Ups! Táto stránka neexistuje.",
+    "p_sorry": "Je nám ľúto, túto stránku sme nenašli. Na domovskej stránke toho nájdete veľa.",
+    "router_link": "Späť na Domovskú stránku"
+  },
+
+  "buttons": {
+    "light": "Svetlý",
+    "dark": "Tmavý",
+    "system": "Systém",
+    "languages": {
+      "en": "Angličtina",
+      "es": "Španielčina",
+      "de": "Nemčina",
+      "sk": "Slovenčina"
     }
   }
 }

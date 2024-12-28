@@ -95,10 +95,10 @@ export default {
   },
   computed: {
     noTasksMessage() {
-      return this.selectValue === 'all' ? this.$t('my_tasks.select.noTasksAll') : this.$t('my_tasks.select.noTasksProject', { projectName: this.findProjectName(this.selectValue) })
+      return this.selectValue === 'all' ? this.$t('my_tasks.select.noTasksAll') : this.$t('my_tasks.select.noTasksProject') + ' ' + this.findProjectName(this.selectValue)
     },
     noPinnedTasksMessage() {
-      return this.selectValue === 'all' ? this.$t('my_tasks.select.noPinnedTasksAll') : this.$t('my_tasks.select.noPinnedTasksProject', { projectName: this.findProjectName(this.selectValue) })
+      return this.selectValue === 'all' ? this.$t('my_tasks.select.noPinnedTasksAll') : this.$t('my_tasks.select.noPinnedTasksProject') + ' ' + this.findProjectName(this.selectValue)
     },
     tasksUnchecked() {
       return this.tasks.filter((task) => !task.checked)

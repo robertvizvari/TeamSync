@@ -35,9 +35,9 @@
       </div>
     </div>
 
-    <DialogContent class="grid-rows-[auto_minmax(0,1fr)_auto] sm:max-w-[500px]">
-      <div class="max-h-[90dvh] overflow-y-auto">
-        <DialogHeader>
+    <DialogContent class="grid-rows-[auto_minmax(0,1fr)_auto] pb-0 sm:max-w-[500px]">
+      <div :class="!showAddTime ? 'overflow-y-auto' : ''" class="max-h-[90dvh]">
+        <DialogHeader :class="showAddTime ? 'opacity-35' : ''">
           <DialogTitle class="mx-auto text-foreground">
             {{ data.name }}
           </DialogTitle>
@@ -61,11 +61,11 @@
           </DialogDescription>
         </DialogHeader>
         <div class="grid gap-4 overflow-y-auto pb-4">
-          <div class="flex flex-col items-start text-foreground">
+          <div :class="showAddTime ? 'opacity-35' : ''" class="flex flex-col items-start text-foreground">
             <span class="text-md text-muted-foreground">{{ $t('task.dialogs.task.trackedTime') }}</span>
             <span class="text-md font-semibold">{{ data.timeRecords ? formatTime(data.time) : '0h' }}</span>
           </div>
-          <div @mouseover="showTimeRecords = true" @mouseleave="showTimeRecords = false" class="group flex cursor-pointer flex-col items-start text-foreground">
+          <div :class="showAddTime ? 'opacity-35' : ''" @mouseover="showTimeRecords = true" @mouseleave="showTimeRecords = false" class="group flex cursor-pointer flex-col items-start text-foreground">
             <span class="text-md flex w-full text-muted-foreground">
               <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">{{ $t('task.dialogs.task.allTimeRecords') }}</span>
               <span class="ml-auto cursor-pointer font-semibold text-primary" @click="showAddTime = true">
@@ -100,7 +100,7 @@
               </li>
             </ul>
           </div>
-          <div @mouseover="showMembers = true" @mouseleave="showMembers = false" class="group line-clamp-1 flex cursor-pointer flex-col items-start text-foreground">
+          <div :class="showAddTime ? 'opacity-35' : ''" @mouseover="showMembers = true" @mouseleave="showMembers = false" class="group line-clamp-1 flex cursor-pointer flex-col items-start text-foreground">
             <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">{{ $t('task.dialogs.task.members') }} ({{ data.members.length }}):</span>
 
             <span v-for="(member, index) in data.members.slice(0, 2)" @mouseover="hoveredIndex = index + 1" @mouseleave="hoveredIndex = null" class="text-md font-semibold">
@@ -117,7 +117,7 @@
           </div>
         </div>
         <Transition :duration="550" name="nested">
-          <div v-if="showAddTime" class="outer hole-shadow rounded">
+          <div v-if="showAddTime" class="outer hole-shadow mb-5 rounded">
             <div class="inner flex flex-col gap-2 rounded p-4 text-foreground">
               <label class="flex w-full flex-row items-center text-lg">
                 <span>{{ $t('task.dialogs.task.addHoursMinutes') }}</span>

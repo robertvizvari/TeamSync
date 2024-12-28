@@ -2,13 +2,14 @@
   <section class="flex min-h-dvh items-center bg-background">
     <div class="container mx-auto flex flex-col-reverse px-6 py-12 lg:flex-row lg:items-center lg:gap-12">
       <div class="w-full lg:w-1/2">
-        <h1 class="mb-4 text-xl font-extrabold tracking-tight text-primary lg:text-2xl">404 Not Found</h1>
-        <h1 class="mb-4 text-3xl font-extrabold tracking-tight text-foreground lg:text-5xl">Whoops! That page doesn’t exist.</h1>
-        <p class="mb-4 text-lg text-muted-foreground">Sorry, we can't find that page. You'll find lots to explore on the home page.</p>
+        <h1 class="mb-4 text-xl font-extrabold tracking-tight text-primary lg:text-2xl">{{ $t('404.h1_404') }}</h1>
+        <h1 class="mb-4 text-3xl font-extrabold tracking-tight text-foreground lg:text-5xl">{{ $t('404.h1_whoops') }}</h1>
+        <p class="mb-4 text-lg text-muted-foreground">{{ $t('404.p_sorry') }}</p>
+        {{ userLoggedIn }}
 
         <div class="mt-6">
-          <router-link to="/">
-            <Button class="text-white">Back to Homepage</Button>
+          <router-link :to="userLoggedIn ? '/dashboard' : '/'">
+            <Button class="text-white">{{ $t('404.router_link') }}</Button>
           </router-link>
         </div>
       </div>
@@ -19,6 +20,20 @@
     </div>
   </section>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      userLoggedIn: false,
+    }
+  },
+  mounted() {
+    const user = JSON.parse(localStorage.getItem('user'))
+    this.userLoggedIn = user && user.uid ? true : false
+  },
+}
+</script>
 
 <script setup>
 import { Button } from '../components/ui/button'

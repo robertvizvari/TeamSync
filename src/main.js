@@ -9,17 +9,23 @@ import store from './store'
 import en from '../src/locales/en'
 import sk from '../src/locales/sk'
 import de from '../src/locales/de'
+import es from '../src/locales/es'
 
-const userLocale = navigator.language.split('-')[0] || 'en'
+const getDefaultLocale = () => {
+  const storedLocale = localStorage.getItem('locale')
+  const browserLocale = navigator.language.split('-')[0]
+  return storedLocale || browserLocale || 'en'
+}
 
 const i18n = createI18n({
   legacy: false,
-  locale: userLocale,
+  locale: getDefaultLocale(),
   fallbackLocale: 'en',
   messages: {
     en: en,
     sk: sk,
     de: de,
+    es: es,
   },
 })
 

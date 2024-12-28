@@ -66,7 +66,7 @@
               </Popover>
             </div>
             <div class="flex w-full flex-col gap-2">
-              <Label class="flex gap-1 text-foreground">State</Label>
+              <Label class="flex gap-1 text-foreground">{{ $t('dialog_task_settings_button.dialog.state_basic') }}</Label>
               <div class="relative inline-block h-4">
                 <Transition name="slide-up">
                   <Button class="absolute w-full text-white" v-if="state === 'todo'" @click="state = 'inProgress'">
@@ -85,7 +85,7 @@
               </div>
             </div>
             <div class="flex w-full flex-col gap-2">
-              <Label class="flex gap-1 text-foreground">Priority</Label>
+              <Label class="flex gap-1 text-foreground">{{ $t('dialog_task_settings_button.dialog.priority_basic') }}</Label>
               <div class="relative inline-block h-4">
                 <Transition name="slide-up">
                   <Button class="absolute w-full bg-emerald-600 px-4 text-white hover:bg-emerald-700" v-if="priority === 'low'" @click="priority = 'medium'">
