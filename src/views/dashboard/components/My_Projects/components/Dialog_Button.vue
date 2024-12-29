@@ -198,7 +198,9 @@ export default {
               import.meta.env.VITE_EMAILJS_PUBLIC_KEY
             )
           } else {
-            toast.error(this.$t('dialog_button.project.toasts.toastErrorInvalidFileType'))
+            setTimeout(() => {
+              toast.error(this.$t('dialog_button.project.toasts.toastErrorInvalidFileType'))
+            }, 1000)
             this.errorOccurred = true
             throw new Error(`User with email ${trimmedEmail} is not registered.`)
           }

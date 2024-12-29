@@ -100,6 +100,7 @@ export default {
       name: '',
       description: '',
       inviteEmails: [],
+      pendingEmails: [],
       loading: false,
       showDialog: false,
     }
@@ -108,7 +109,10 @@ export default {
     this.image = this.data.projectImage
     this.name = this.data.projectName
     this.description = this.data.description
-    this.inviteEmails = this.data.members.map((member) => member.email)
+
+    this.inviteEmails = this.data.members.filter((member) => member.state === 'accepted').map((member) => member.email)
+
+    this.pendingEmails = this.data.members.filter((member) => member.state === 'pending').map((member) => member.email)
   },
   methods: {
     async saveChanges() {
@@ -121,11 +125,13 @@ export default {
 
         const createdByEmail = this.data.createdBy[0].email
         if (this.inviteEmails.includes(createdByEmail)) {
-          toast.error(this.$t('dialog_project_settings_button.project.toasts.toastErrorOwnEmail'))
+          setTimeout(() => {
+            toast.error(this.$t('dialog_project_settings_button.project.toasts.toastErrorOwnEmail'))
+          }, 500)
           throw new Error("You can't add your own email.")
         }
 
-        const currentEmails = this.data.members.map((member) => member.email)
+        const currentEmails = this.data.members.filter((member) => member.state === 'accepted').map((member) => member.email)
         const newInviteEmails = this.inviteEmails.filter((email) => !currentEmails.includes(email))
         const removedEmails = currentEmails.filter((email) => !this.inviteEmails.includes(email))
 
@@ -177,6 +183,18 @@ export default {
       for (const email of emails) {
         try {
           const trimmedEmail = email.trim()
+
+          if (this.pendingEmails.includes(trimmedEmail)) {
+            setTimeout(() => {
+              toast.error(
+                this.$t('dialog_project_settings_button.project.toasts.toastErrorEmailPending', {
+                  trimmedEmail: trimmedEmail,
+                })
+              )
+            }, 500)
+            throw new Error(`${trimmedEmail} invitation is already pending.`)
+          }
+
           const userQuery = query(collection(db, 'users'), where('email', '==', trimmedEmail))
           const userSnapshot = await getDocs(userQuery)
 
@@ -205,7 +223,12 @@ export default {
               import.meta.env.VITE_EMAILJS_PUBLIC_KEY
             )
           } else {
-            toast.error(this.$t('dialog_project_settings_button.project.toasts.toastErrorInvalidEmail'))
+            setTimeout(() => {
+              toast.error(this.$t('dialog_project_settings_button.project.toasts.toastErrorInvalidEmail'), {
+                trimmedEmail: trimmedEmail,
+              })
+            }, 500)
+            throw new Error(`Invalid email: ${trimmedEmail}`)
           }
         } catch (error) {
           console.error(`Error validating or sending email to ${email}:`, error)
@@ -259,7 +282,7 @@ export default {
       const hasDescriptionChanged = this.description.trim() !== this.data.description.trim()
       const hasInviteEmailsChanged = !this.arraysEqual(
         this.inviteEmails,
-        this.data.members.map((member) => member.email)
+        this.data.members.filter((member) => member.state === 'accepted').map((member) => member.email)
       )
 
       return hasImageChanged || hasNameChanged || hasDescriptionChanged || hasInviteEmailsChanged

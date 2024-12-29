@@ -241,7 +241,7 @@
         "toastErrorInvalidFileType": "Invalid file type. Please upload an image.",
         "toastErrorImageTooLarge": "Compressed image is still too large. Please choose a smaller image.",
         "toastErrorProcessingImage": "Failed to process the image. Please try again.",
-        "toastErrorInvalidEmail": "User with email {{trimmedEmail}} is not registered.",
+        "toastErrorInvalidEmail": "User with email {trimmedEmail} is not registered.",
         "toastErrorProjectCreation": "Failed to create project. Please try again.",
         "toastErrorSendInvites": "Failed to send invites. Aborting project creation.",
         "toastErrorUnexpected": "An unexpected error occurred. Please try again.",
@@ -254,8 +254,8 @@
     "_comment": "This content is inside Dialog_Project_Settings_Button.vue",
 
     "project": {
-      "editProject": "Create a project",
-      "editProject_basic": "Create project",
+      "editProject": "Edit project",
+      "editProject_basic": "Edit project",
       "projectDescription": "Work with your team to plan, create, and achieve your goals together.",
       "image": "Image",
       "name": "Name",
@@ -272,7 +272,7 @@
         "toastErrorInvalidFileType": "Invalid file type. Please upload an image.",
         "toastErrorImageTooLarge": "Compressed image is still too large. Please choose a smaller image.",
         "toastErrorProcessingImage": "Failed to process the image. Please try again.",
-        "toastErrorInvalidEmail": "User with email {{trimmedEmail}} is not registered.",
+        "toastErrorInvalidEmail": "User with email {trimmedEmail} is not registered.",
         "toastErrorProjectCreation": "Failed to create project. Please try again.",
         "toastErrorSendInvites": "Failed to send invites. Aborting project creation.",
         "toastErrorUnexpected": "An unexpected error occurred. Please try again.",
@@ -280,6 +280,7 @@
         "toastErrorOwnEmail": "You cannot add your own email",
         "toastErrorFailedToDelete": "Failed to delete the project. Please try again.",
         "toastErrorFailedToUpdate": "Failed to update the project. Please try again.",
+        "toastErrorEmailPending": "{trimmedEmail} invitation is already pending.",
         "projectUpdated": "Project updated successfully.",
         "projectDeleted": "Project deleted successfully."
       },

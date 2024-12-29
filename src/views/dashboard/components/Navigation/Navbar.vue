@@ -112,7 +112,6 @@ export default {
 <script setup>
 import Logo from '@/assets/svg/Logo.vue'
 import DarkModeButton from '@/components/Dark_Mode.vue'
-import LanguageChange from '@/components/Language_Change.vue'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 </script>

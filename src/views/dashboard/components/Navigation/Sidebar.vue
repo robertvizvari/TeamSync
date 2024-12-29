@@ -52,5 +52,4 @@ export default {
 
 <script setup>
 import { Icon } from '@iconify/vue'
-import { Badge } from '@/components/ui/badge'
 </script>

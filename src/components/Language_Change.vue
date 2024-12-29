@@ -7,10 +7,10 @@
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" class="z-[9999] border-border">
-      <DropdownMenuItem :disabled="locale === 'en'" @click="changeLocale('en')">{{ $t('buttons.languages.en') }}</DropdownMenuItem>
-      <DropdownMenuItem :disabled="locale === 'de'" @click="changeLocale('de')">{{ $t('buttons.languages.de') }}</DropdownMenuItem>
-      <DropdownMenuItem :disabled="locale === 'es'" @click="changeLocale('es')">{{ $t('buttons.languages.es') }}</DropdownMenuItem>
-      <DropdownMenuItem :disabled="locale === 'sk'" @click="changeLocale('sk')">{{ $t('buttons.languages.sk') }}</DropdownMenuItem>
+      <DropdownMenuItem :disabled="locale === 'en'" @click="changeLocale('en')" class="cursor-pointer">{{ $t('buttons.languages.en') }}</DropdownMenuItem>
+      <DropdownMenuItem :disabled="locale === 'de'" @click="changeLocale('de')" class="cursor-pointer">{{ $t('buttons.languages.de') }}</DropdownMenuItem>
+      <DropdownMenuItem :disabled="locale === 'es'" @click="changeLocale('es')" class="cursor-pointer">{{ $t('buttons.languages.es') }}</DropdownMenuItem>
+      <DropdownMenuItem :disabled="locale === 'sk'" @click="changeLocale('sk')" class="cursor-pointer">{{ $t('buttons.languages.sk') }}</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

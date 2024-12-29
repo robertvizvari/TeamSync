@@ -47,8 +47,6 @@
 <script>
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
 import { toast } from 'vue-sonner'
-import { useStore } from 'vuex'
-import { doc } from 'firebase/firestore'
 
 export default {
   data() {

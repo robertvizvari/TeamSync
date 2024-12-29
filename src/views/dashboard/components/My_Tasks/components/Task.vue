@@ -68,9 +68,9 @@
           <div :class="showAddTime ? 'opacity-35' : ''" @mouseover="showTimeRecords = true" @mouseleave="showTimeRecords = false" class="group flex cursor-pointer flex-col items-start text-foreground">
             <span class="text-md flex w-full text-muted-foreground">
               <span class="text-md text-muted-foreground duration-200 group-hover:text-foreground">{{ $t('task.dialogs.task.allTimeRecords') }}</span>
-              <span class="ml-auto cursor-pointer font-semibold text-primary" @click="showAddTime = true">
+              <!-- <span class="ml-auto cursor-pointer font-semibold text-primary" @click="showAddTime = true">
                 {{ $t('task.dialogs.task.addTime') }}
-              </span>
+              </span> -->
             </span>
             <span v-if="!data.timeRecords">
               {{ $t('task.dialogs.task.noTimeRecords') }}
@@ -152,8 +152,9 @@
           </div>
         </Transition>
         <DialogFooter>
-          <Button :disabled="showAddTime" class="mt-2 w-full border-primary font-normal text-primary hover:text-primary sm:m-0" variant="outline">{{ $t('task.dialogs.task.completeTask') }}</Button>
-          <Button :disabled="showAddTime" class="w-full font-normal text-foreground text-white">{{ $t('task.dialogs.task.startTracking') }}</Button>
+          <!-- <Button :disabled="showAddTime" class="mt-2 w-full border-primary font-normal text-primary hover:text-primary sm:m-0" variant="outline">{{ $t('task.dialogs.task.completeTask') }}</Button>
+          <Button :disabled="showAddTime" class="w-full font-normal text-foreground text-white">{{ $t('task.dialogs.task.startTracking') }}</Button> -->
+          <Button @click="showAddTime = true" :disabled="showAddTime" class="w-full font-normal text-foreground text-white">{{ $t('task.dialogs.task.addTime') }}</Button>
         </DialogFooter>
       </div>
     </DialogContent>

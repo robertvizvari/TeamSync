@@ -3,7 +3,7 @@
     <Navbar />
 
     <div class="relative mx-auto w-full max-w-lg rounded-lg bg-background p-6 shadow-lg">
-      <div class="absolute right-5 top-5">
+      <div v-if="!isEditing" class="absolute right-5 top-5">
         <LanguageChange />
       </div>
       <div class="mb-4 flex items-center justify-center">

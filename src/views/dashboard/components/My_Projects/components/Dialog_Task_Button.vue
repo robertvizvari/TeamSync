@@ -46,7 +46,7 @@
                 <ComboboxEmpty class="py-2 text-center text-xs font-medium text-gray-400" />
 
                 <ComboboxGroup>
-                  <ComboboxLabel class="px-[25px] text-xs leading-[25px] text-muted-foreground">{{ $t('dialog_task_button.tasks.members_basic') }}"</ComboboxLabel>
+                  <ComboboxLabel class="px-[25px] text-xs leading-[25px] text-muted-foreground">{{ $t('dialog_task_button.tasks.members_basic') }}</ComboboxLabel>
 
                   <ComboboxItem class="relative flex h-[25px] cursor-pointer select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="data.createdBy[0].email">
                     <ComboboxItemIndicator class="absolute left-0 inline-flex w-[25px] items-center justify-center">
@@ -59,7 +59,7 @@
                       </span>
                     </span>
                   </ComboboxItem>
-                  <ComboboxItem v-for="(member, index) in data.members" :key="index" class="relative flex h-[25px] cursor-pointer select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="member.email">
+                  <ComboboxItem v-for="(member, index) in acceptedMembers" :key="index" class="relative flex h-[25px] cursor-pointer select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-foreground data-[disabled]:pointer-events-none data-[disabled]:text-muted-foreground data-[highlighted]:text-foreground data-[highlighted]:outline-none" :value="member.email">
                     <ComboboxItemIndicator class="absolute left-0 inline-flex w-[25px] items-center justify-center">
                       <Icon icon="radix-icons:check" />
                     </ComboboxItemIndicator>
@@ -82,13 +82,13 @@
               <PopoverTrigger as-child>
                 <Button variant="outline" class="ps-3 text-start font-normal text-foreground sm:w-[250px]">
                   <span>{{ dueDate ? dueDate : $t('dialog_task_button.tasks.pick_a_date') }}</span>
-                  <CalendarIcon v-if="!dueDate" class="ms-auto h-4 w-4 opacity-50" />
+                  <CalendarIcon v-if="!dueDate" :locale="locale" class="ms-auto h-4 w-4 opacity-50" />
                   <X v-if="dueDate" @click="dueDate = ''" class="ms-auto h-4 w-4 opacity-50 transition-all duration-300 hover:text-red-500" />
                 </Button>
                 <input hidden />
               </PopoverTrigger>
               <PopoverContent class="w-auto p-0">
-                <Calendar v-model="dueDate" calendar-label="Date of birth" initial-focus />
+                <Calendar v-model="dueDate" :locale="locale" calendar-label="Date of birth" initial-focus />
               </PopoverContent>
             </Popover>
           </div>
@@ -143,6 +143,7 @@ export default {
       dueDate: '',
       loading: false,
       searchTerm: '',
+      locale: localStorage.getItem('locale') || 'en',
     }
   },
   methods: {
@@ -221,23 +222,26 @@ export default {
       this.dueDate = ''
     },
   },
+  computed: {
+    acceptedMembers() {
+      return this.data.members.filter((member) => member.state === 'accepted')
+    },
+  },
 }
 </script>
 
 <script setup>
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
 import { Calendar } from '@/components/ui/calendar'
 import { Calendar as CalendarIcon, X } from 'lucide-vue-next'
-import { CircleHelp, RefreshCw } from 'lucide-vue-next'
+import { RefreshCw } from 'lucide-vue-next'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { ref, watch } from 'vue'
 import { ComboboxAnchor, ComboboxContent, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxItemIndicator, ComboboxLabel, ComboboxRoot, ComboboxTrigger, ComboboxViewport, TagsInputRoot } from 'radix-vue'
 import { Icon } from '@iconify/vue'
 </script>

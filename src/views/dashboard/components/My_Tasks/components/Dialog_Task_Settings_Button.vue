@@ -55,13 +55,13 @@
                 <PopoverTrigger as-child>
                   <Button variant="outline" class="ps-3 text-start font-normal text-foreground sm:w-[250px]">
                     <span>{{ dueDate && newDueDate == '' ? dueDate : newDueDate }}</span>
-                    <CalendarIcon v-if="dueDate == $t('dialog_task_settings_button.dialog.dueDate.pickDate') && !newDueDate" class="ms-auto h-4 w-4 opacity-50" />
+                    <CalendarIcon v-if="dueDate == $t('dialog_task_settings_button.dialog.dueDate.pickDate') && !newDueDate" class="ms-auto h-4 w-4 opacity-50" :locale="locale" />
                     <X v-if="dueDate !== $t('dialog_task_settings_button.dialog.dueDate.pickDate') || newDueDate" @click="(dueDate = $t('dialog_task_settings_button.dialog.dueDate.pickDate')), (newDueDate = '')" class="ms-auto h-4 w-4 opacity-50 transition-all duration-300 hover:text-red-500" />
                   </Button>
                   <input hidden />
                 </PopoverTrigger>
                 <PopoverContent class="w-auto p-0">
-                  <Calendar v-model="newDueDate" @click="dueDate = $t('dialog_task_settings_button.dialog.dueDate.pickDate')" calendar-label="Date of birth" initial-focus />
+                  <Calendar v-model="newDueDate" @click="dueDate = $t('dialog_task_settings_button.dialog.dueDate.pickDate')" :locale="locale" calendar-label="Date of birth" initial-focus />
                 </PopoverContent>
               </Popover>
             </div>
@@ -161,6 +161,7 @@ export default {
       showDialog: false,
       userIsCreator: false,
       newDueDate: '',
+      locale: localStorage.getItem('locale') || 'en',
     }
   },
   methods: {
@@ -310,17 +311,15 @@ export default {
 <script setup>
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
 import { Calendar } from '@/components/ui/calendar'
 import { Calendar as CalendarIcon, X } from 'lucide-vue-next'
-import { CircleHelp, RefreshCw, Edit } from 'lucide-vue-next'
+import { RefreshCw, Edit } from 'lucide-vue-next'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { ref, watch } from 'vue'
-import { ComboboxAnchor, ComboboxContent, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxItemIndicator, ComboboxLabel, ComboboxRoot, ComboboxTrigger, ComboboxViewport, TagsInputRoot } from 'radix-vue'
+import { ComboboxAnchor, ComboboxInput, ComboboxRoot, ComboboxTrigger, TagsInputRoot } from 'radix-vue'
 import { Icon } from '@iconify/vue'
 </script>
 

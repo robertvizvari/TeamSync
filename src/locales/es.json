@@ -155,81 +155,140 @@
     }
   },
 
-  "my_project": {
-    "_comment": "This content is inside My_Project.vue",
+  "my_projects": {
+    "_comment": "This content is inside My_Projects.vue",
 
-    "tabs": {
-      "info": "Información",
-      "tasks": "Tareas",
-      "members": "Miembros"
-    },
-    "info": {
-      "noDescription": "No hay descripción disponible",
-      "editDescription": "Editar descripción",
-      "createdAt": "Creado el {{createdAt}}",
-      "lastUpdated": "Última actualización: {{lastUpdated}}",
-      "editProjectName": "Editar nombre del proyecto"
-    },
     "tasks": {
-      "filter": {
-        "all": "Todas",
-        "todo": "Por hacer",
-        "inProgress": "En progreso",
-        "finished": "Finalizadas",
-        "cancelled": "Canceladas"
-      },
-      "createTask": "Crear tarea",
-      "noTasks": "No hay tareas en este proyecto",
-      "taskStates": {
+      "noProjects": "No hay proyectos",
+      "noOtherMembers": "No hay otros miembros",
+      "noTasks": "No hay tareas",
+      "tasks": "Tareas",
+      "members": "Miembros",
+      "members_lowercase": "miembros",
+      "member_lowercase": "miembro"
+    },
+    "priorities": {
+      "firstHalf": "Esta tarea tiene ",
+      "secondHalf": " prioridad.",
+      "hSign": "alta",
+      "mSign": "media",
+      "lSign": "baja"
+    },
+    "taskStates": {
+      "todo": "Por hacer",
+      "inProgress": "En progreso",
+      "finished": "Finalizada",
+      "cancelled": "Cancelada"
+    }
+  },
+
+  "dialog_task_button": {
+    "_comment": "This content is inside Dialog_Task_Button.vue",
+
+    "tasks": {
+      "addTask": "Añadir tarea",
+      "taskDescrpition": "Trabaja con tu equipo para asignar tareas y mantener el rumbo hacia tus objetivos.",
+      "name": "Nombre",
+      "description": "Descripción",
+      "optional": "(opcional)",
+      "assignMembers": "Asignar miembros",
+      "members": "Miembros...",
+      "members_basic": "Miembros",
+      "pick_a_date": "Seleccionar una fecha",
+      "dueDate": "Fecha de vencimiento",
+      "state": "Estado",
+      "priority": "Prioridad",
+      "descriptionPlaceholder": "Esta tarea es muy importante...",
+      "namePlaceholder": "Tarea importante",
+
+      "stateLabels": {
         "todo": "Por hacer",
         "inProgress": "En progreso",
         "finished": "Finalizada",
         "cancelled": "Cancelada"
-      }
-    },
-    "members": {
-      "addMember": "Añadir miembro",
-      "noMembers": "No hay miembros en este proyecto",
-      "memberRoles": {
-        "admin": "Administrador",
-        "editor": "Editor",
-        "viewer": "Espectador"
+      },
+      "priorityLabels": {
+        "low": "Baja",
+        "medium": "Media",
+        "high": "Alta"
+      },
+      "toasts": {
+        "toastErrorNameEmpty": "El nombre de la tarea no puede estar vacío.",
+        "toastErrorInvalidProjectID": "ID de proyecto inválido. No se puede añadir la tarea.",
+        "toastErrorAdding": "No se pudo añadir la tarea. Por favor, inténtalo de nuevo."
       }
     }
   },
 
-  "project_settings": {
-    "_comment": "This content is inside Project_Settings.vue",
+  "dialog_button": {
+    "_comment": "This content is inside Dialog_Button.vue",
 
-    "dialog": {
-      "editProjectTitle": "Editar proyecto",
-      "editProjectDescription": "Actualiza el nombre, descripción y configura los ajustes del proyecto.",
-      "projectName": {
-        "label": "Nombre del proyecto",
-        "placeholder": "Nuevo nombre del proyecto"
-      },
-      "projectDescription": {
-        "label": "Descripción del proyecto",
-        "optionalText": "(opcional)",
-        "placeholder": "Este proyecto es para..."
-      },
-      "buttons": {
-        "save": "Guardar cambios",
-        "cancel": "Cancelar",
-        "delete": "Eliminar proyecto"
-      },
-      "deleteDialog": {
-        "confirmationTitle": "¿Estás completamente seguro?",
-        "confirmationDescription": "¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.",
-        "confirmDeleteButton": "Eliminar",
-        "cancelButton": "Cancelar"
-      },
+    "project": {
+      "createProject": "Crear un proyecto",
+      "createProject_basic": "Crear proyecto",
+      "projectDescription": "Trabaja con tu equipo para planificar, crear y alcanzar tus objetivos juntos.",
+      "image": "Imagen",
+      "name": "Nombre",
+      "description": "Descripción",
+      "optional": "(opcional)",
+      "inviteTeammates": "Invita a tus compañeros",
+      "firstHalf": "Después de ingresar la dirección de correo correcta, presiona ",
+      "secondHalf": " para añadir otra.",
+      "please": "Por favor, no introduzcas múltiples direcciones en un solo campo.",
+      "descriptionPlaceholder": "Este proyecto es muy importante...",
+      "namePlaceholder": "Proyecto importante",
       "toasts": {
-        "projectNameEmpty": "El nombre del proyecto no puede estar vacío.",
-        "projectUpdated": "Proyecto actualizado con éxito.",
-        "projectUpdateFailed": "No se pudo actualizar el proyecto. Inténtalo de nuevo.",
-        "projectDeleted": "Proyecto eliminado con éxito.",
-        "projectDeleteFailed": "No se pudo eliminar el proyecto. Inténtalo de nuevo."
+        "toastErrorInvalidFileType": "Tipo de archivo inválido. Por favor, sube una imagen.",
+        "toastErrorImageTooLarge": "La imagen comprimida sigue siendo demasiado grande. Por favor, elige una imagen más pequeña.",
+        "toastErrorProcessingImage": "No se pudo procesar la imagen. Por favor, inténtalo de nuevo.",
+        "toastErrorInvalidEmail": "El usuario con el correo {trimmedEmail} no está registrado.",
+        "toastErrorProjectCreation": "No se pudo crear el proyecto. Por favor, inténtalo de nuevo.",
+        "toastErrorSendInvites": "No se pudieron enviar las invitaciones. Cancelando la creación del proyecto.",
+        "toastErrorUnexpected": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
+        "toastErrorMissingInfo": "El nombre del proyecto y la imagen son obligatorios."
+      }
+    }
+  },
+
+  "dialog_project_settings_button": {
+    "_comment": "This content is inside Dialog_Project_Settings_Button.vue",
+
+    "project": {
+      "editProject": "Editar proyecto",
+      "editProject_basic": "Editar proyecto",
+      "projectDescription": "Trabaja con tu equipo para planificar, crear y alcanzar tus objetivos juntos.",
+      "image": "Imagen",
+      "name": "Nombre",
+      "description": "Descripción",
+      "optional": "(opcional)",
+      "inviteTeammates": "Invita a tus compañeros",
+      "firstHalf": "Después de ingresar la dirección de correo correcta, presiona ",
+      "secondHalf": " para añadir otra.",
+      "please": "Por favor, no introduzcas múltiples direcciones en un solo campo.",
+      "descriptionPlaceholder": "Este proyecto es muy importante...",
+      "namePlaceholder": "Proyecto importante",
+      "deleteProject": "Eliminar",
+      "toasts": {
+        "toastErrorInvalidFileType": "Tipo de archivo inválido. Por favor, sube una imagen.",
+        "toastErrorImageTooLarge": "La imagen comprimida sigue siendo demasiado grande. Por favor, elige una imagen más pequeña.",
+        "toastErrorProcessingImage": "No se pudo procesar la imagen. Por favor, inténtalo de nuevo.",
+        "toastErrorInvalidEmail": "El usuario con el correo {trimmedEmail} no está registrado.",
+        "toastErrorProjectCreation": "No se pudo crear el proyecto. Por favor, inténtalo de nuevo.",
+        "toastErrorSendInvites": "No se pudieron enviar las invitaciones. Cancelando la creación del proyecto.",
+        "toastErrorUnexpected": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
+        "toastErrorMissingInfo": "El nombre del proyecto y la imagen son obligatorios.",
+        "toastErrorOwnEmail": "No puedes añadir tu propio correo electrónico",
+        "toastErrorFailedToDelete": "No se pudo eliminar el proyecto. Por favor, inténtalo de nuevo.",
+        "toastErrorFailedToUpdate": "No se pudo actualizar el proyecto. Por favor, inténtalo de nuevo.",
+        "toastErrorEmailPending": "La invitación para {trimmedEmail} ya está pendiente.",
+        "projectUpdated": "Proyecto actualizado correctamente.",
+        "projectDeleted": "Proyecto eliminado correctamente."
+      },
+      "confirmation": {
+        "title": "¿Estás completamente seguro?",
+        "description": "¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.",
+        "cancel": "Cancelar",
+        "confirm": "Eliminar"
       }
     }
   },
