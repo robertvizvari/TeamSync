@@ -182,9 +182,9 @@ export default {
       const assignedEmails = Array.isArray(this.assignMembers) ? this.assignMembers : []
 
       const creatorEmail = this.projectCreatedBy[0].email
-      const creatorUid = JSON.parse(localStorage.getItem('user')).uid
-      const creatorName = JSON.parse(localStorage.getItem('user')).name
-      const creatorSurname = JSON.parse(localStorage.getItem('user')).surname
+      const creatorUid = this.data.createdBy[0].uid
+      const creatorName = this.data.createdBy[0].name
+      const creatorSurname = this.data.createdBy[0].surname
 
       const validDueDate = this.dueDate === 'Pick a date' ? (this.newDueDate ? new Date(this.newDueDate).toISOString().split('T')[0] : null) : this.dueDate ? new Date(this.dueDate).toISOString().split('T')[0] : null
 

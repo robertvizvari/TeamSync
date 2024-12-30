@@ -164,9 +164,9 @@ export default {
       const assignedEmails = Array.isArray(this.assignMembers) ? this.assignMembers : []
 
       const creatorEmail = this.data.createdBy[0].email
-      const creatorUid = JSON.parse(localStorage.getItem('user')).uid
-      const creatorName = JSON.parse(localStorage.getItem('user')).name
-      const creatorSurname = JSON.parse(localStorage.getItem('user')).surname
+      const creatorUid = this.data.createdBy[0].uid
+      const creatorName = this.data.createdBy[0].name
+      const creatorSurname = this.data.createdBy[0].surname
 
       const validDueDate = this.dueDate && this.dueDate instanceof Date && !isNaN(this.dueDate) ? this.dueDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
 

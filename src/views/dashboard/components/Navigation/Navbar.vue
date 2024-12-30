@@ -39,7 +39,7 @@
                   <li>
                     <router-link v-if="$route.path == '/account'" to="/dashboard/mytasks" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">{{ $t('navbar.userMenu.dashboard') }}</router-link>
                     <router-link v-if="$route.path !== '/account'" to="/account" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">{{ $t('navbar.userMenu.account') }}</router-link>
-                    <router-link to="#" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">{{ $t('navbar.userMenu.settings') }}</router-link>
+                    <!-- <router-link to="#" class="block px-4 py-2 text-sm text-gray-700 transition-all duration-150 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">{{ $t('navbar.userMenu.settings') }}</router-link> -->
                     <span @click="showDialog = true" class="block cursor-pointer px-4 py-2 text-sm text-red-400 transition-all duration-150 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-red-500" role="menuitem">{{ $t('navbar.userMenu.logout') }}</span>
                   </li>
                 </ul>
