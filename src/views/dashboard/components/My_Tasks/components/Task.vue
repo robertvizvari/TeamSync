@@ -8,10 +8,55 @@
         <div class="relative flex w-full cursor-pointer flex-col">
           <div class="flex flex-row items-center gap-2 text-[1rem] font-semibold">
             {{ data.name }}
+            <div>
+              <TooltipProvider>
+                <Tooltip class="border-border">
+                  <TooltipTrigger as-child>
+                    <div v-if="data.state == 'todo'" class="size-2 cursor-help rounded-full bg-blue-500"></div>
+                    <div v-else-if="data.state == 'inProgress'" class="size-2 cursor-help rounded-full bg-amber-500"></div>
+                    <div v-else-if="data.state == 'finished'" class="size-2 cursor-help rounded-full bg-emerald-500"></div>
+                    <div v-else-if="data.state == 'cancelled'" class="size-2 cursor-help rounded-full bg-red-500"></div>
+                  </TooltipTrigger>
+                  <TooltipContent :class="data.state == 'todo' ? 'bg-blue-500' : data.state == 'inProgress' ? 'bg-amber-500' : data.state == 'finished' ? 'bg-emerald-500' : data.state == 'cancelled' ? 'bg-red-500' : ''" class="rounded p-1 text-white">
+                    <p v-if="data.state == 'todo'" class="px-2 text-white">{{ $t('my_projects.taskStates.todo') }}</p>
+                    <p v-else-if="data.state == 'inProgress'" class="px-2 text-white">{{ $t('my_projects.taskStates.inProgress') }}</p>
+                    <p v-else-if="data.state == 'finished'" class="px-2 text-white">{{ $t('my_projects.taskStates.finished') }}</p>
+                    <p v-else-if="data.state == 'cancelled'" class="px-2 text-white">{{ $t('my_projects.taskStates.cancelled') }}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </div>
+
           <div class="text-sm">{{ $t('task.dialogs.task.project') }} {{ data.projectName }}</div>
           <div class="text-sm text-muted-foreground">{{ $t('task.dialogs.task.trackedTime') }} {{ data.timeRecords ? formatTime(data.time) : '0h' }}</div>
         </div>
+        <TooltipProvider>
+          <Tooltip class="border-border">
+            <TooltipTrigger as-child>
+              <div v-if="data.priority == 'high'" class="absolute bottom-0 right-0 h-full w-[0.3rem] cursor-help rounded-r bg-red-500"></div>
+              <div v-else-if="data.priority == 'medium'" class="absolute bottom-0 right-0 h-full w-[0.3rem] cursor-help rounded-r bg-amber-500"></div>
+              <div v-else-if="data.priority == 'low'" class="absolute bottom-0 right-0 h-full w-[0.3rem] cursor-help rounded-r bg-emerald-500"></div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p v-if="data.priority == 'high'">
+                {{ $t('my_projects.priorities.firstHalf') }}
+                <span class="text-red-500">{{ $t('my_projects.priorities.hSign') }}</span>
+                {{ $t('my_projects.priorities.secondHalf') }}
+              </p>
+              <p v-else-if="data.priority == 'medium'">
+                {{ $t('my_projects.priorities.firstHalf') }}
+                <span class="text-amber-500">{{ $t('my_projects.priorities.mSign') }}</span>
+                {{ $t('my_projects.priorities.secondHalf') }}
+              </p>
+              <p v-else-if="data.priority == 'low'">
+                {{ $t('my_projects.priorities.firstHalf') }}
+                <span class="text-emerald-500">{{ $t('my_projects.priorities.lSign') }}</span>
+                {{ $t('my_projects.priorities.secondHalf') }}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </DialogTrigger>
       <div class="absolute right-5 top-1/2 -translate-y-1/2 transform">
         <DialogTaskSettingsButton :data="data" :projects="projects" @project-created="$emit('project-created')" />
