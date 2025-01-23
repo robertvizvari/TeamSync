@@ -81,10 +81,10 @@
                         <li class="relative flex flex-col overflow-hidden rounded-md bg-secondary p-3" v-for="(task, index) in sortedTasksByChecked(data.tasks)" :key="index" :class="index != 0 ? 'mt-2' : ''">
                           <span class="flex flex-row items-start gap-3 font-semibold">
                             <span class="text-wrap">{{ task.name }} - {{ task.time ? formatTime(task.time) : '0h' }}</span>
-                            <span v-if="task.state == 'todo'" class="ml-auto select-none whitespace-nowrap rounded-full bg-blue-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-blue-500">{{ $t('my_projects.taskStates.todo') }}</span>
-                            <span v-else-if="task.state == 'inProgress'" class="ml-auto select-none whitespace-nowrap rounded-full bg-amber-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-amber-500">{{ $t('my_projects.taskStates.inProgress') }}</span>
-                            <span v-else-if="task.state == 'finished'" class="ml-auto select-none whitespace-nowrap rounded-full bg-emerald-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-emerald-500">{{ $t('my_projects.taskStates.finished') }}</span>
-                            <span v-else-if="task.state == 'cancelled'" class="ml-auto select-none whitespace-nowrap rounded-full bg-red-500 bg-opacity-40 px-[0.6rem] text-[0.6rem] text-red-500">{{ $t('my_projects.taskStates.cancelled') }}</span>
+                            <span v-if="task.state == 'todo'" class="ml-auto select-none whitespace-nowrap rounded-full bg-blue-500 bg-opacity-15 px-[0.6rem] text-[0.6rem] text-blue-500">{{ $t('my_projects.taskStates.todo') }}</span>
+                            <span v-else-if="task.state == 'inProgress'" class="ml-auto select-none whitespace-nowrap rounded-full bg-amber-500 bg-opacity-15 px-[0.6rem] text-[0.6rem] text-amber-500">{{ $t('my_projects.taskStates.inProgress') }}</span>
+                            <span v-else-if="task.state == 'finished'" class="ml-auto select-none whitespace-nowrap rounded-full bg-emerald-500 bg-opacity-15 px-[0.6rem] text-[0.6rem] text-emerald-500">{{ $t('my_projects.taskStates.finished') }}</span>
+                            <span v-else-if="task.state == 'cancelled'" class="ml-auto select-none whitespace-nowrap rounded-full bg-red-500 bg-opacity-15 px-[0.6rem] text-[0.6rem] text-red-500">{{ $t('my_projects.taskStates.cancelled') }}</span>
                           </span>
 
                           <span class="text-sm text-muted-foreground">{{ task.members.length }} {{ task.members.length > 1 ? $t('my_projects.tasks.members_lowercase') : $t('my_projects.tasks.member_lowercase') }}</span>
