@@ -35,7 +35,8 @@ watchEffect(() => {
 }
 
 html {
-  background-color: hsl(var(--primary));
+  background-color: hsl(var(--muted));
+  background: hsl(var(--muted));
 }
 
 * {

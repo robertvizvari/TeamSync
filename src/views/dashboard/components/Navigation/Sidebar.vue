@@ -1,5 +1,5 @@
 <template>
-  <div @click="toggleSidebar()" :class="sidebarActive ? 'fixed left-0 top-0 h-screen w-screen bg-black bg-opacity-40' : ''" class="transition-all duration-300 ease-in-out"></div>
+  <div @click="toggleSidebar()" :class="sidebarActive ? 'fixed left-0 top-0 z-[39] h-screen w-screen bg-black bg-opacity-40' : ''" class="transition-all duration-300 ease-in-out"></div>
   <aside id="logo-sidebar" :class="sidebarActive ? 'translate-x-0' : '-translate-x-full'" class="fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-muted pt-20 transition-transform duration-300 dark:border-gray-700 sm:translate-x-0" aria-label="Sidebar">
     <div class="h-full overflow-y-auto bg-muted px-3 pb-4">
       <ul class="flex w-full flex-col gap-2 font-medium">
